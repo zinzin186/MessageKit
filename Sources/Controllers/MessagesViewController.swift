@@ -148,10 +148,10 @@ UICollectionViewDelegateFlowLayout, UICollectionViewDataSource, UIGestureRecogni
         }
     }
 
-    open override func viewSafeAreaInsetsDidChange() {
-        super.viewSafeAreaInsetsDidChange()
-        messageCollectionViewBottomInset = requiredInitialScrollViewBottomInset()
-    }
+//    open override func viewSafeAreaInsetsDidChange() {
+//        super.viewSafeAreaInsetsDidChange()
+//        messageCollectionViewBottomInset = requiredInitialScrollViewBottomInset()
+//    }
 
     // MARK: - Initializers
 
@@ -214,7 +214,11 @@ UICollectionViewDelegateFlowLayout, UICollectionViewDataSource, UIGestureRecogni
     private func setupDefaults() {
         extendedLayoutIncludesOpaqueBars = true
         view.backgroundColor = .collectionViewBackground
-        messagesCollectionView.contentInsetAdjustmentBehavior = .never
+        if #available(iOS 11.0, *) {
+            messagesCollectionView.contentInsetAdjustmentBehavior = .never
+        } else {
+            // Fallback on earlier versions
+        }
         messagesCollectionView.keyboardDismissMode = .interactive
         messagesCollectionView.alwaysBounceVertical = true
         messagesCollectionView.backgroundColor = .collectionViewBackground
@@ -232,10 +236,11 @@ UICollectionViewDelegateFlowLayout, UICollectionViewDataSource, UIGestureRecogni
     private func setupConstraints() {
         messagesCollectionView.translatesAutoresizingMaskIntoConstraints = false
         
-        let top = messagesCollectionView.topAnchor.constraint(equalTo: view.safeAreaLayoutGuide.topAnchor)
+        let top = messagesCollectionView.topAnchor.constraint(equalTo: view.topAnchor)
+        let leading = messagesCollectionView.leadingAnchor.constraint(equalTo: view.leadingAnchor)
+        let trailing = messagesCollectionView.trailingAnchor.constraint(equalTo: view.trailingAnchor)
         let bottom = messagesCollectionView.bottomAnchor.constraint(equalTo: view.bottomAnchor)
-        let leading = messagesCollectionView.leadingAnchor.constraint(equalTo: view.safeAreaLayoutGuide.leadingAnchor)
-        let trailing = messagesCollectionView.trailingAnchor.constraint(equalTo: view.safeAreaLayoutGuide.trailingAnchor)
+        
         NSLayoutConstraint.activate([top, bottom, trailing, leading])
     }
 

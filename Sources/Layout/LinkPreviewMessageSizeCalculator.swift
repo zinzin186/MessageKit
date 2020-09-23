@@ -35,12 +35,13 @@ open class LinkPreviewMessageSizeCalculator: TextMessageSizeCalculator {
 
     public override init(layout: MessagesCollectionViewFlowLayout?) {
         let titleFont = UIFont.systemFont(ofSize: 13, weight: .semibold)
-        let titleFontMetrics = UIFontMetrics(forTextStyle: .footnote)
-        self.titleFont = titleFontMetrics.scaledFont(for: titleFont)
-
+//        let titleFontMetrics = UIFontMetrics(forTextStyle: .footnote)
+//        self.titleFont = titleFontMetrics.scaledFont(for: titleFont)
+        self.titleFont = titleFont
         let domainFont = UIFont.systemFont(ofSize: 12, weight: .semibold)
-        let domainFontMetrics = UIFontMetrics(forTextStyle: .caption1)
-        self.domainFont = domainFontMetrics.scaledFont(for: domainFont)
+//        let domainFontMetrics = UIFontMetrics(forTextStyle: .caption1)
+//        self.domainFont = domainFontMetrics.scaledFont(for: domainFont)
+        self.domainFont = domainFont
 
         super.init(layout: layout)
     }
