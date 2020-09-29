@@ -26,7 +26,7 @@ import Foundation
 import UIKit
 
 /// A subclass of `MessageCollectionViewCell` used to display text, media, and location messages.
-open class MessageContentCell: MessageCollectionViewCell {
+open class MessageContentCell: MessageCollectionViewCell, UIGestureRecognizerDelegate {
 
     /// The image view displaying the avatar.
     open var avatarView = AvatarView()
@@ -119,6 +119,7 @@ open class MessageContentCell: MessageCollectionViewCell {
         contentView.addSubview(iconReply)
         contentView.backgroundColor = .clear
         panGesture = UIPanGestureRecognizer(target: self, action: #selector(actionDrag(_:)))
+        panGesture.delegate = self
         contentView.isUserInteractionEnabled = true
         contentView.addGestureRecognizer(panGesture)
     }
@@ -132,27 +133,29 @@ open class MessageContentCell: MessageCollectionViewCell {
     
     @objc func actionDrag(_ sender:UIPanGestureRecognizer) {
         let translation: CGPoint = sender.translation(in: self.superview)
-        guard translation.x <= 0 else {return}
         let center: CGPoint = contentView.center
         var newX: CGFloat = center.x + translation.x
-        // Vượt quá breakX sẽ là action reply
-        let breakX = frame.width/2 - CGFloat(60)
-        newX = max(breakX, newX)
-        let newY: CGFloat = center.y
-        contentView.center = CGPoint(x: newX, y: newY)
-        sender.setTranslation(CGPoint.zero, in: self.superview)
-        if sender.state == UIGestureRecognizer.State.changed {
-            if shouldReply {
-                if newX > breakX {
-                    shouldReply = false
-                }
-            } else {
-                if newX <= breakX {
-                    delegate?.cellShouldReplyMessage(cell: self)
-                    shouldReply = true
+        if newX <= contentView.frame.size.width/2 {
+            // Vượt quá breakX sẽ là action reply
+            let breakX = frame.width/2 - CGFloat(60)
+            newX = max(breakX, newX)
+            let newY: CGFloat = center.y
+            contentView.center = CGPoint(x: newX, y: newY)
+            sender.setTranslation(CGPoint.zero, in: self.superview)
+            if sender.state == UIGestureRecognizer.State.changed {
+                if shouldReply {
+                    if newX > breakX {
+                        shouldReply = false
+                    }
+                } else {
+                    if newX <= breakX {
+                        delegate?.cellShouldReplyMessage(cell: self)
+                        shouldReply = true
+                    }
                 }
             }
         }
+        
         if sender.state == UIGestureRecognizer.State.ended {
             if shouldReply{
                 shouldReply = false
@@ -252,11 +255,19 @@ open class MessageContentCell: MessageCollectionViewCell {
     }
 
     /// Handle long press gesture, return true when gestureRecognizer's touch point in `messageContainerView`'s frame
-//    open override func gestureRecognizerShouldBegin(_ gestureRecognizer: UIGestureRecognizer) -> Bool {
-//        let touchPoint = gestureRecognizer.location(in: self)
-//        guard gestureRecognizer.isKind(of: UILongPressGestureRecognizer.self) else { return false }
-//        return messageContainerView.frame.contains(touchPoint)
-//    }
+    open override func gestureRecognizerShouldBegin(_ gestureRecognizer: UIGestureRecognizer) -> Bool {
+        let touchPoint = gestureRecognizer.location(in: self)
+        guard gestureRecognizer.isKind(of: UILongPressGestureRecognizer.self) || gestureRecognizer.isKind(of: UIPanGestureRecognizer.self) else { return false }
+        if let panGesture = gestureRecognizer as? UIPanGestureRecognizer{
+            let velocity = panGesture.velocity(in: contentView)
+            if abs(velocity.y) > abs(velocity.x) {
+                return false
+            } else {
+                return true
+            }
+        }
+        return messageContainerView.frame.contains(touchPoint)
+    }
 
     /// Handle `ContentView`'s tap gesture, return false when `ContentView` doesn't needs to handle gesture
     open func cellContentView(canHandle touchPoint: CGPoint) -> Bool {
