@@ -132,6 +132,7 @@ open class MessageContentCell: MessageCollectionViewCell {
     
     @objc func actionDrag(_ sender:UIPanGestureRecognizer) {
         let translation: CGPoint = sender.translation(in: self.superview)
+        guard translation.x <= 0 else {return}
         let center: CGPoint = contentView.center
         var newX: CGFloat = center.x + translation.x
         // Vượt quá breakX sẽ là action reply
