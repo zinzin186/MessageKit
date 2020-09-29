@@ -24,8 +24,9 @@
 
 internal struct MessageKitError {
     static let avatarPositionUnresolved = "AvatarPosition Horizontal.natural needs to be resolved."
+    static let sendStatusPositionUnresolved = "SendStatusPosition Horizontal.natural needs to be resolved."
     static let nilMessagesDataSource = "MessagesDataSource has not been set."
-    static let nilMessagesDisplayDelegate = "MessagesDisplayDelegate has not been set."
+    static let nilMessagesDisplayDelegate = "MKMessagesDisplayDelegate has not been set."
     static let nilMessagesLayoutDelegate = "MessagesLayoutDelegate has not been set."
     static let notMessagesCollectionView = "The collectionView is not a MessagesCollectionView."
     static let layoutUsedOnForeignType = "MessagesCollectionViewFlowLayout is being used on a foreign type."

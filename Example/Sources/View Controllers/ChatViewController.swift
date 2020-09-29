@@ -27,7 +27,7 @@ import MessageKit
 import InputBarAccessoryView
 
 /// A base class for the example controllers
-class ChatViewController: MessagesViewController, MessagesDataSource {
+class ChatViewController: MessagesViewController, MKMessagesDataSource {
 
     // MARK: - Public properties
 
@@ -156,7 +156,7 @@ class ChatViewController: MessagesViewController, MessagesDataSource {
 
     // MARK: - MessagesDataSource
 
-    func currentSender() -> SenderType {
+    func currentSender() -> MKSenderType {
         return SampleData.shared.currentSender
     }
 
@@ -164,27 +164,27 @@ class ChatViewController: MessagesViewController, MessagesDataSource {
         return messageList.count
     }
 
-    func messageForItem(at indexPath: IndexPath, in messagesCollectionView: MessagesCollectionView) -> MessageType {
+    func messageForItem(at indexPath: IndexPath, in messagesCollectionView: MessagesCollectionView) -> MKMessageType {
         return messageList[indexPath.section]
     }
 
-    func cellTopLabelAttributedText(for message: MessageType, at indexPath: IndexPath) -> NSAttributedString? {
+    func cellTopLabelAttributedText(for message: MKMessageType, at indexPath: IndexPath) -> NSAttributedString? {
         if indexPath.section % 3 == 0 {
             return NSAttributedString(string: MessageKitDateFormatter.shared.string(from: message.sentDate), attributes: [NSAttributedString.Key.font: UIFont.boldSystemFont(ofSize: 10), NSAttributedString.Key.foregroundColor: UIColor.darkGray])
         }
         return nil
     }
 
-    func cellBottomLabelAttributedText(for message: MessageType, at indexPath: IndexPath) -> NSAttributedString? {
+    func cellBottomLabelAttributedText(for message: MKMessageType, at indexPath: IndexPath) -> NSAttributedString? {
         return NSAttributedString(string: "Read", attributes: [NSAttributedString.Key.font: UIFont.boldSystemFont(ofSize: 10), NSAttributedString.Key.foregroundColor: UIColor.darkGray])
     }
 
-    func messageTopLabelAttributedText(for message: MessageType, at indexPath: IndexPath) -> NSAttributedString? {
+    func messageTopLabelAttributedText(for message: MKMessageType, at indexPath: IndexPath) -> NSAttributedString? {
         let name = message.sender.displayName
         return NSAttributedString(string: name, attributes: [NSAttributedString.Key.font: UIFont.preferredFont(forTextStyle: .caption1)])
     }
 
-    func messageBottomLabelAttributedText(for message: MessageType, at indexPath: IndexPath) -> NSAttributedString? {
+    func messageBottomLabelAttributedText(for message: MKMessageType, at indexPath: IndexPath) -> NSAttributedString? {
         let dateString = formatter.string(from: message.sentDate)
         return NSAttributedString(string: dateString, attributes: [NSAttributedString.Key.font: UIFont.preferredFont(forTextStyle: .caption2)])
     }
@@ -192,7 +192,7 @@ class ChatViewController: MessagesViewController, MessagesDataSource {
 
 // MARK: - MessageCellDelegate
 
-extension ChatViewController: MessageCellDelegate {
+extension ChatViewController: MKMessageCellDelegate {
     func didTapAvatar(in cell: MessageCollectionViewCell) {
         print("Avatar tapped")
     }
@@ -266,7 +266,7 @@ extension ChatViewController: MessageCellDelegate {
 
 // MARK: - MessageLabelDelegate
 
-extension ChatViewController: MessageLabelDelegate {
+extension ChatViewController: MKMessageLabelDelegate {
     func didSelectAddress(_ addressComponents: [String: String]) {
         print("Address Selected: \(addressComponents)")
     }

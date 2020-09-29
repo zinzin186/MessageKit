@@ -30,7 +30,7 @@ open class TextMessageCell: MessageContentCell {
     // MARK: - Properties
 
     /// The `MessageCellDelegate` for the cell.
-    open override weak var delegate: MessageCellDelegate? {
+    open override weak var delegate: MKMessageCellDelegate? {
         didSet {
             messageLabel.delegate = delegate
         }
@@ -61,7 +61,7 @@ open class TextMessageCell: MessageContentCell {
         messageContainerView.addSubview(messageLabel)
     }
 
-    open override func configure(with message: MessageType, at indexPath: IndexPath, and messagesCollectionView: MessagesCollectionView) {
+    open override func configure(with message: MKMessageType, at indexPath: IndexPath, and messagesCollectionView: MessagesCollectionView) {
         super.configure(with: message, at: indexPath, and: messagesCollectionView)
 
         guard let displayDelegate = messagesCollectionView.messagesDisplayDelegate else {

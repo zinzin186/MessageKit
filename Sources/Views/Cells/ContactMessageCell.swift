@@ -108,7 +108,7 @@ open class ContactMessageCell: MessageContentCell {
     }
     
     // MARK: - Configure Cell
-    open override func configure(with message: MessageType, at indexPath: IndexPath, and messagesCollectionView: MessagesCollectionView) {
+    open override func configure(with message: MKMessageType, at indexPath: IndexPath, and messagesCollectionView: MessagesCollectionView) {
         super.configure(with: message, at: indexPath, and: messagesCollectionView)
         // setup data
         guard case let .contact(contactItem) = message.kind else { fatalError("Failed decorate audio cell") }

@@ -30,9 +30,11 @@ open class MessagesCollectionViewLayoutAttributes: UICollectionViewLayoutAttribu
     // MARK: - Properties
 
     public var avatarSize: CGSize = .zero
+    public var sendStatusSize: CGSize = CGSize(width: 14, height: 14)
     public var avatarPosition = AvatarPosition(vertical: .cellBottom)
+    public var sendStatusPosition = AvatarPosition(vertical: .messageBottom)
     public var avatarLeadingTrailingPadding: CGFloat = 0
-
+    public var sendStatusLeadingTrailingPadding: CGFloat = 0
     public var messageContainerSize: CGSize = .zero
     public var messageContainerPadding: UIEdgeInsets = .zero
     public var messageLabelFont: UIFont = UIFont.preferredFont(forTextStyle: .body)

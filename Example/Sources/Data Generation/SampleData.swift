@@ -264,7 +264,7 @@ final internal class SampleData {
         completion(messages)
     }
 
-    func getAvatarFor(sender: SenderType) -> Avatar {
+    func getAvatarFor(sender: MKSenderType) -> Avatar {
         let firstName = sender.displayName.components(separatedBy: " ").first
         let lastName = sender.displayName.components(separatedBy: " ").first
         let initials = "\(firstName?.first ?? "A")\(lastName?.first ?? "A")"

@@ -27,7 +27,7 @@ import UIKit
 
 /// A protocol used by the `MessagesCollectionViewFlowLayout` object to determine
 /// the size and layout of a `MessageCollectionViewCell` and its contents.
-public protocol MessagesLayoutDelegate: AnyObject {
+public protocol MKMessagesLayoutDelegate: AnyObject {
 
     /// Specifies the size to use for a header view.
     ///
@@ -77,7 +77,7 @@ public protocol MessagesLayoutDelegate: AnyObject {
     ///
     /// - Note:
     ///   The default value returned by this method is zero.
-    func cellTopLabelHeight(for message: MessageType, at indexPath: IndexPath, in messagesCollectionView: MessagesCollectionView) -> CGFloat
+    func cellTopLabelHeight(for message: MKMessageType, at indexPath: IndexPath, in messagesCollectionView: MessagesCollectionView) -> CGFloat
     
     /// Specifies the height for the `MessageContentCell`'s bottom label.
     ///
@@ -88,7 +88,7 @@ public protocol MessagesLayoutDelegate: AnyObject {
     ///
     /// - Note:
     ///   The default value returned by this method is zero.
-    func cellBottomLabelHeight(for message: MessageType, at indexPath: IndexPath, in messagesCollectionView: MessagesCollectionView) -> CGFloat
+    func cellBottomLabelHeight(for message: MKMessageType, at indexPath: IndexPath, in messagesCollectionView: MessagesCollectionView) -> CGFloat
     
     /// Specifies the height for the message bubble's top label.
     ///
@@ -99,7 +99,7 @@ public protocol MessagesLayoutDelegate: AnyObject {
     ///
     /// - Note:
     ///   The default value returned by this method is zero.
-    func messageTopLabelHeight(for message: MessageType, at indexPath: IndexPath, in messagesCollectionView: MessagesCollectionView) -> CGFloat
+    func messageTopLabelHeight(for message: MKMessageType, at indexPath: IndexPath, in messagesCollectionView: MessagesCollectionView) -> CGFloat
 
     /// Specifies the height for the `MessageContentCell`'s bottom label.
     ///
@@ -110,7 +110,7 @@ public protocol MessagesLayoutDelegate: AnyObject {
     ///
     /// - Note:
     ///   The default value returned by this method is zero.
-    func messageBottomLabelHeight(for message: MessageType, at indexPath: IndexPath, in messagesCollectionView: MessagesCollectionView) -> CGFloat
+    func messageBottomLabelHeight(for message: MKMessageType, at indexPath: IndexPath, in messagesCollectionView: MessagesCollectionView) -> CGFloat
     
     /// Custom cell size calculator for messages with MessageType.custom.
     ///
@@ -121,10 +121,10 @@ public protocol MessagesLayoutDelegate: AnyObject {
     ///
     /// - Note:
     ///   The default implementation will throw fatalError(). You must override this method if you are using messages with MessageType.custom.
-    func customCellSizeCalculator(for message: MessageType, at indexPath: IndexPath, in messagesCollectionView: MessagesCollectionView) -> CellSizeCalculator
+    func customCellSizeCalculator(for message: MKMessageType, at indexPath: IndexPath, in messagesCollectionView: MessagesCollectionView) -> CellSizeCalculator
 }
 
-public extension MessagesLayoutDelegate {
+public extension MKMessagesLayoutDelegate {
 
     func headerViewSize(for section: Int, in messagesCollectionView: MessagesCollectionView) -> CGSize {
         return .zero
@@ -142,23 +142,23 @@ public extension MessagesLayoutDelegate {
         return 15
     }
 
-    func cellTopLabelHeight(for message: MessageType, at indexPath: IndexPath, in messagesCollectionView: MessagesCollectionView) -> CGFloat {
+    func cellTopLabelHeight(for message: MKMessageType, at indexPath: IndexPath, in messagesCollectionView: MessagesCollectionView) -> CGFloat {
         return 0
     }
     
-    func cellBottomLabelHeight(for message: MessageType, at indexPath: IndexPath, in messagesCollectionView: MessagesCollectionView) -> CGFloat {
+    func cellBottomLabelHeight(for message: MKMessageType, at indexPath: IndexPath, in messagesCollectionView: MessagesCollectionView) -> CGFloat {
         return 0
     }
     
-    func messageTopLabelHeight(for message: MessageType, at indexPath: IndexPath, in messagesCollectionView: MessagesCollectionView) -> CGFloat {
+    func messageTopLabelHeight(for message: MKMessageType, at indexPath: IndexPath, in messagesCollectionView: MessagesCollectionView) -> CGFloat {
         return 0
     }
 
-    func messageBottomLabelHeight(for message: MessageType, at indexPath: IndexPath, in messagesCollectionView: MessagesCollectionView) -> CGFloat {
+    func messageBottomLabelHeight(for message: MKMessageType, at indexPath: IndexPath, in messagesCollectionView: MessagesCollectionView) -> CGFloat {
         return 0
     }
     
-    func customCellSizeCalculator(for message: MessageType, at indexPath: IndexPath, in messagesCollectionView: MessagesCollectionView) -> CellSizeCalculator {
+    func customCellSizeCalculator(for message: MKMessageType, at indexPath: IndexPath, in messagesCollectionView: MessagesCollectionView) -> CellSizeCalculator {
         fatalError("Must return a CellSizeCalculator for MessageKind.custom(Any?)")
     }
 }

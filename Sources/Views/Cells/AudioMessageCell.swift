@@ -105,7 +105,7 @@ open class AudioMessageCell: MessageContentCell {
 
     // MARK: - Configure Cell
 
-    open override func configure(with message: MessageType, at indexPath: IndexPath, and messagesCollectionView: MessagesCollectionView) {
+    open override func configure(with message: MKMessageType, at indexPath: IndexPath, and messagesCollectionView: MessagesCollectionView) {
         super.configure(with: message, at: indexPath, and: messagesCollectionView)
 
         guard let dataSource = messagesCollectionView.messagesDataSource else {

@@ -51,7 +51,7 @@ open class LinkPreviewMessageCell: TextMessageCell {
         linkPreviewView.domainLabel.font = attributes.linkPreviewFonts.domainFont
     }
 
-    open override func configure(with message: MessageType, at indexPath: IndexPath, and messagesCollectionView: MessagesCollectionView) {
+    open override func configure(with message: MKMessageType, at indexPath: IndexPath, and messagesCollectionView: MessagesCollectionView) {
         let displayDelegate = messagesCollectionView.messagesDisplayDelegate
 
         if let textColor: UIColor = displayDelegate?.textColor(for: message, at: indexPath, in: messagesCollectionView) {

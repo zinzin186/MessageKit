@@ -43,7 +43,7 @@ open class MessagesCollectionViewFlowLayout: UICollectionViewFlowLayout {
     }
     
     /// The `MessagesDataSource` for the layout's collection view.
-    public var messagesDataSource: MessagesDataSource {
+    public var messagesDataSource: MKMessagesDataSource {
         guard let messagesDataSource = messagesCollectionView.messagesDataSource else {
             fatalError(MessageKitError.nilMessagesDataSource)
         }
@@ -51,7 +51,7 @@ open class MessagesCollectionViewFlowLayout: UICollectionViewFlowLayout {
     }
     
     /// The `MessagesLayoutDelegate` for the layout's collection view.
-    public var messagesLayoutDelegate: MessagesLayoutDelegate {
+    public var messagesLayoutDelegate: MKMessagesLayoutDelegate {
         guard let messagesLayoutDelegate = messagesCollectionView.messagesLayoutDelegate else {
             fatalError(MessageKitError.nilMessagesLayoutDelegate)
         }

@@ -29,13 +29,13 @@ open class MessagesCollectionView: UICollectionView {
 
     // MARK: - Properties
 
-    open weak var messagesDataSource: MessagesDataSource?
+    open weak var messagesDataSource: MKMessagesDataSource?
 
-    open weak var messagesDisplayDelegate: MessagesDisplayDelegate?
+    open weak var messagesDisplayDelegate: MKMessagesDisplayDelegate?
 
-    open weak var messagesLayoutDelegate: MessagesLayoutDelegate?
+    open weak var messagesLayoutDelegate: MKMessagesLayoutDelegate?
 
-    open weak var messageCellDelegate: MessageCellDelegate?
+    open weak var messageCellDelegate: MKMessageCellDelegate?
 
     open var isTypingIndicatorHidden: Bool {
         return messagesCollectionViewFlowLayout.isTypingIndicatorViewHidden

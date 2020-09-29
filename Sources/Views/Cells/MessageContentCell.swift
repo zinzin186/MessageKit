@@ -30,6 +30,8 @@ open class MessageContentCell: MessageCollectionViewCell {
 
     /// The image view displaying the avatar.
     open var avatarView = AvatarView()
+    
+    open var sendStatusImageView = UIImageView()
 
     /// The container used for styling and holding the message's content view.
     open var messageContainerView: MessageContainerView = {
@@ -76,7 +78,7 @@ open class MessageContentCell: MessageCollectionViewCell {
     open var accessoryView: UIView = UIView()
 
     /// The `MessageCellDelegate` for the cell.
-    open weak var delegate: MessageCellDelegate?
+    open weak var delegate: MKMessageCellDelegate?
 
     public override init(frame: CGRect) {
         super.init(frame: frame)
@@ -98,6 +100,7 @@ open class MessageContentCell: MessageCollectionViewCell {
         contentView.addSubview(cellBottomLabel)
         contentView.addSubview(messageContainerView)
         contentView.addSubview(avatarView)
+        contentView.addSubview(sendStatusImageView)
         contentView.addSubview(messageTimestampLabel)
     }
 
@@ -122,6 +125,7 @@ open class MessageContentCell: MessageCollectionViewCell {
         layoutCellTopLabel(with: attributes)
         layoutMessageTopLabel(with: attributes)
         layoutAvatarView(with: attributes)
+        layoutSendStatusView(with: attributes)
         layoutAccessoryView(with: attributes)
         layoutTimeLabelView(with: attributes)
     }
@@ -132,7 +136,7 @@ open class MessageContentCell: MessageCollectionViewCell {
     ///   - message: The `MessageType` this cell displays.
     ///   - indexPath: The `IndexPath` for this cell.
     ///   - messagesCollectionView: The `MessagesCollectionView` in which this cell is contained.
-    open func configure(with message: MessageType, at indexPath: IndexPath, and messagesCollectionView: MessagesCollectionView) {
+    open func configure(with message: MKMessageType, at indexPath: IndexPath, and messagesCollectionView: MessagesCollectionView) {
         guard let dataSource = messagesCollectionView.messagesDataSource else {
             fatalError(MessageKitError.nilMessagesDataSource)
         }
@@ -146,6 +150,8 @@ open class MessageContentCell: MessageCollectionViewCell {
         let messageStyle = displayDelegate.messageStyle(for: message, at: indexPath, in: messagesCollectionView)
 
         displayDelegate.configureAvatarView(avatarView, for: message, at: indexPath, in: messagesCollectionView)
+        
+        displayDelegate.configureSendStatusView(sendStatusImageView, for: message, at: indexPath, in: messagesCollectionView)
 
         displayDelegate.configureAccessoryView(accessoryView, for: message, at: indexPath, in: messagesCollectionView)
 
@@ -232,10 +238,33 @@ open class MessageContentCell: MessageCollectionViewCell {
         default:
             break
         }
-
         avatarView.frame = CGRect(origin: origin, size: attributes.avatarSize)
     }
 
+    open func layoutSendStatusView(with attributes: MessagesCollectionViewLayoutAttributes) {
+        var origin: CGPoint = .zero
+        let padding = attributes.sendStatusLeadingTrailingPadding
+
+        origin.x = attributes.frame.width - attributes.sendStatusSize.width - padding
+
+        switch attributes.sendStatusPosition.vertical {
+        case .messageLabelTop:
+            origin.y = messageTopLabel.frame.minY
+        case .messageTop: // Needs messageContainerView frame to be set
+            origin.y = messageContainerView.frame.minY
+        case .messageBottom: // Needs messageContainerView frame to be set
+            origin.y = messageContainerView.frame.maxY - attributes.sendStatusSize.height
+        case .messageCenter: // Needs messageContainerView frame to be set
+            origin.y = messageContainerView.frame.midY - (attributes.sendStatusSize.height/2)
+        case .cellBottom:
+            origin.y = attributes.frame.height - attributes.sendStatusSize.height
+        default:
+            break
+        }
+        sendStatusImageView.backgroundColor = .red
+        sendStatusImageView.frame = CGRect(origin: origin, size: attributes.sendStatusSize)
+    }
+    
     /// Positions the cell's `MessageContainerView`.
     /// - attributes: The `MessagesCollectionViewLayoutAttributes` for the cell.
     open func layoutMessageContainerView(with attributes: MessagesCollectionViewLayoutAttributes) {

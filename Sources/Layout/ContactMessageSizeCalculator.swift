@@ -31,19 +31,19 @@ open class ContactMessageSizeCalculator: MessageSizeCalculator {
     public var outgoingMessageNameLabelInsets = UIEdgeInsets(top: 7, left: 41, bottom: 7, right: 35)
     public var contactLabelFont = UIFont.preferredFont(forTextStyle: .body)
     
-    internal func contactLabelInsets(for message: MessageType) -> UIEdgeInsets {
+    internal func contactLabelInsets(for message: MKMessageType) -> UIEdgeInsets {
         let dataSource = messagesLayout.messagesDataSource
         let isFromCurrentSender = dataSource.isFromCurrentSender(message: message)
         return isFromCurrentSender ? outgoingMessageNameLabelInsets : incomingMessageNameLabelInsets
     }
     
-    open override func messageContainerMaxWidth(for message: MessageType) -> CGFloat {
+    open override func messageContainerMaxWidth(for message: MKMessageType) -> CGFloat {
         let maxWidth = super.messageContainerMaxWidth(for: message)
         let textInsets = contactLabelInsets(for: message)
         return maxWidth - textInsets.horizontal
     }
     
-    open override func messageContainerSize(for message: MessageType) -> CGSize {
+    open override func messageContainerSize(for message: MKMessageType) -> CGSize {
         let maxWidth = messageContainerMaxWidth(for: message)
         
         var messageContainerSize: CGSize

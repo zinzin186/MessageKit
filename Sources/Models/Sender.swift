@@ -26,7 +26,7 @@ import Foundation
 
 /// An object that groups the metadata of a messages sender.
 @available(*, deprecated, message: "`Sender` has been replaced with the `SenderType` protocol in 3.0.0")
-public struct Sender: SenderType {
+public struct Sender: MKSenderType {
 
     // MARK: - Properties
 
@@ -42,12 +42,15 @@ public struct Sender: SenderType {
 
     /// The display name of a sender.
     public let displayName: String
+    
+    public let avatarUrl: String?
 
     // MARK: - Intializers
 
     public init(senderId: String, displayName: String) {
         self.senderId = senderId
         self.displayName = displayName
+        self.avatarUrl = nil
     }
 
     @available(*, deprecated, message: "`id` has been renamed `senderId` as defined in the `SenderType` protocol")

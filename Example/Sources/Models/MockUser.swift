@@ -25,7 +25,8 @@
 import Foundation
 import MessageKit
 
-struct MockUser: SenderType, Equatable {
+struct MockUser: MKSenderType, Equatable {
+    var avatarUrl: String?
     var senderId: String
     var displayName: String
 }

@@ -46,7 +46,7 @@ open class LinkPreviewMessageSizeCalculator: TextMessageSizeCalculator {
         super.init(layout: layout)
     }
 
-    open override func messageContainerMaxWidth(for message: MessageType) -> CGFloat {
+    open override func messageContainerMaxWidth(for message: MKMessageType) -> CGFloat {
         switch message.kind {
         case .linkPreview:
             let maxWidth = super.messageContainerMaxWidth(for: message)
@@ -56,7 +56,7 @@ open class LinkPreviewMessageSizeCalculator: TextMessageSizeCalculator {
         }
     }
 
-    open override func messageContainerSize(for message: MessageType) -> CGSize {
+    open override func messageContainerSize(for message: MKMessageType) -> CGSize {
         guard case MessageKind.linkPreview(let linkItem) = message.kind else {
             fatalError("messageContainerSize received unhandled MessageDataType: \(message.kind)")
         }

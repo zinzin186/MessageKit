@@ -256,14 +256,14 @@ final class AdvancedExampleViewController: ChatViewController {
 
     // MARK: - MessagesDataSource
 
-    override func cellTopLabelAttributedText(for message: MessageType, at indexPath: IndexPath) -> NSAttributedString? {
+    override func cellTopLabelAttributedText(for message: MKMessageType, at indexPath: IndexPath) -> NSAttributedString? {
         if isTimeLabelVisible(at: indexPath) {
             return NSAttributedString(string: MessageKitDateFormatter.shared.string(from: message.sentDate), attributes: [NSAttributedString.Key.font: UIFont.boldSystemFont(ofSize: 10), NSAttributedString.Key.foregroundColor: UIColor.darkGray])
         }
         return nil
     }
     
-    override func messageTopLabelAttributedText(for message: MessageType, at indexPath: IndexPath) -> NSAttributedString? {
+    override func messageTopLabelAttributedText(for message: MKMessageType, at indexPath: IndexPath) -> NSAttributedString? {
         if !isPreviousMessageSameSender(at: indexPath) {
             let name = message.sender.displayName
             return NSAttributedString(string: name, attributes: [NSAttributedString.Key.font: UIFont.preferredFont(forTextStyle: .caption1)])
@@ -271,7 +271,7 @@ final class AdvancedExampleViewController: ChatViewController {
         return nil
     }
 
-    override func messageBottomLabelAttributedText(for message: MessageType, at indexPath: IndexPath) -> NSAttributedString? {
+    override func messageBottomLabelAttributedText(for message: MKMessageType, at indexPath: IndexPath) -> NSAttributedString? {
 
         if !isNextMessageSameSender(at: indexPath) && isFromCurrentSender(message: message) {
             return NSAttributedString(string: "Delivered", attributes: [NSAttributedString.Key.font: UIFont.preferredFont(forTextStyle: .caption1)])
@@ -282,15 +282,15 @@ final class AdvancedExampleViewController: ChatViewController {
 
 // MARK: - MessagesDisplayDelegate
 
-extension AdvancedExampleViewController: MessagesDisplayDelegate {
+extension AdvancedExampleViewController: MKMessagesDisplayDelegate {
 
     // MARK: - Text Messages
 
-    func textColor(for message: MessageType, at indexPath: IndexPath, in messagesCollectionView: MessagesCollectionView) -> UIColor {
+    func textColor(for message: MKMessageType, at indexPath: IndexPath, in messagesCollectionView: MessagesCollectionView) -> UIColor {
         return isFromCurrentSender(message: message) ? .white : .darkText
     }
 
-    func detectorAttributes(for detector: DetectorType, and message: MessageType, at indexPath: IndexPath) -> [NSAttributedString.Key: Any] {
+    func detectorAttributes(for detector: DetectorType, and message: MKMessageType, at indexPath: IndexPath) -> [NSAttributedString.Key: Any] {
         switch detector {
         case .hashtag, .mention:
             if isFromCurrentSender(message: message) {
@@ -302,17 +302,17 @@ extension AdvancedExampleViewController: MessagesDisplayDelegate {
         }
     }
 
-    func enabledDetectors(for message: MessageType, at indexPath: IndexPath, in messagesCollectionView: MessagesCollectionView) -> [DetectorType] {
+    func enabledDetectors(for message: MKMessageType, at indexPath: IndexPath, in messagesCollectionView: MessagesCollectionView) -> [DetectorType] {
         return [.url, .address, .phoneNumber, .date, .transitInformation, .mention, .hashtag]
     }
 
     // MARK: - All Messages
     
-    func backgroundColor(for message: MessageType, at indexPath: IndexPath, in messagesCollectionView: MessagesCollectionView) -> UIColor {
+    func backgroundColor(for message: MKMessageType, at indexPath: IndexPath, in messagesCollectionView: MessagesCollectionView) -> UIColor {
         return isFromCurrentSender(message: message) ? .primaryColor : UIColor(red: 230/255, green: 230/255, blue: 230/255, alpha: 1)
     }
 
-    func messageStyle(for message: MessageType, at indexPath: IndexPath, in messagesCollectionView: MessagesCollectionView) -> MessageStyle {
+    func messageStyle(for message: MKMessageType, at indexPath: IndexPath, in messagesCollectionView: MessagesCollectionView) -> MessageStyle {
         
         var corners: UIRectCorner = []
         
@@ -345,7 +345,7 @@ extension AdvancedExampleViewController: MessagesDisplayDelegate {
         }
     }
     
-    func configureAvatarView(_ avatarView: AvatarView, for message: MessageType, at indexPath: IndexPath, in messagesCollectionView: MessagesCollectionView) {
+    func configureAvatarView(_ avatarView: AvatarView, for message: MKMessageType, at indexPath: IndexPath, in messagesCollectionView: MessagesCollectionView) {
         let avatar = SampleData.shared.getAvatarFor(sender: message.sender)
         avatarView.set(avatar: avatar)
         avatarView.isHidden = isNextMessageSameSender(at: indexPath)
@@ -353,7 +353,7 @@ extension AdvancedExampleViewController: MessagesDisplayDelegate {
         avatarView.layer.borderColor = UIColor.primaryColor.cgColor
     }
     
-    func configureAccessoryView(_ accessoryView: UIView, for message: MessageType, at indexPath: IndexPath, in messagesCollectionView: MessagesCollectionView) {
+    func configureAccessoryView(_ accessoryView: UIView, for message: MKMessageType, at indexPath: IndexPath, in messagesCollectionView: MessagesCollectionView) {
         // Cells are reused, so only add a button here once. For real use you would need to
         // ensure any subviews are removed if not needed
         accessoryView.subviews.forEach { $0.removeFromSuperview() }
@@ -371,7 +371,7 @@ extension AdvancedExampleViewController: MessagesDisplayDelegate {
         accessoryView.backgroundColor = UIColor.primaryColor.withAlphaComponent(0.3)
     }
 
-    func configureMediaMessageImageView(_ imageView: UIImageView, for message: MessageType, at indexPath: IndexPath, in messagesCollectionView: MessagesCollectionView) {
+    func configureMediaMessageImageView(_ imageView: UIImageView, for message: MKMessageType, at indexPath: IndexPath, in messagesCollectionView: MessagesCollectionView) {
         if case MessageKind.photo(let media) = message.kind, let imageURL = media.url {
             imageView.pin_setImage(from: imageURL)
         } else {
@@ -381,7 +381,7 @@ extension AdvancedExampleViewController: MessagesDisplayDelegate {
     
     // MARK: - Location Messages
     
-    func annotationViewForLocation(message: MessageType, at indexPath: IndexPath, in messageCollectionView: MessagesCollectionView) -> MKAnnotationView? {
+    func annotationViewForLocation(message: MKMessageType, at indexPath: IndexPath, in messageCollectionView: MessagesCollectionView) -> MKAnnotationView? {
         let annotationView = MKAnnotationView(annotation: nil, reuseIdentifier: nil)
         let pinImage = #imageLiteral(resourceName: "ic_map_marker")
         annotationView.image = pinImage
@@ -389,7 +389,7 @@ extension AdvancedExampleViewController: MessagesDisplayDelegate {
         return annotationView
     }
     
-    func animationBlockForLocation(message: MessageType, at indexPath: IndexPath, in messagesCollectionView: MessagesCollectionView) -> ((UIImageView) -> Void)? {
+    func animationBlockForLocation(message: MKMessageType, at indexPath: IndexPath, in messagesCollectionView: MessagesCollectionView) -> ((UIImageView) -> Void)? {
         return { view in
             view.layer.transform = CATransform3DMakeScale(2, 2, 2)
             UIView.animate(withDuration: 0.6, delay: 0, usingSpringWithDamping: 0.9, initialSpringVelocity: 0, options: [], animations: {
@@ -398,18 +398,18 @@ extension AdvancedExampleViewController: MessagesDisplayDelegate {
         }
     }
     
-    func snapshotOptionsForLocation(message: MessageType, at indexPath: IndexPath, in messagesCollectionView: MessagesCollectionView) -> LocationMessageSnapshotOptions {
+    func snapshotOptionsForLocation(message: MKMessageType, at indexPath: IndexPath, in messagesCollectionView: MessagesCollectionView) -> LocationMessageSnapshotOptions {
         
         return LocationMessageSnapshotOptions(showsBuildings: true, showsPointsOfInterest: true, span: MKCoordinateSpan(latitudeDelta: 10, longitudeDelta: 10))
     }
 
     // MARK: - Audio Messages
 
-    func audioTintColor(for message: MessageType, at indexPath: IndexPath, in messagesCollectionView: MessagesCollectionView) -> UIColor {
+    func audioTintColor(for message: MKMessageType, at indexPath: IndexPath, in messagesCollectionView: MessagesCollectionView) -> UIColor {
         return self.isFromCurrentSender(message: message) ? .white : .primaryColor
     }
 
-    func configureAudioCell(_ cell: AudioMessageCell, message: MessageType) {
+    func configureAudioCell(_ cell: AudioMessageCell, message: MKMessageType) {
         audioController.configureAudioCell(cell, message: message) // this is needed especily when the cell is reconfigure while is playing sound
     }
     
@@ -417,16 +417,16 @@ extension AdvancedExampleViewController: MessagesDisplayDelegate {
 
 // MARK: - MessagesLayoutDelegate
 
-extension AdvancedExampleViewController: MessagesLayoutDelegate {
+extension AdvancedExampleViewController: MKMessagesLayoutDelegate {
 
-    func cellTopLabelHeight(for message: MessageType, at indexPath: IndexPath, in messagesCollectionView: MessagesCollectionView) -> CGFloat {
+    func cellTopLabelHeight(for message: MKMessageType, at indexPath: IndexPath, in messagesCollectionView: MessagesCollectionView) -> CGFloat {
         if isTimeLabelVisible(at: indexPath) {
             return 18
         }
         return 0
     }
     
-    func messageTopLabelHeight(for message: MessageType, at indexPath: IndexPath, in messagesCollectionView: MessagesCollectionView) -> CGFloat {
+    func messageTopLabelHeight(for message: MKMessageType, at indexPath: IndexPath, in messagesCollectionView: MessagesCollectionView) -> CGFloat {
         if isFromCurrentSender(message: message) {
             return !isPreviousMessageSameSender(at: indexPath) ? 20 : 0
         } else {
@@ -434,7 +434,7 @@ extension AdvancedExampleViewController: MessagesLayoutDelegate {
         }
     }
 
-    func messageBottomLabelHeight(for message: MessageType, at indexPath: IndexPath, in messagesCollectionView: MessagesCollectionView) -> CGFloat {
+    func messageBottomLabelHeight(for message: MKMessageType, at indexPath: IndexPath, in messagesCollectionView: MessagesCollectionView) -> CGFloat {
         return (!isNextMessageSameSender(at: indexPath) && isFromCurrentSender(message: message)) ? 16 : 0
     }
 

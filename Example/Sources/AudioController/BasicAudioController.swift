@@ -50,7 +50,7 @@ open class BasicAudioController: NSObject, AVAudioPlayerDelegate {
     open weak var playingCell: AudioMessageCell?
 
     /// The `MessageType` that is currently playing sound
-    open var playingMessage: MessageType?
+    open var playingMessage: MKMessageType?
 
     /// Specify if current audio controller state: playing, in pause or none
     open private(set) var state: PlayerState = .stopped
@@ -81,13 +81,13 @@ open class BasicAudioController: NSObject, AVAudioPlayerDelegate {
     ///
     /// - Note:
     ///   This protocol method is called by MessageKit every time an audio cell needs to be configure
-    open func configureAudioCell(_ cell: AudioMessageCell, message: MessageType) {
+    open func configureAudioCell(_ cell: AudioMessageCell, message: MKMessageType) {
         if playingMessage?.messageId == message.messageId, let collectionView = messageCollectionView, let player = audioPlayer {
             playingCell = cell
             cell.progressView.progress = (player.duration == 0) ? 0 : Float(player.currentTime/player.duration)
             cell.playButton.isSelected = (player.isPlaying == true) ? true : false
             guard let displayDelegate = collectionView.messagesDisplayDelegate else {
-                fatalError("MessagesDisplayDelegate has not been set.")
+                fatalError("MKMessagesDisplayDelegate has not been set.")
             }
             cell.durationLabel.text = displayDelegate.audioProgressTextFormat(Float(player.currentTime), for: cell, in: collectionView)
         }
@@ -98,7 +98,7 @@ open class BasicAudioController: NSObject, AVAudioPlayerDelegate {
     /// - Parameters:
     ///   - message: The `MessageType` that contain the audio item to be played.
     ///   - audioCell: The `AudioMessageCell` that needs to be updated while audio is playing.
-    open func playSound(for message: MessageType, in audioCell: AudioMessageCell) {
+    open func playSound(for message: MKMessageType, in audioCell: AudioMessageCell) {
         switch message.kind {
         case .audio(let item):
             playingCell = audioCell
@@ -125,7 +125,7 @@ open class BasicAudioController: NSObject, AVAudioPlayerDelegate {
     /// - Parameters:
     ///   - message: The `MessageType` that contain the audio item to be pause.
     ///   - audioCell: The `AudioMessageCell` that needs to be updated by the pause action.
-    open func pauseSound(for message: MessageType, in audioCell: AudioMessageCell) {
+    open func pauseSound(for message: MKMessageType, in audioCell: AudioMessageCell) {
         audioPlayer?.pause()
         state = .pause
         audioCell.playButton.isSelected = false // show play button on audio cell
@@ -144,7 +144,7 @@ open class BasicAudioController: NSObject, AVAudioPlayerDelegate {
             cell.progressView.progress = 0.0
             cell.playButton.isSelected = false
             guard let displayDelegate = collectionView.messagesDisplayDelegate else {
-                fatalError("MessagesDisplayDelegate has not been set.")
+                fatalError("MKMessagesDisplayDelegate has not been set.")
             }
             cell.durationLabel.text = displayDelegate.audioProgressTextFormat(Float(player.duration), for: cell, in: collectionView)
             cell.delegate?.didStopAudio(in: cell)
@@ -185,7 +185,7 @@ open class BasicAudioController: NSObject, AVAudioPlayerDelegate {
                 // messages are the same update cell content
                 cell.progressView.progress = (player.duration == 0) ? 0 : Float(player.currentTime/player.duration)
                 guard let displayDelegate = collectionView.messagesDisplayDelegate else {
-                    fatalError("MessagesDisplayDelegate has not been set.")
+                    fatalError("MKMessagesDisplayDelegate has not been set.")
                 }
                 cell.durationLabel.text = displayDelegate.audioProgressTextFormat(Float(player.currentTime), for: cell, in: collectionView)
             } else {

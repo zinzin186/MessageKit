@@ -23,7 +23,7 @@ final class MessageSwiftUIVC: MessagesViewController {
 struct MessagesView: UIViewControllerRepresentable {
     
     @State var initialized = false
-    @Binding var messages: [MessageType]
+    @Binding var messages: [MKMessageType]
     
     func makeUIViewController(context: Context) -> MessagesViewController {
         let messagesVC = MessageSwiftUIVC()
@@ -64,8 +64,8 @@ struct MessagesView: UIViewControllerRepresentable {
             return formatter
         }()
         
-        var messages: Binding<[MessageType]>
-        init(messages: Binding<[MessageType]>) {
+        var messages: Binding<[MKMessageType]>
+        init(messages: Binding<[MKMessageType]>) {
             self.messages = messages
         }
         
@@ -74,12 +74,12 @@ struct MessagesView: UIViewControllerRepresentable {
 }
 
 @available(iOS 13.0, *)
-extension MessagesView.Coordinator: MessagesDataSource {
-    func currentSender() -> SenderType {
+extension MessagesView.Coordinator: MKMessagesDataSource {
+    func currentSender() -> MKSenderType {
         return SampleData.shared.currentSender
     }
     
-    func messageForItem(at indexPath: IndexPath, in messagesCollectionView: MessagesCollectionView) -> MessageType {
+    func messageForItem(at indexPath: IndexPath, in messagesCollectionView: MessagesCollectionView) -> MKMessageType {
         return messages.wrappedValue[indexPath.section]
     }
     
@@ -87,17 +87,17 @@ extension MessagesView.Coordinator: MessagesDataSource {
         return messages.wrappedValue.count
     }
     
-    func messageTopLabelAttributedText(for message: MessageType, at indexPath: IndexPath) -> NSAttributedString? {
+    func messageTopLabelAttributedText(for message: MKMessageType, at indexPath: IndexPath) -> NSAttributedString? {
         let name = message.sender.displayName
         return NSAttributedString(string: name, attributes: [NSAttributedString.Key.font: UIFont.preferredFont(forTextStyle: .caption1)])
     }
     
-    func messageBottomLabelAttributedText(for message: MessageType, at indexPath: IndexPath) -> NSAttributedString? {
+    func messageBottomLabelAttributedText(for message: MKMessageType, at indexPath: IndexPath) -> NSAttributedString? {
         let dateString = formatter.string(from: message.sentDate)
         return NSAttributedString(string: dateString, attributes: [NSAttributedString.Key.font: UIFont.preferredFont(forTextStyle: .caption2)])
     }
 
-    func messageTimestampLabelAttributedText(for message: MessageType, at indexPath: IndexPath) -> NSAttributedString? {
+    func messageTimestampLabelAttributedText(for message: MKMessageType, at indexPath: IndexPath) -> NSAttributedString? {
         let sentDate = message.sentDate
         let sentDateString = MessageKitDateFormatter.shared.string(from: sentDate)
         let timeLabelFont: UIFont = .boldSystemFont(ofSize: 10)
@@ -116,16 +116,16 @@ extension MessagesView.Coordinator: InputBarAccessoryViewDelegate {
 }
 
 @available(iOS 13.0, *)
-extension MessagesView.Coordinator: MessagesLayoutDelegate, MessagesDisplayDelegate {
-    func configureAvatarView(_ avatarView: AvatarView, for message: MessageType, at indexPath: IndexPath, in messagesCollectionView: MessagesCollectionView) {
+extension MessagesView.Coordinator: MKMessagesLayoutDelegate, MKMessagesDisplayDelegate {
+    func configureAvatarView(_ avatarView: AvatarView, for message: MKMessageType, at indexPath: IndexPath, in messagesCollectionView: MessagesCollectionView) {
         let avatar = SampleData.shared.getAvatarFor(sender: message.sender)
         avatarView.set(avatar: avatar)
     }
-    func messageTopLabelHeight(for message: MessageType, at indexPath: IndexPath, in messagesCollectionView: MessagesCollectionView) -> CGFloat {
+    func messageTopLabelHeight(for message: MKMessageType, at indexPath: IndexPath, in messagesCollectionView: MessagesCollectionView) -> CGFloat {
         return 20
     }
     
-    func messageBottomLabelHeight(for message: MessageType, at indexPath: IndexPath, in messagesCollectionView: MessagesCollectionView) -> CGFloat {
+    func messageBottomLabelHeight(for message: MKMessageType, at indexPath: IndexPath, in messagesCollectionView: MessagesCollectionView) -> CGFloat {
         return 16
     }
 }

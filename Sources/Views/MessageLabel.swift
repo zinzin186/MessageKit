@@ -55,7 +55,7 @@ open class MessageLabel: UILabel {
 
     // MARK: - Public Properties
 
-    open weak var delegate: MessageLabelDelegate?
+    open weak var delegate: MKMessageLabelDelegate?
 
     open var enabledDetectors: [DetectorType] = [] {
         didSet {

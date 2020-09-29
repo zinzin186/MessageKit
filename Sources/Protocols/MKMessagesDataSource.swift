@@ -26,10 +26,10 @@ import UIKit
 
 /// An object that adopts the `MessagesDataSource` protocol is responsible for providing
 /// the data required by a `MessagesCollectionView`.
-public protocol MessagesDataSource: AnyObject {
+public protocol MKMessagesDataSource: AnyObject {
 
     /// The `SenderType` of new messages in the `MessagesCollectionView`.
-    func currentSender() -> SenderType
+    func currentSender() -> MKSenderType
 
     /// A helper method to determine if a given message is from the current `SenderType`.
     ///
@@ -39,14 +39,14 @@ public protocol MessagesDataSource: AnyObject {
     /// - Note:
     ///   The default implementation of this method checks for equality between
     ///   the message's `SenderType` and the current `SenderType`.
-    func isFromCurrentSender(message: MessageType) -> Bool
+    func isFromCurrentSender(message: MKMessageType) -> Bool
 
     /// The message to be used for a `MessageCollectionViewCell` at the given `IndexPath`.
     ///
     /// - Parameters:
     ///   - indexPath: The `IndexPath` of the cell.
     ///   - messagesCollectionView: The `MessagesCollectionView` in which the message will be displayed.
-    func messageForItem(at indexPath: IndexPath, in messagesCollectionView: MessagesCollectionView) -> MessageType
+    func messageForItem(at indexPath: IndexPath, in messagesCollectionView: MessagesCollectionView) -> MKMessageType
 
     /// The number of sections to be displayed in the `MessagesCollectionView`.
     ///
@@ -71,7 +71,7 @@ public protocol MessagesDataSource: AnyObject {
     ///   - messagesCollectionView: The `MessagesCollectionView` in which this cell will be displayed.
     ///
     /// The default value returned by this method is `nil`.
-    func cellTopLabelAttributedText(for message: MessageType, at indexPath: IndexPath) -> NSAttributedString?
+    func cellTopLabelAttributedText(for message: MKMessageType, at indexPath: IndexPath) -> NSAttributedString?
     
     /// The attributed text to be used for cell's bottom label.
     ///
@@ -81,7 +81,7 @@ public protocol MessagesDataSource: AnyObject {
     ///   - messagesCollectionView: The `MessagesCollectionView` in which this cell will be displayed.
     ///
     /// The default value returned by this method is `nil`.
-    func cellBottomLabelAttributedText(for message: MessageType, at indexPath: IndexPath) -> NSAttributedString?
+    func cellBottomLabelAttributedText(for message: MKMessageType, at indexPath: IndexPath) -> NSAttributedString?
     
     /// The attributed text to be used for message bubble's top label.
     ///
@@ -91,7 +91,7 @@ public protocol MessagesDataSource: AnyObject {
     ///   - messagesCollectionView: The `MessagesCollectionView` in which this cell will be displayed.
     ///
     /// The default value returned by this method is `nil`.
-    func messageTopLabelAttributedText(for message: MessageType, at indexPath: IndexPath) -> NSAttributedString?
+    func messageTopLabelAttributedText(for message: MKMessageType, at indexPath: IndexPath) -> NSAttributedString?
 
     /// The attributed text to be used for cell's bottom label.
     ///
@@ -101,7 +101,7 @@ public protocol MessagesDataSource: AnyObject {
     ///   - messagesCollectionView: The `MessagesCollectionView` in which this cell will be displayed.
     ///
     /// The default value returned by this method is `nil`.
-    func messageBottomLabelAttributedText(for message: MessageType, at indexPath: IndexPath) -> NSAttributedString?
+    func messageBottomLabelAttributedText(for message: MKMessageType, at indexPath: IndexPath) -> NSAttributedString?
 
     /// The attributed text to be used for cell's timestamp label.
     /// The timestamp label is shown when showMessageTimestampOnSwipeLeft is enabled by swiping left over the chat controller.
@@ -112,7 +112,7 @@ public protocol MessagesDataSource: AnyObject {
     ///   - messagesCollectionView: The `MessagesCollectionView` in which this cell will be displayed.
     ///
     /// The default value returned by this method is `nil`.
-    func messageTimestampLabelAttributedText(for message: MessageType, at indexPath: IndexPath) -> NSAttributedString?
+    func messageTimestampLabelAttributedText(for message: MKMessageType, at indexPath: IndexPath) -> NSAttributedString?
     
     /// Custom collectionView cell for message with `custom` message type.
     ///
@@ -123,7 +123,7 @@ public protocol MessagesDataSource: AnyObject {
     ///
     /// - Note:
     ///   This method will call fatalError() on default. You must override this method if you are using MessageKind.custom messages.
-    func customCell(for message: MessageType, at indexPath: IndexPath, in messagesCollectionView: MessagesCollectionView) -> UICollectionViewCell
+    func customCell(for message: MKMessageType, at indexPath: IndexPath, in messagesCollectionView: MessagesCollectionView) -> UICollectionViewCell
 
     /// Typing indicator cell used when the indicator is set to be shown
     ///
@@ -134,9 +134,9 @@ public protocol MessagesDataSource: AnyObject {
     func typingIndicator(at indexPath: IndexPath, in messagesCollectionView: MessagesCollectionView) -> UICollectionViewCell
 }
 
-public extension MessagesDataSource {
+public extension MKMessagesDataSource {
 
-    func isFromCurrentSender(message: MessageType) -> Bool {
+    func isFromCurrentSender(message: MKMessageType) -> Bool {
         return message.sender.senderId == currentSender().senderId
     }
 
@@ -144,23 +144,23 @@ public extension MessagesDataSource {
         return 1
     }
 
-    func cellTopLabelAttributedText(for message: MessageType, at indexPath: IndexPath) -> NSAttributedString? {
+    func cellTopLabelAttributedText(for message: MKMessageType, at indexPath: IndexPath) -> NSAttributedString? {
         return nil
     }
     
-    func cellBottomLabelAttributedText(for message: MessageType, at indexPath: IndexPath) -> NSAttributedString? {
+    func cellBottomLabelAttributedText(for message: MKMessageType, at indexPath: IndexPath) -> NSAttributedString? {
         return nil
     }
     
-    func messageTopLabelAttributedText(for message: MessageType, at indexPath: IndexPath) -> NSAttributedString? {
+    func messageTopLabelAttributedText(for message: MKMessageType, at indexPath: IndexPath) -> NSAttributedString? {
         return nil
     }
 
-    func messageBottomLabelAttributedText(for message: MessageType, at indexPath: IndexPath) -> NSAttributedString? {
+    func messageBottomLabelAttributedText(for message: MKMessageType, at indexPath: IndexPath) -> NSAttributedString? {
         return nil
     }
 
-    func messageTimestampLabelAttributedText(for message: MessageType, at indexPath: IndexPath) -> NSAttributedString? {
+    func messageTimestampLabelAttributedText(for message: MKMessageType, at indexPath: IndexPath) -> NSAttributedString? {
         let sentDate = message.sentDate
         let sentDateString = MessageKitDateFormatter.shared.string(from: sentDate)
         let timeLabelFont: UIFont = .boldSystemFont(ofSize: 10)
@@ -173,7 +173,7 @@ public extension MessagesDataSource {
         return NSAttributedString(string: sentDateString, attributes: [NSAttributedString.Key.font: timeLabelFont, NSAttributedString.Key.foregroundColor: timeLabelColor])
     }
 
-    func customCell(for message: MessageType, at indexPath: IndexPath, in messagesCollectionView: MessagesCollectionView) -> UICollectionViewCell {
+    func customCell(for message: MKMessageType, at indexPath: IndexPath, in messagesCollectionView: MessagesCollectionView) -> UICollectionViewCell {
         fatalError(MessageKitError.customDataUnresolvedCell)
     }
 

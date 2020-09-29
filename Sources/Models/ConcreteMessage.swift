@@ -28,8 +28,8 @@ import Foundation
 /// 
 /// Use this when you are subclassing calculators and/or cells that needs
 /// a concrete type to handle super's method.
-internal struct ConcreteMessageType: MessageType {
-    let sender: SenderType
+internal struct ConcreteMessageType: MKMessageType {
+    let sender: MKSenderType
     let messageId: String
     let sentDate: Date
     var kind: MessageKind

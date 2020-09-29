@@ -25,7 +25,7 @@
 import Foundation
 
 /// A protocol used by `MessageContentCell` subclasses to detect taps in the cell's subviews.
-public protocol MessageCellDelegate: MessageLabelDelegate {
+public protocol MKMessageCellDelegate: MKMessageLabelDelegate {
 
     /// Triggered when a tap occurs in the background of the cell.
     ///
@@ -161,7 +161,7 @@ public protocol MessageCellDelegate: MessageLabelDelegate {
 
 }
 
-public extension MessageCellDelegate {
+public extension MKMessageCellDelegate {
 
     func didTapBackground(in cell: MessageCollectionViewCell) {}
 

@@ -100,10 +100,10 @@ struct MockLinkItem: LinkItem {
     let thumbnailImage: UIImage
 }
 
-internal struct MockMessage: MessageType {
+internal struct MockMessage: MKMessageType {
 
     var messageId: String
-    var sender: SenderType {
+    var sender: MKSenderType {
         return user
     }
     var sentDate: Date

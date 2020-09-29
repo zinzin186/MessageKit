@@ -25,7 +25,7 @@
 import Foundation
 
 /// A protocol used to handle tap events on detected text.
-public protocol MessageLabelDelegate: AnyObject {
+public protocol MKMessageLabelDelegate: AnyObject {
 
     /// Triggered when a tap occurs on a detected address.
     ///
@@ -78,7 +78,7 @@ public protocol MessageLabelDelegate: AnyObject {
 
 }
 
-public extension MessageLabelDelegate {
+public extension MKMessageLabelDelegate {
 
     func didSelectAddress(_ addressComponents: [String: String]) {}
 
