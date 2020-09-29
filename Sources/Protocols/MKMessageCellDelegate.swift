@@ -158,6 +158,10 @@ public protocol MKMessageCellDelegate: MKMessageLabelDelegate {
     /// `indexPath(for: cell)` method. Then using the returned `IndexPath` with the `MessagesDataSource`
     /// method `messageForItem(at:indexPath:messagesCollectionView)`.
     func didStopAudio(in cell: AudioMessageCell)
+    
+    func cellShouldReplyMessage(cell: MessageCollectionViewCell)
+    
+    func cellDidRequestReplyMessage(cell: MessageCollectionViewCell)
 
 }
 
@@ -188,5 +192,9 @@ public extension MKMessageCellDelegate {
     func didTapMessageBottomLabel(in cell: MessageCollectionViewCell) {}
     
     func didTapAccessoryView(in cell: MessageCollectionViewCell) {}
+    
+    func cellShouldReplyMessage(cell: MessageCollectionViewCell) {}
+    
+    func cellDidRequestReplyMessage(cell: MessageCollectionViewCell) {}
 
 }

@@ -40,6 +40,14 @@ open class MessageContentCell: MessageCollectionViewCell {
         containerView.layer.masksToBounds = true
         return containerView
     }()
+    
+    open var iconReply: UIImageView = {
+        let imgvCanReply = UIImageView()
+        imgvCanReply.backgroundColor = UIColor.red
+        imgvCanReply.image = UIImage(named: "icon_chat_reply")
+        imgvCanReply.contentMode = .scaleAspectFit
+        return imgvCanReply
+    }()
 
     /// The top label of the cell.
     open var cellTopLabel: InsetLabel = {
@@ -72,13 +80,16 @@ open class MessageContentCell: MessageCollectionViewCell {
     }()
 
     /// The time label of the messageBubble.
-    open var messageTimestampLabel: InsetLabel = InsetLabel()
+//    open var messageTimestampLabel: InsetLabel = InsetLabel()
 
     // Should only add customized subviews - don't change accessoryView itself.
     open var accessoryView: UIView = UIView()
 
     /// The `MessageCellDelegate` for the cell.
     open weak var delegate: MKMessageCellDelegate?
+    var panGesture = UIPanGestureRecognizer()
+    var shouldReply: Bool = false
+    
 
     public override init(frame: CGRect) {
         super.init(frame: frame)
@@ -91,7 +102,7 @@ open class MessageContentCell: MessageCollectionViewCell {
         contentView.autoresizingMask = [.flexibleWidth, .flexibleHeight]
         setupSubviews()
     }
-
+    
     open func setupSubviews() {
         contentView.addSubview(accessoryView)
         contentView.addSubview(cellTopLabel)
@@ -101,16 +112,61 @@ open class MessageContentCell: MessageCollectionViewCell {
         contentView.addSubview(messageContainerView)
         contentView.addSubview(avatarView)
         contentView.addSubview(sendStatusImageView)
-        contentView.addSubview(messageTimestampLabel)
+        setupViewContainter()
     }
-
+    
+    func setupViewContainter() {
+        contentView.addSubview(iconReply)
+        contentView.backgroundColor = .clear
+        panGesture = UIPanGestureRecognizer(target: self, action: #selector(actionDrag(_:)))
+        contentView.isUserInteractionEnabled = true
+        contentView.addGestureRecognizer(panGesture)
+    }
+    
+    func layoutImageCanReply() {
+        let iconReplySize: CGSize = CGSize(width: 24, height: 24)
+        let originX: CGFloat = contentView.frame.size.width + 24
+        let originY: CGFloat = messageContainerView.frame.midY - iconReplySize.height/2
+        iconReply.frame = CGRect(origin: CGPoint(x: originX, y: originY), size: iconReplySize)
+    }
+    
+    @objc func actionDrag(_ sender:UIPanGestureRecognizer) {
+        let translation: CGPoint = sender.translation(in: self.superview)
+        let center: CGPoint = contentView.center
+        var newX: CGFloat = center.x + translation.x
+        // Vượt quá breakX sẽ là action reply
+        let breakX = frame.width/2 - CGFloat(60)
+        newX = max(breakX, newX)
+        let newY: CGFloat = center.y
+        contentView.center = CGPoint(x: newX, y: newY)
+        sender.setTranslation(CGPoint.zero, in: self.superview)
+        if sender.state == UIGestureRecognizer.State.changed {
+            if shouldReply {
+                if newX > breakX {
+                    shouldReply = false
+                }
+            } else {
+                if newX <= breakX {
+                    delegate?.cellShouldReplyMessage(cell: self)
+                    shouldReply = true
+                }
+            }
+        }
+        if sender.state == UIGestureRecognizer.State.ended {
+            if shouldReply{
+                shouldReply = false
+                delegate?.cellDidRequestReplyMessage(cell: self)
+            }
+            contentView.center = CGPoint(x: contentView.frame.size.width/2, y: contentView.frame.size.height/2)
+        }
+    }
     open override func prepareForReuse() {
         super.prepareForReuse()
         cellTopLabel.text = nil
         cellBottomLabel.text = nil
         messageTopLabel.text = nil
         messageBottomLabel.text = nil
-        messageTimestampLabel.attributedText = nil
+//        messageTimestampLabel.attributedText = nil
     }
 
     // MARK: - Configuration
@@ -127,7 +183,7 @@ open class MessageContentCell: MessageCollectionViewCell {
         layoutAvatarView(with: attributes)
         layoutSendStatusView(with: attributes)
         layoutAccessoryView(with: attributes)
-        layoutTimeLabelView(with: attributes)
+        layoutImageCanReply()
     }
 
     /// Used to configure the cell.
@@ -158,17 +214,16 @@ open class MessageContentCell: MessageCollectionViewCell {
         messageContainerView.backgroundColor = messageColor
         messageContainerView.style = messageStyle
 
-        let topCellLabelText = dataSource.cellTopLabelAttributedText(for: message, at: indexPath)
+//        let topCellLabelText = dataSource.cellTopLabelAttributedText(for: message, at: indexPath)
         let bottomCellLabelText = dataSource.cellBottomLabelAttributedText(for: message, at: indexPath)
         let topMessageLabelText = dataSource.messageTopLabelAttributedText(for: message, at: indexPath)
         let bottomMessageLabelText = dataSource.messageBottomLabelAttributedText(for: message, at: indexPath)
         let messageTimestampLabelText = dataSource.messageTimestampLabelAttributedText(for: message, at: indexPath)
-        cellTopLabel.attributedText = topCellLabelText
+        cellTopLabel.attributedText = messageTimestampLabelText
         cellBottomLabel.attributedText = bottomCellLabelText
         messageTopLabel.attributedText = topMessageLabelText
         messageBottomLabel.attributedText = bottomMessageLabelText
-        messageTimestampLabel.attributedText = messageTimestampLabelText
-        messageTimestampLabel.isHidden = !messagesCollectionView.showMessageTimestampOnSwipeLeft
+//        messageTimestampLabel.attributedText = messageTimestampLabelText
     }
 
     /// Handle tap gesture on contentView and its subviews.
@@ -196,11 +251,11 @@ open class MessageContentCell: MessageCollectionViewCell {
     }
 
     /// Handle long press gesture, return true when gestureRecognizer's touch point in `messageContainerView`'s frame
-    open override func gestureRecognizerShouldBegin(_ gestureRecognizer: UIGestureRecognizer) -> Bool {
-        let touchPoint = gestureRecognizer.location(in: self)
-        guard gestureRecognizer.isKind(of: UILongPressGestureRecognizer.self) else { return false }
-        return messageContainerView.frame.contains(touchPoint)
-    }
+//    open override func gestureRecognizerShouldBegin(_ gestureRecognizer: UIGestureRecognizer) -> Bool {
+//        let touchPoint = gestureRecognizer.location(in: self)
+//        guard gestureRecognizer.isKind(of: UILongPressGestureRecognizer.self) else { return false }
+//        return messageContainerView.frame.contains(touchPoint)
+//    }
 
     /// Handle `ContentView`'s tap gesture, return false when `ContentView` doesn't needs to handle gesture
     open func cellContentView(canHandle touchPoint: CGPoint) -> Bool {
@@ -380,13 +435,5 @@ open class MessageContentCell: MessageCollectionViewCell {
 
         accessoryView.frame = CGRect(origin: origin, size: attributes.accessoryViewSize)
     }
-
-    ///  Positions the message bubble's time label.
-    /// - attributes: The `MessagesCollectionViewLayoutAttributes` for the cell.
-    open func layoutTimeLabelView(with attributes: MessagesCollectionViewLayoutAttributes) {
-        let paddingLeft: CGFloat = 10
-        let origin = CGPoint(x: contentView.frame.size.width + paddingLeft, y: contentView.frame.size.height * 0.5)
-        let size = CGSize(width: attributes.messageTimeLabelSize.width, height: attributes.messageTimeLabelSize.height)
-        messageTimestampLabel.frame = CGRect(origin: origin, size: size)
-    }
+    
 }
