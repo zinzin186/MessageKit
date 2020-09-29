@@ -261,7 +261,6 @@ open class MessageContentCell: MessageCollectionViewCell {
         default:
             break
         }
-        sendStatusImageView.backgroundColor = .red
         sendStatusImageView.frame = CGRect(origin: origin, size: attributes.sendStatusSize)
     }
     
@@ -294,7 +293,7 @@ open class MessageContentCell: MessageCollectionViewCell {
         case .cellLeading:
             origin.x = attributes.avatarSize.width + attributes.messageContainerPadding.left + avatarPadding
         case .cellTrailing:
-            origin.x = attributes.frame.width - attributes.avatarSize.width - attributes.messageContainerSize.width - attributes.messageContainerPadding.right - avatarPadding
+            origin.x = attributes.frame.width - attributes.avatarSize.width - attributes.sendStatusSize.width - attributes.messageContainerSize.width - attributes.messageContainerPadding.right - avatarPadding
         case .natural:
             fatalError(MessageKitError.avatarPositionUnresolved)
         }
