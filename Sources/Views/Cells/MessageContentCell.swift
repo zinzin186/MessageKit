@@ -43,7 +43,6 @@ open class MessageContentCell: MessageCollectionViewCell, UIGestureRecognizerDel
     
     open var iconReply: UIImageView = {
         let imgvCanReply = UIImageView()
-        imgvCanReply.backgroundColor = UIColor.red
         imgvCanReply.image = UIImage(named: "icon_chat_reply")
         imgvCanReply.contentMode = .scaleAspectFit
         return imgvCanReply
@@ -256,19 +255,24 @@ open class MessageContentCell: MessageCollectionViewCell, UIGestureRecognizerDel
 
     /// Handle long press gesture, return true when gestureRecognizer's touch point in `messageContainerView`'s frame
     open override func gestureRecognizerShouldBegin(_ gestureRecognizer: UIGestureRecognizer) -> Bool {
-        let touchPoint = gestureRecognizer.location(in: self)
-        guard gestureRecognizer.isKind(of: UILongPressGestureRecognizer.self) || gestureRecognizer.isKind(of: UIPanGestureRecognizer.self) else { return false }
-        if let panGesture = gestureRecognizer as? UIPanGestureRecognizer{
+        if gestureRecognizer == panGesture {
             let velocity = panGesture.velocity(in: contentView)
-            if abs(velocity.y) > abs(velocity.x) {
-                return false
+            if velocity.x < 0 {
+                if abs(velocity.y) > abs(velocity.x) {
+                    return false
+                } else {
+                    return true
+                }
             } else {
-                return true
+                return false
             }
         }
-        return messageContainerView.frame.contains(touchPoint)
+        if gestureRecognizer.isKind(of: UIPanGestureRecognizer.self){
+            let touchPoint = gestureRecognizer.location(in: self)
+            return messageContainerView.frame.contains(touchPoint)
+        }
+        return true
     }
-
     /// Handle `ContentView`'s tap gesture, return false when `ContentView` doesn't needs to handle gesture
     open func cellContentView(canHandle touchPoint: CGPoint) -> Bool {
         return false
@@ -448,4 +452,20 @@ open class MessageContentCell: MessageCollectionViewCell, UIGestureRecognizerDel
         accessoryView.frame = CGRect(origin: origin, size: attributes.accessoryViewSize)
     }
     
+    open func focusWhenLongPressMessage() {
+        let view = messageContainerView
+        view.alpha = 0.8
+        UIView.animate(withDuration: 0.3 / 1.5, animations: {
+            view.transform = CGAffineTransform(scaleX: 1.03, y: 1.03)
+        }) { _ in
+            UIView.animate(withDuration: 0.3 / 2, animations: {
+                view.transform = CGAffineTransform(scaleX: 0.97, y: 0.97)
+            }) { _ in
+                UIView.animate(withDuration: 0.3 / 2, animations: {
+                    view.transform = CGAffineTransform.identity
+                    view.alpha = 1.0
+                })
+            }
+        }
+    }
 }

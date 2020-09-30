@@ -449,6 +449,9 @@ UICollectionViewDelegateFlowLayout, UICollectionViewDataSource, UIGestureRecogni
     }
 
     open func collectionView(_ collectionView: UICollectionView, canPerformAction action: Selector, forItemAt indexPath: IndexPath, withSender sender: Any?) -> Bool {
+        if let cell = messagesCollectionView.cellForItem(at: indexPath) as? MessageContentCell{
+            cell.focusWhenLongPressMessage()
+        }
         if isSectionReservedForTypingIndicator(indexPath.section) {
             return false
         }
