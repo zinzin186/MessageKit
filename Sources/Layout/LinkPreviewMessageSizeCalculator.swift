@@ -64,7 +64,7 @@ open class LinkPreviewMessageSizeCalculator: TextMessageSizeCalculator {
         let dummyMessage = ConcreteMessageType(sender: message.sender,
                                                messageId: message.messageId,
                                                sentDate: message.sentDate,
-                                               kind: linkItem.textKind)
+                                               kind: linkItem.textKind, action: message.action)
 
         var containerSize = super.messageContainerSize(for: dummyMessage)
         containerSize.width = max(containerSize.width, messageContainerMaxWidth(for: message))

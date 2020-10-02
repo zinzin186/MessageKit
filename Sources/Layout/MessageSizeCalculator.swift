@@ -76,7 +76,9 @@ open class MessageSizeCalculator: CellSizeCalculator {
         attributes.avatarPosition = avatarPosition(for: message)
         attributes.avatarLeadingTrailingPadding = avatarLeadingTrailingPadding
 
+        attributes.replyBodyPadding = replyBodyPadding(for: message)
         attributes.messageContainerPadding = messageContainerPadding(for: message)
+        attributes.replyBodySize = replyBodySize(for: message)
         attributes.messageContainerSize = messageContainerSize(for: message)
         attributes.cellTopLabelSize = cellTopLabelSize(for: message, at: indexPath)
         attributes.cellTopLabelAlignment = cellTopLabelAlignment(for: message)
@@ -103,6 +105,7 @@ open class MessageSizeCalculator: CellSizeCalculator {
 
     open func cellContentHeight(for message: MKMessageType, at indexPath: IndexPath) -> CGFloat {
 
+        let replyBodyHeight = replyBodySize(for: message).height
         let messageContainerHeight = messageContainerSize(for: message).height
         let cellBottomLabelHeight = cellBottomLabelSize(for: message, at: indexPath).height
         let messageBottomLabelHeight = messageBottomLabelSize(for: message, at: indexPath).height
@@ -115,7 +118,7 @@ open class MessageSizeCalculator: CellSizeCalculator {
 
         switch avatarVerticalPosition {
         case .messageCenter:
-            let totalLabelHeight: CGFloat = cellTopLabelHeight + messageTopLabelHeight
+            let totalLabelHeight: CGFloat = cellTopLabelHeight + messageTopLabelHeight + replyBodyHeight
                 + messageContainerHeight + messageVerticalPadding + messageBottomLabelHeight + cellBottomLabelHeight
             let cellHeight = max(avatarHeight, totalLabelHeight)
             return max(cellHeight, accessoryViewHeight)
@@ -123,24 +126,24 @@ open class MessageSizeCalculator: CellSizeCalculator {
             var cellHeight: CGFloat = 0
             cellHeight += messageBottomLabelHeight
             cellHeight += cellBottomLabelHeight
-            let labelsHeight = messageContainerHeight + messageVerticalPadding + cellTopLabelHeight + messageTopLabelHeight
+            let labelsHeight = replyBodyHeight + messageContainerHeight + messageVerticalPadding + cellTopLabelHeight + messageTopLabelHeight
             cellHeight += max(labelsHeight, avatarHeight)
             return max(cellHeight, accessoryViewHeight)
         case .messageTop:
             var cellHeight: CGFloat = 0
             cellHeight += cellTopLabelHeight
             cellHeight += messageTopLabelHeight
-            let labelsHeight = messageContainerHeight + messageVerticalPadding + messageBottomLabelHeight + cellBottomLabelHeight
+            let labelsHeight = replyBodyHeight + messageContainerHeight + messageVerticalPadding + messageBottomLabelHeight + cellBottomLabelHeight
             cellHeight += max(labelsHeight, avatarHeight)
             return max(cellHeight, accessoryViewHeight)
         case .messageLabelTop:
             var cellHeight: CGFloat = 0
             cellHeight += cellTopLabelHeight
-            let messageLabelsHeight = messageContainerHeight + messageBottomLabelHeight + messageVerticalPadding + messageTopLabelHeight + cellBottomLabelHeight
+            let messageLabelsHeight = replyBodyHeight + messageContainerHeight + messageBottomLabelHeight + messageVerticalPadding + messageTopLabelHeight + cellBottomLabelHeight
             cellHeight += max(messageLabelsHeight, avatarHeight)
             return max(cellHeight, accessoryViewHeight)
         case .cellTop, .cellBottom:
-            let totalLabelHeight: CGFloat = cellTopLabelHeight + messageTopLabelHeight
+            let totalLabelHeight: CGFloat = cellTopLabelHeight + messageTopLabelHeight + replyBodyHeight
                 + messageContainerHeight + messageVerticalPadding + messageBottomLabelHeight + cellBottomLabelHeight
             let cellHeight = max(avatarHeight, totalLabelHeight)
             return max(cellHeight, accessoryViewHeight)
@@ -190,7 +193,16 @@ open class MessageSizeCalculator: CellSizeCalculator {
         let layoutDelegate = messagesLayout.messagesLayoutDelegate
         let collectionView = messagesLayout.messagesCollectionView
         let height = layoutDelegate.messageTopLabelHeight(for: message, at: indexPath, in: collectionView)
-        return CGSize(width: messagesLayout.itemWidth, height: height)
+//        return CGSize(width: messagesLayout.itemWidth, height: height)
+        let dataSource = messagesLayout.messagesDataSource
+        if let attributedText = dataSource.messageTopLabelAttributedText(for: message, at: indexPath){
+            let topLabelWidth = labelWidth(for: attributedText, considering: height)
+            return CGSize(width: topLabelWidth, height: height)
+        }else{
+            return CGSize.zero
+        }
+        
+        
     }
     
     open func messageTopLabelAlignment(for message: MKMessageType) -> LabelAlignment {
@@ -261,11 +273,54 @@ open class MessageSizeCalculator: CellSizeCalculator {
     }
 
     // MARK: - MessageContainer
+    
+    open func replyBodyPadding(for message: MKMessageType) -> UIEdgeInsets {
+        let dataSource = messagesLayout.messagesDataSource
+        let isFromCurrentSender = dataSource.isFromCurrentSender(message: message)
+        return isFromCurrentSender ? outgoingMessagePadding : incomingMessagePadding
+    }
 
     open func messageContainerPadding(for message: MKMessageType) -> UIEdgeInsets {
         let dataSource = messagesLayout.messagesDataSource
         let isFromCurrentSender = dataSource.isFromCurrentSender(message: message)
         return isFromCurrentSender ? outgoingMessagePadding : incomingMessagePadding
+    }
+    
+    internal func messageLabelInsets(for message: MKMessageType) -> UIEdgeInsets {
+        let dataSource = messagesLayout.messagesDataSource
+        let isFromCurrentSender = dataSource.isFromCurrentSender(message: message)
+        return isFromCurrentSender ? outgoingMessageLabelInsets : incomingMessageLabelInsets
+    }
+    public var incomingMessageLabelInsets = UIEdgeInsets(top: 7, left: 18, bottom: 7, right: 14)
+    public var outgoingMessageLabelInsets = UIEdgeInsets(top: 7, left: 14, bottom: 7, right: 18)
+    open func replyBodySize(for message: MKMessageType) -> CGSize {
+        // Returns .zero by default
+        switch message.action {
+        case .reply(let replyMessage):
+            let maxWidth = messageContainerMaxWidth(for: message)
+
+            var messageContainerSize: CGSize
+            let attributedText: NSAttributedString
+
+            switch replyMessage.kind {
+            case .attributedText(let text):
+                attributedText = text
+            case .text(let text), .emoji(let text):
+                attributedText = NSAttributedString(string: text, attributes: [.font: UIFont.systemFont(ofSize: 13)])
+            default:
+                return CGSize(width: 50, height: 50)
+//                fatalError("messageContainerSize received unhandled MessageDataType: \(message.kind)")
+            }
+
+            messageContainerSize = labelSize(for: attributedText, considering: maxWidth)
+
+            messageContainerSize.width += 10
+            messageContainerSize.height += 30
+            return messageContainerSize
+        default:
+            return CGSize.zero
+        }
+        
     }
 
     open func messageContainerSize(for message: MKMessageType) -> CGSize {
@@ -295,6 +350,12 @@ open class MessageSizeCalculator: CellSizeCalculator {
         let rect = attributedText.boundingRect(with: constraintBox, options: [.usesLineFragmentOrigin, .usesFontLeading], context: nil).integral
 
         return rect.size
+    }
+    internal func labelWidth(for attributedText: NSAttributedString, considering maxHeight: CGFloat) -> CGFloat {
+        let constraintBox = CGSize(width: .greatestFiniteMagnitude, height: maxHeight)
+        let rect = attributedText.boundingRect(with: constraintBox, options: [.usesLineFragmentOrigin, .usesFontLeading], context: nil).integral
+
+        return rect.size.width
     }
 }
 

@@ -27,16 +27,16 @@ import UIKit
 
 open class TextMessageSizeCalculator: MessageSizeCalculator {
 
-    public var incomingMessageLabelInsets = UIEdgeInsets(top: 7, left: 18, bottom: 7, right: 14)
-    public var outgoingMessageLabelInsets = UIEdgeInsets(top: 7, left: 14, bottom: 7, right: 18)
+//    public var incomingMessageLabelInsets = UIEdgeInsets(top: 7, left: 18, bottom: 7, right: 14)
+//    public var outgoingMessageLabelInsets = UIEdgeInsets(top: 7, left: 14, bottom: 7, right: 18)
 
     public var messageLabelFont = UIFont.preferredFont(forTextStyle: .body)
 
-    internal func messageLabelInsets(for message: MKMessageType) -> UIEdgeInsets {
-        let dataSource = messagesLayout.messagesDataSource
-        let isFromCurrentSender = dataSource.isFromCurrentSender(message: message)
-        return isFromCurrentSender ? outgoingMessageLabelInsets : incomingMessageLabelInsets
-    }
+//    internal func messageLabelInsets(for message: MKMessageType) -> UIEdgeInsets {
+//        let dataSource = messagesLayout.messagesDataSource
+//        let isFromCurrentSender = dataSource.isFromCurrentSender(message: message)
+//        return isFromCurrentSender ? outgoingMessageLabelInsets : incomingMessageLabelInsets
+//    }
 
     open override func messageContainerMaxWidth(for message: MKMessageType) -> CGFloat {
         let maxWidth = super.messageContainerMaxWidth(for: message)
@@ -44,6 +44,31 @@ open class TextMessageSizeCalculator: MessageSizeCalculator {
         return maxWidth - textInsets.horizontal
     }
 
+//    open override func replyBodySize(for message: MKMessageType) -> CGSize {
+//        guard message.action == .reply else {return CGSize.zero}
+//        let maxWidth = messageContainerMaxWidth(for: message)
+//
+//        var messageContainerSize: CGSize
+//        let attributedText: NSAttributedString
+//
+//        switch message.kind {
+//        case .attributedText(let text):
+//            attributedText = text
+//        case .text(let text), .emoji(let text):
+//            attributedText = NSAttributedString(string: text, attributes: [.font: messageLabelFont])
+//        default:
+//            fatalError("messageContainerSize received unhandled MessageDataType: \(message.kind)")
+//        }
+//
+//        messageContainerSize = labelSize(for: attributedText, considering: maxWidth)
+//
+//        let messageInsets = messageLabelInsets(for: message)
+//        messageContainerSize.width += messageInsets.horizontal
+//        messageContainerSize.height += messageInsets.vertical
+//
+//        return messageContainerSize
+//    }
+    
     open override func messageContainerSize(for message: MKMessageType) -> CGSize {
         let maxWidth = messageContainerMaxWidth(for: message)
 

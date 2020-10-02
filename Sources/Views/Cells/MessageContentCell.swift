@@ -34,6 +34,15 @@ open class MessageContentCell: MessageCollectionViewCell, UIGestureRecognizerDel
     open var sendStatusImageView = UIImageView()
 
     /// The container used for styling and holding the message's content view.
+    lazy var replyBodyView: ReplyBodyView = {
+        let replyView = ReplyBodyView()
+        replyView.backgroundColor = UIColor.groupTableViewBackground
+        replyView.clipsToBounds = true
+        replyView.layer.cornerRadius = 10
+        return replyView
+    }()
+    
+    
     open var messageContainerView: MessageContainerView = {
         let containerView = MessageContainerView()
         containerView.clipsToBounds = true
@@ -43,9 +52,17 @@ open class MessageContentCell: MessageCollectionViewCell, UIGestureRecognizerDel
     
     open var iconReply: UIImageView = {
         let imgvCanReply = UIImageView()
-        imgvCanReply.image = UIImage(named: "icon_chat_reply")
+        imgvCanReply.image = UIImage(named: "mk_icon_chat_reply", in: Bundle.messageKitAssetBundle, compatibleWith: nil)
         imgvCanReply.contentMode = .scaleAspectFit
         return imgvCanReply
+    }()
+    
+    lazy var iconMarkReply: UIImageView = {
+        let imgvReply = UIImageView()
+        imgvReply.image = UIImage(named: "mk_icon_mark_reply", in: Bundle.messageKitAssetBundle, compatibleWith: nil)
+        imgvReply.clipsToBounds = true
+        imgvReply.contentMode = .scaleAspectFill
+        return imgvReply
     }()
 
     /// The top label of the cell.
@@ -106,8 +123,10 @@ open class MessageContentCell: MessageCollectionViewCell, UIGestureRecognizerDel
         contentView.addSubview(accessoryView)
         contentView.addSubview(cellTopLabel)
         contentView.addSubview(messageTopLabel)
+        contentView.addSubview(iconMarkReply)
         contentView.addSubview(messageBottomLabel)
         contentView.addSubview(cellBottomLabel)
+        contentView.addSubview(replyBodyView)
         contentView.addSubview(messageContainerView)
         contentView.addSubview(avatarView)
         contentView.addSubview(sendStatusImageView)
@@ -168,6 +187,7 @@ open class MessageContentCell: MessageCollectionViewCell, UIGestureRecognizerDel
         cellTopLabel.text = nil
         cellBottomLabel.text = nil
         messageTopLabel.text = nil
+//        iconMarkReply.isHidden = true
         messageBottomLabel.text = nil
 //        messageTimestampLabel.attributedText = nil
     }
@@ -178,6 +198,7 @@ open class MessageContentCell: MessageCollectionViewCell, UIGestureRecognizerDel
         super.apply(layoutAttributes)
         guard let attributes = layoutAttributes as? MessagesCollectionViewLayoutAttributes else { return }
         // Call this before other laying out other subviews
+        layoutReplyView(with: attributes)
         layoutMessageContainerView(with: attributes)
         layoutMessageBottomLabel(with: attributes)
         layoutCellBottomLabel(with: attributes)
@@ -227,6 +248,8 @@ open class MessageContentCell: MessageCollectionViewCell, UIGestureRecognizerDel
         messageTopLabel.attributedText = topMessageLabelText
         messageBottomLabel.attributedText = bottomMessageLabelText
 //        messageTimestampLabel.attributedText = messageTimestampLabelText
+        let isOutgoingMessage = dataSource.isFromCurrentSender(message: message)
+        replyBodyView.applyUI(isOutgoingMessage: isOutgoingMessage, message: message)
     }
 
     /// Handle tap gesture on contentView and its subviews.
@@ -335,6 +358,41 @@ open class MessageContentCell: MessageCollectionViewCell, UIGestureRecognizerDel
         sendStatusImageView.frame = CGRect(origin: origin, size: attributes.sendStatusSize)
     }
     
+    open func layoutReplyView(with attributes: MessagesCollectionViewLayoutAttributes) {
+        var origin: CGPoint = .zero
+
+        switch attributes.avatarPosition.vertical {
+        case .messageBottom:
+            origin.y = attributes.size.height - attributes.replyBodyPadding.bottom - attributes.cellBottomLabelSize.height - attributes.messageBottomLabelSize.height - attributes.replyBodySize.height - attributes.replyBodyPadding.top
+        case .messageCenter:
+            if attributes.avatarSize.height > attributes.replyBodySize.height {
+                let messageHeight = attributes.replyBodySize.height + attributes.replyBodyPadding.vertical
+                origin.y = (attributes.size.height / 2) - (messageHeight / 2)
+            } else {
+                fallthrough
+            }
+        default:
+            if attributes.accessoryViewSize.height > attributes.replyBodySize.height {
+                let messageHeight = attributes.replyBodySize.height + attributes.replyBodyPadding.vertical
+                origin.y = (attributes.size.height / 2) - (messageHeight / 2)
+            } else {
+                origin.y = attributes.cellTopLabelSize.height + attributes.messageTopLabelSize.height + attributes.replyBodyPadding.top
+            }
+        }
+
+        let avatarPadding = attributes.avatarLeadingTrailingPadding
+        switch attributes.avatarPosition.horizontal {
+        case .cellLeading:
+            origin.x = attributes.avatarSize.width + attributes.replyBodyPadding.left + avatarPadding
+        case .cellTrailing:
+            origin.x = attributes.frame.width - attributes.avatarSize.width - attributes.sendStatusSize.width - attributes.replyBodySize.width - attributes.replyBodyPadding.right - avatarPadding
+        case .natural:
+            fatalError(MessageKitError.avatarPositionUnresolved)
+        }
+
+        replyBodyView.frame = CGRect(origin: origin, size: attributes.replyBodySize)
+    }
+    
     /// Positions the cell's `MessageContainerView`.
     /// - attributes: The `MessagesCollectionViewLayoutAttributes` for the cell.
     open func layoutMessageContainerView(with attributes: MessagesCollectionViewLayoutAttributes) {
@@ -355,7 +413,7 @@ open class MessageContentCell: MessageCollectionViewCell, UIGestureRecognizerDel
                 let messageHeight = attributes.messageContainerSize.height + attributes.messageContainerPadding.vertical
                 origin.y = (attributes.size.height / 2) - (messageHeight / 2)
             } else {
-                origin.y = attributes.cellTopLabelSize.height + attributes.messageTopLabelSize.height + attributes.messageContainerPadding.top
+                origin.y = attributes.cellTopLabelSize.height + attributes.messageTopLabelSize.height + attributes.messageContainerPadding.top + attributes.replyBodySize.height - 20
             }
         }
 
@@ -398,11 +456,18 @@ open class MessageContentCell: MessageCollectionViewCell, UIGestureRecognizerDel
     open func layoutMessageTopLabel(with attributes: MessagesCollectionViewLayoutAttributes) {
         messageTopLabel.textAlignment = attributes.messageTopLabelAlignment.textAlignment
         messageTopLabel.textInsets = attributes.messageTopLabelAlignment.textInsets
-
-        let y = messageContainerView.frame.minY - attributes.messageContainerPadding.top - attributes.messageTopLabelSize.height
-        let origin = CGPoint(x: 0, y: y)
         
-        messageTopLabel.frame = CGRect(origin: origin, size: attributes.messageTopLabelSize)
+        let iconMarkReplySize: CGSize = CGSize(width: 15, height: 15)
+        let y = replyBodyView.frame.minY - attributes.messageContainerPadding.top - attributes.messageTopLabelSize.height
+        let origin = CGPoint(x: 0, y: y)
+        let iconX: CGFloat
+        if attributes.messageTopLabelAlignment.textAlignment == .left{
+            iconX = attributes.messageTopLabelAlignment.textInsets.left - (iconMarkReplySize.width + 5)
+        }else{
+            iconX = self.frame.width - attributes.messageTopLabelAlignment.textInsets.right - attributes.messageTopLabelSize.width - (iconMarkReplySize.width + 5)
+        }
+        iconMarkReply.frame = CGRect(x: iconX, y: y + (attributes.messageTopLabelSize.height - iconMarkReplySize.height)/2, width: iconMarkReplySize.width, height: iconMarkReplySize.height)
+        messageTopLabel.frame = CGRect(origin: origin, size: CGSize(width: self.frame.width, height: attributes.messageTopLabelSize.height))
     }
 
     /// Positions the message bubble's bottom label.

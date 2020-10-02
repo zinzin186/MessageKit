@@ -35,6 +35,7 @@ open class MessageContainerView: UIImageView {
             applyMessageStyle()
         }
     }
+    
 
     open override var frame: CGRect {
         didSet {
@@ -85,4 +86,5 @@ open class MessageContainerView: UIImageView {
             configurationClosure(self)
         }
     }
+    
 }

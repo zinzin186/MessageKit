@@ -128,6 +128,21 @@ class ChatViewController: MessagesViewController, MKMessagesDataSource {
         )
     }
     
+    private func getTitleText(isOutgoingMessage: Bool, message: MKMessageType, replyMessage: MKReplyMessageType) -> String {
+        if isOutgoingMessage {
+            if message.sender.senderId == replyMessage.sender.senderId {
+                return "Bạn đã trả lời chính mình"
+            } else {
+                return "Bạn đã trả lời \(replyMessage.sender.displayName)"
+            }
+        }
+        if message.sender.senderId == replyMessage.sender.senderId {
+            return "\(message.sender.displayName) đã trả lời chính mình"
+        } else {
+            return "\(message.sender.displayName) đã trả lời \(replyMessage.sender.displayName)"
+        }
+    }
+    
     // MARK: - Helpers
     
     func insertMessage(_ message: MockMessage) {
@@ -180,10 +195,19 @@ class ChatViewController: MessagesViewController, MKMessagesDataSource {
     }
 
     func messageTopLabelAttributedText(for message: MKMessageType, at indexPath: IndexPath) -> NSAttributedString? {
-        let name = message.sender.displayName
-        return NSAttributedString(string: name, attributes: [NSAttributedString.Key.font: UIFont.preferredFont(forTextStyle: .caption1)])
+        switch message.action {
+        case .reply(let replyMessage):
+            let outGoing = currentSender().senderId == message.sender.senderId
+            
+            let name = self.getTitleText(isOutgoingMessage: outGoing, message: message, replyMessage: replyMessage)
+            return NSAttributedString(string: name, attributes: [NSAttributedString.Key.font: UIFont.preferredFont(forTextStyle: .caption1)])
+        default:
+            let name = message.sender.displayName
+            return NSAttributedString(string: name, attributes: [NSAttributedString.Key.font: UIFont.preferredFont(forTextStyle: .caption1)])
+        }
+        
     }
-
+    
     func messageBottomLabelAttributedText(for message: MKMessageType, at indexPath: IndexPath) -> NSAttributedString? {
         let dateString = formatter.string(from: message.sentDate)
         return NSAttributedString(string: dateString, attributes: [NSAttributedString.Key.font: UIFont.preferredFont(forTextStyle: .caption2)])
