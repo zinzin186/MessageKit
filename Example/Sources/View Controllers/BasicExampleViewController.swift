@@ -81,6 +81,12 @@ extension BasicExampleViewController: MKMessagesDisplayDelegate {
         }
     }
     
+    func configureReplyMediaMessageImageView(_ imageView: UIImageView, for message: MKReplyMessageType, at indexPath: IndexPath, in messagesCollectionView: MessagesCollectionView) {
+        if case MessageKind.photo(let media) = message.kind, let imageURL = media.url {
+            imageView.pin_setImage(from: imageURL)
+        }
+    }
+    
     // MARK: - Location Messages
     
     func annotationViewForLocation(message: MKMessageType, at indexPath: IndexPath, in messageCollectionView: MessagesCollectionView) -> MKAnnotationView? {

@@ -294,9 +294,9 @@ extension AutocompleteExampleViewController: MKMessagesDisplayDelegate {
         switch detector {
         case .hashtag, .mention:
             if isFromCurrentSender(message: message) {
-                return [.foregroundColor: UIColor.white]
+                return [.foregroundColor: UIColor.red]
             } else {
-                return [.foregroundColor: UIColor.primaryColor]
+                return [.foregroundColor: UIColor.blue]
             }
         default: return MessageLabel.defaultAttributes
         }

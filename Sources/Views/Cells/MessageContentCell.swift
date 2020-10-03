@@ -250,6 +250,10 @@ open class MessageContentCell: MessageCollectionViewCell, UIGestureRecognizerDel
 //        messageTimestampLabel.attributedText = messageTimestampLabelText
         let isOutgoingMessage = dataSource.isFromCurrentSender(message: message)
         replyBodyView.applyUI(isOutgoingMessage: isOutgoingMessage, message: message)
+        
+        if case ActionType.reply(let replyMessage) = message.action {
+            displayDelegate.configureReplyMediaMessageImageView(replyBodyView.imageView, for: replyMessage, at: indexPath, in: messagesCollectionView)
+        }
     }
 
     /// Handle tap gesture on contentView and its subviews.

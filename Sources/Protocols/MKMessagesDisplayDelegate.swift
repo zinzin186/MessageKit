@@ -175,6 +175,8 @@ public protocol MKMessagesDisplayDelegate: AnyObject {
     ///   - indexPath: The `IndexPath` of the cell.
     ///   - messagesCollectionView: The `MessagesCollectionView` in which this cell will be displayed.
     func configureMediaMessageImageView(_ imageView: UIImageView, for message: MKMessageType, at indexPath: IndexPath, in messagesCollectionView: MessagesCollectionView)
+    
+    func configureReplyMediaMessageImageView(_ imageView: UIImageView, for message: MKReplyMessageType, at indexPath: IndexPath, in messagesCollectionView: MessagesCollectionView)
 
     // MARK: - Audio Message
     
@@ -297,6 +299,8 @@ public extension MKMessagesDisplayDelegate {
 
     func configureMediaMessageImageView(_ imageView: UIImageView, for message: MKMessageType, at indexPath: IndexPath, in messagesCollectionView: MessagesCollectionView) {
     }
+    
+    func configureReplyMediaMessageImageView(_ imageView: UIImageView, for message: MKReplyMessageType, at indexPath: IndexPath, in messagesCollectionView: MessagesCollectionView){}
 
     // MARK: - Audio Message Defaults
     

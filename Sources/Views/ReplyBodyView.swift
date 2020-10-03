@@ -26,25 +26,45 @@ import UIKit
 
 open class ReplyBodyView: UIView {
     
+    private lazy var tapButton: UIButton = { [unowned self] in
+        let button = UIButton(type: .system)
+        button.addTarget(self, action: #selector(self.tapReplyMessage), for: .touchUpInside)
+        button.translatesAutoresizingMaskIntoConstraints = false
+        return button
+    }()
+    @objc private func tapReplyMessage(){
+        print("Tapppp")
+    }
     
-    
-    lazy var imageView: UIImageView = {
+    lazy var imageView: UIImageView = {[unowned self] in
         let imageView: UIImageView = .init()
         imageView.clipsToBounds = true
         imageView.contentMode = .scaleAspectFill
         imageView.translatesAutoresizingMaskIntoConstraints = false
-        imageView.backgroundColor = .red
         addSubview(imageView)
 
         NSLayoutConstraint.activate([
             imageView.leadingAnchor.constraint(equalTo: self.leadingAnchor, constant: 5),
             imageView.topAnchor.constraint(equalTo: self.topAnchor, constant: 5),
-            imageView.trailingAnchor.constraint(equalTo: self.trailingAnchor, constant: -5),
+            imageView.widthAnchor.constraint(equalToConstant: 50),
             imageView.bottomAnchor.constraint(equalTo: self.bottomAnchor, constant: -25)
+        ])
+        addSubview(teaserLabel)
+        NSLayoutConstraint.activate([
+            teaserLabel.leadingAnchor.constraint(equalTo: imageView.trailingAnchor, constant: 5),
+            teaserLabel.topAnchor.constraint(equalTo: imageView.topAnchor, constant: 5),
+            teaserLabel.trailingAnchor.constraint(equalTo: self.trailingAnchor, constant: -5),
+        ])
+        addSubview(tapButton)
+        NSLayoutConstraint.activate([
+            tapButton.leadingAnchor.constraint(equalTo: self.leadingAnchor),
+            tapButton.topAnchor.constraint(equalTo: self.topAnchor),
+            tapButton.trailingAnchor.constraint(equalTo: self.trailingAnchor),
+            tapButton.bottomAnchor.constraint(equalTo: self.bottomAnchor)
         ])
         return imageView
     }()
-    private lazy var contentLabel: UILabel = {
+    private lazy var contentLabel: UILabel = {[unowned self] in
         let label: UILabel = .init()
         label.numberOfLines = 0
         label.font = UIFont.systemFont(ofSize: 13)
@@ -56,12 +76,18 @@ open class ReplyBodyView: UIView {
             label.trailingAnchor.constraint(equalTo: self.trailingAnchor, constant: -5),
             label.bottomAnchor.constraint(equalTo: self.bottomAnchor, constant: -25)
         ])
+        NSLayoutConstraint.activate([
+            tapButton.leadingAnchor.constraint(equalTo: self.leadingAnchor),
+            tapButton.topAnchor.constraint(equalTo: self.topAnchor),
+            tapButton.trailingAnchor.constraint(equalTo: self.trailingAnchor),
+            tapButton.bottomAnchor.constraint(equalTo: self.bottomAnchor)
+        ])
         return label
     }()
     lazy var teaserLabel: UILabel = {
         let label: UILabel = .init()
         label.numberOfLines = 0
-        label.font = UIFont.systemFont(ofSize: 15)
+        label.font = UIFont.systemFont(ofSize: 13)
         label.translatesAutoresizingMaskIntoConstraints = false
         return label
     }()
@@ -76,11 +102,8 @@ open class ReplyBodyView: UIView {
     }
 
     func applyUI(isOutgoingMessage: Bool, message: MKMessageType){
-        switch message.action {
-        case .reply(let replyMessage):
+        if case ActionType.reply(let replyMessage) = message.action {
             self.getContentText(message: replyMessage)
-        default:
-            break
         }
         
     }
@@ -94,8 +117,10 @@ open class ReplyBodyView: UIView {
             self.contentLabel.attributedText = text
         case .photo(let photo):
             self.imageView.image = photo.image ?? photo.placeholderImage
+            teaserLabel.text = "Hình ảnh"
         case .video(let video):
             self.imageView.image = video.image ?? video.placeholderImage
+            teaserLabel.text = "Video"
         default:
             break
         }

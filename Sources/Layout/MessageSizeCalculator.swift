@@ -308,7 +308,7 @@ open class MessageSizeCalculator: CellSizeCalculator {
             case .text(let text), .emoji(let text):
                 attributedText = NSAttributedString(string: text, attributes: [.font: UIFont.systemFont(ofSize: 13)])
             default:
-                return CGSize(width: 50, height: 50)
+                return CGSize(width: 120, height: 80)
 //                fatalError("messageContainerSize received unhandled MessageDataType: \(message.kind)")
             }
 
