@@ -47,13 +47,13 @@ extension BasicExampleViewController: MKMessagesDisplayDelegate {
     
     func detectorAttributes(for detector: DetectorType, and message: MKMessageType, at indexPath: IndexPath) -> [NSAttributedString.Key: Any] {
         switch detector {
-        case .hashtag, .mention: return [.foregroundColor: UIColor.blue]
+        case .hashtag, .mentionRange: return [.foregroundColor: UIColor.blue, NSAttributedString.Key.font: UIFont.systemFont(ofSize: 22.0)]
         default: return MessageLabel.defaultAttributes
         }
     }
     
     func enabledDetectors(for message: MKMessageType, at indexPath: IndexPath, in messagesCollectionView: MessagesCollectionView) -> [DetectorType] {
-        return [.url, .address, .phoneNumber, .date, .transitInformation, .mention, .hashtag]
+        return [.url, .address, .phoneNumber, .date, .transitInformation, .mentionRange([MentionInfo(range: NSRange(location: 1, length: 4), target: "targetMention"), MentionInfo(range: NSRange(location: 8, length: 2), target: "targetMention1")]), .hashtag]
     }
     
     // MARK: - All Messages

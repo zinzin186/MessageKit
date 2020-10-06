@@ -27,63 +27,28 @@ import UIKit
 
 open class TextMessageSizeCalculator: MessageSizeCalculator {
 
-//    public var incomingMessageLabelInsets = UIEdgeInsets(top: 7, left: 18, bottom: 7, right: 14)
-//    public var outgoingMessageLabelInsets = UIEdgeInsets(top: 7, left: 14, bottom: 7, right: 18)
+    public var incomingMessageLabelInsets = UIEdgeInsets(top: 7, left: 18, bottom: 7, right: 14)
+    public var outgoingMessageLabelInsets = UIEdgeInsets(top: 7, left: 14, bottom: 7, right: 18)
 
     public var messageLabelFont = UIFont.preferredFont(forTextStyle: .body)
 
-//    internal func messageLabelInsets(for message: MKMessageType) -> UIEdgeInsets {
-//        let dataSource = messagesLayout.messagesDataSource
-//        let isFromCurrentSender = dataSource.isFromCurrentSender(message: message)
-//        return isFromCurrentSender ? outgoingMessageLabelInsets : incomingMessageLabelInsets
-//    }
+    internal func messageLabelInsets(for message: MKMessageType) -> UIEdgeInsets {
+        let dataSource = messagesLayout.messagesDataSource
+        let isFromCurrentSender = dataSource.isFromCurrentSender(message: message)
+        return isFromCurrentSender ? outgoingMessageLabelInsets : incomingMessageLabelInsets
+    }
 
     open override func messageContainerMaxWidth(for message: MKMessageType) -> CGFloat {
         let maxWidth = super.messageContainerMaxWidth(for: message)
         let textInsets = messageLabelInsets(for: message)
         return maxWidth - textInsets.horizontal
     }
-
-//    open override func replyBodySize(for message: MKMessageType) -> CGSize {
-//        guard message.action == .reply else {return CGSize.zero}
-//        let maxWidth = messageContainerMaxWidth(for: message)
-//
-//        var messageContainerSize: CGSize
-//        let attributedText: NSAttributedString
-//
-//        switch message.kind {
-//        case .attributedText(let text):
-//            attributedText = text
-//        case .text(let text), .emoji(let text):
-//            attributedText = NSAttributedString(string: text, attributes: [.font: messageLabelFont])
-//        default:
-//            fatalError("messageContainerSize received unhandled MessageDataType: \(message.kind)")
-//        }
-//
-//        messageContainerSize = labelSize(for: attributedText, considering: maxWidth)
-//
-//        let messageInsets = messageLabelInsets(for: message)
-//        messageContainerSize.width += messageInsets.horizontal
-//        messageContainerSize.height += messageInsets.vertical
-//
-//        return messageContainerSize
-//    }
     
-    open override func messageContainerSize(for message: MKMessageType) -> CGSize {
+    open override func messageContainerSize(for message: MKMessageType, indexPath: IndexPath) -> CGSize {
         let maxWidth = messageContainerMaxWidth(for: message)
 
         var messageContainerSize: CGSize
-        let attributedText: NSAttributedString
-
-        switch message.kind {
-        case .attributedText(let text):
-            attributedText = text
-        case .text(let text), .emoji(let text):
-            attributedText = NSAttributedString(string: text, attributes: [.font: messageLabelFont])
-        default:
-            fatalError("messageContainerSize received unhandled MessageDataType: \(message.kind)")
-        }
-
+        let attributedText = self.genAttributeMessage(with: message, at: indexPath)
         messageContainerSize = labelSize(for: attributedText, considering: maxWidth)
 
         let messageInsets = messageLabelInsets(for: message)
@@ -112,5 +77,34 @@ open class TextMessageSizeCalculator: MessageSizeCalculator {
         default:
             break
         }
+    }
+    private func genAttributeMessage(with message: MKMessageType, at indexPath: IndexPath) -> NSAttributedString {
+        guard let displayDelegate = messagesLayout.messagesCollectionView.messagesDisplayDelegate else {
+            fatalError(MessageKitError.nilMessagesDisplayDelegate)
+        }
+        let attributedString: NSMutableAttributedString
+        switch message.kind {
+        case .text(let text), .emoji(let text):
+            attributedString = NSMutableAttributedString(string: text)
+            attributedString.addAttribute(.font, value: UIFont.preferredFont(forTextStyle: .body), range: NSMakeRange(0, text.count))
+        case .attributedText(let text):
+            attributedString = NSMutableAttributedString(attributedString: text)
+        default:
+            attributedString = NSMutableAttributedString(string: "")
+        }
+
+        
+        let enabledDetectors = displayDelegate.enabledDetectors(for: message, at: indexPath, in: messagesLayout.messagesCollectionView)
+        for detector in enabledDetectors {
+            switch detector {
+            case .mentionRange(let mentionInfo):
+                let attributes = displayDelegate.detectorAttributes(for: detector, and: message, at: indexPath)
+                mentionInfo.forEach({attributedString.addAttributes(attributes, range: $0.range)})
+            default:
+                break
+            }
+        }
+        let modifiedText = NSAttributedString(attributedString: attributedString)
+        return modifiedText
     }
 }

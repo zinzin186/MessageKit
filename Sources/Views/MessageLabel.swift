@@ -160,7 +160,7 @@ open class MessageLabel: UILabel {
             urlAttributes = attributes
         case .transitInformation:
             transitInformationAttributes = attributes
-        case .mention:
+        case .mentionRange:
             mentionAttributes = attributes
         case .hashtag:
             hashtagAttributes = attributes
@@ -233,6 +233,21 @@ open class MessageLabel: UILabel {
             rangesForDetectors.removeAll()
             let results = parse(text: mutableText)
             setRangesForDetectors(in: results)
+            //Mention Config
+            if let mention = enabledDetectors.filter({ $0.isMention }).first{
+                if case DetectorType.mentionRange(let mentionInfo) = mention {
+                    var ranges = rangesForDetectors[mention] ?? []
+                    mentionInfo.forEach { (men) in
+                        let tuple: (NSRange, MessageTextCheckingType) = (men.range, .mentionRange(mentionInfo: men))
+                        ranges.append(tuple)
+                    }
+                    
+                    
+                    rangesForDetectors.updateValue(ranges, forKey: mention)
+                }
+            }
+            
+                    
         }
         
         for (detector, rangeTuples) in rangesForDetectors {
@@ -271,7 +286,6 @@ open class MessageLabel: UILabel {
 
         for detector in detectors {
             guard let rangeTuples = rangesForDetectors[detector] else { continue }
-
             for (range, _)  in rangeTuples {
                 // This will enable us to attribute it with our own styles, since `UILabel` does not provide link attribute overrides like `UITextView` does
                 if detector.textCheckingType == .link {
@@ -300,7 +314,7 @@ open class MessageLabel: UILabel {
             return urlAttributes
         case .transitInformation:
             return transitInformationAttributes
-        case .mention:
+        case .mentionRange:
             return mentionAttributes
         case .hashtag:
             return hashtagAttributes
@@ -345,10 +359,9 @@ open class MessageLabel: UILabel {
             .map { parseForMatches(with: $0, in: text, for: range) }
             .joined()
         matches.append(contentsOf: regexs)
-
         // Get all Checking Types of detectors, except for .custom because they contain their own regex
         let detectorCheckingTypes = enabledDetectors
-            .filter { !$0.isCustom }
+            .filter { (!$0.isCustom && !$0.isMention) }
             .reduce(0) { $0 | $1.textCheckingType.rawValue }
         if detectorCheckingTypes > 0, let detector = try? NSDataDetector(types: detectorCheckingTypes) {
             let detectorMatches = detector.matches(in: text.string, options: [], range: range)
@@ -379,9 +392,22 @@ open class MessageLabel: UILabel {
             fatalError("You must pass a .custom DetectorType")
         }
     }
-
-    private func setRangesForDetectors(in checkingResults: [NSTextCheckingResult]) {
-
+    func getElements(from text: String, with pattern: String, range: NSRange) -> [NSTextCheckingResult]{
+        guard let elementRegex = regularExpression(for: pattern) else { return [] }
+        return elementRegex.matches(in: text, options: [], range: range)
+    }
+    private var cachedRegularExpressions: [String : NSRegularExpression] = [:]
+    private func regularExpression(for pattern: String) -> NSRegularExpression? {
+        if let regex = cachedRegularExpressions[pattern] {
+            return regex
+        } else if let createdRegex = try? NSRegularExpression(pattern: pattern, options: [.caseInsensitive]) {
+            cachedRegularExpressions[pattern] = createdRegex
+            return createdRegex
+        } else {
+            return nil
+        }
+    }
+    private func  setRangesForDetectors(in checkingResults: [NSTextCheckingResult]) {
         guard checkingResults.isEmpty == false else { return }
         
         for result in checkingResults {
@@ -424,6 +450,10 @@ open class MessageLabel: UILabel {
             }
 
         }
+        
+        
+        
+       
 
     }
 
@@ -498,11 +528,16 @@ open class MessageLabel: UILabel {
             switch detectorType {
             case .hashtag:
                 handleHashtag(match)
-            case .mention:
-                handleMention(match)
+//            case .mention:
+//                handleMention(match)
             default:
                 handleCustom(pattern, match: match)
             }
+        case let .mentionRange(mention):
+            guard let text = text else {return}
+            let substring = (text as NSString).substring(with: mention.range)
+            handleMention(substring, target: mention.target)
+            
         }
     }
     // swiftlint:enable cyclomatic_complexity
@@ -531,8 +566,8 @@ open class MessageLabel: UILabel {
         delegate?.didSelectHashtag(hashtag)
     }
 
-    private func handleMention(_ mention: String) {
-        delegate?.didSelectMention(mention)
+    private func handleMention(_ mention: String, target: String) {
+        delegate?.didSelectMention(mention, target: target)
     }
 
     private func handleCustom(_ pattern: String, match: String) {
@@ -548,4 +583,5 @@ internal enum MessageTextCheckingType {
     case link(URL?)
     case transitInfoComponents([NSTextCheckingKey: String]?)
     case custom(pattern: String, match: String?)
+    case mentionRange(mentionInfo: MentionInfo)
 }

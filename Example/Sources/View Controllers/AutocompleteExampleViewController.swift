@@ -292,7 +292,7 @@ extension AutocompleteExampleViewController: MKMessagesDisplayDelegate {
 
     func detectorAttributes(for detector: DetectorType, and message: MKMessageType, at indexPath: IndexPath) -> [NSAttributedString.Key: Any] {
         switch detector {
-        case .hashtag, .mention:
+        case .hashtag, .mentionRange:
             if isFromCurrentSender(message: message) {
                 return [.foregroundColor: UIColor.red]
             } else {
@@ -303,7 +303,7 @@ extension AutocompleteExampleViewController: MKMessagesDisplayDelegate {
     }
 
     func enabledDetectors(for message: MKMessageType, at indexPath: IndexPath, in messagesCollectionView: MessagesCollectionView) -> [DetectorType] {
-        return [.url, .address, .phoneNumber, .date, .transitInformation, .mention, .hashtag]
+        return [.url, .address, .phoneNumber, .date, .transitInformation, .mentionRange([MentionInfo(range: NSRange(location: 2, length: 6), target: "targetMention")]), .hashtag]
     }
 
     // MARK: - All Messages

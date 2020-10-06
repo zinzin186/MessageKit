@@ -315,8 +315,8 @@ extension ChatViewController: MKMessageLabelDelegate {
         print("Hashtag selected: \(hashtag)")
     }
 
-    func didSelectMention(_ mention: String) {
-        print("Mention selected: \(mention)")
+    func didSelectMention(_ mention: String, target: String) {
+        print("Mention selected: \(mention), target: \(target)")
     }
 
     func didSelectCustom(_ pattern: String, match: String?) {

@@ -24,7 +24,20 @@
 
 import Foundation
 
+public struct MentionInfo{
+    let range: NSRange
+    let target: String
+    public init(range: NSRange, target: String) {
+        self.range = range
+        self.target = target
+    }
+}
+
 public enum DetectorType: Hashable {
+    public static func == (lhs: DetectorType, rhs: DetectorType) -> Bool {
+        return lhs.toInt() == rhs.toInt()
+    }
+    
 
     case address
     case date
@@ -32,10 +45,11 @@ public enum DetectorType: Hashable {
     case url
     case transitInformation
     case custom(NSRegularExpression)
+    case mentionRange([MentionInfo])
 
     // swiftlint:disable force_try
     public static var hashtag = DetectorType.custom(try! NSRegularExpression(pattern: "#[a-zA-Z0-9]{4,}", options: []))
-    public static var mention = DetectorType.custom(try! NSRegularExpression(pattern: "@[a-zA-Z0-9]{4,}", options: []))
+//    public static var mention = DetectorType.custom(try! NSRegularExpression(pattern: "@[a-zA-Z0-9]{4,}", options: []))
     // swiftlint:enable force_try
 
     internal var textCheckingType: NSTextCheckingResult.CheckingType {
@@ -46,6 +60,7 @@ public enum DetectorType: Hashable {
         case .url: return .link
         case .transitInformation: return .transitInformation
         case .custom: return .regularExpression
+        case .mentionRange: return .regularExpression
         }
     }
 
@@ -57,6 +72,12 @@ public enum DetectorType: Hashable {
         }
     }
 
+    public var isMention: Bool {
+        switch self {
+        case .mentionRange: return true
+        default: return false
+        }
+    }
     ///The hashValue of the `DetectorType` so we can conform to `Hashable` and be sorted.
     public func hash(into hasher: inout Hasher) {
         hasher.combine(toInt())
@@ -71,6 +92,7 @@ public enum DetectorType: Hashable {
         case .url: return 3
         case .transitInformation: return 4
         case .custom(let regex): return regex.hashValue
+        case .mentionRange(let mentionInfo): return mentionInfo.map({$0.target}).joined().hashValue
         }
     }
 

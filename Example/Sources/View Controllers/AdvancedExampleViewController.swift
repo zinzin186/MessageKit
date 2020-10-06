@@ -292,7 +292,7 @@ extension AdvancedExampleViewController: MKMessagesDisplayDelegate {
 
     func detectorAttributes(for detector: DetectorType, and message: MKMessageType, at indexPath: IndexPath) -> [NSAttributedString.Key: Any] {
         switch detector {
-        case .hashtag, .mention:
+        case .hashtag, .mentionRange:
             if isFromCurrentSender(message: message) {
                 return [.foregroundColor: UIColor.white]
             } else {
@@ -303,7 +303,7 @@ extension AdvancedExampleViewController: MKMessagesDisplayDelegate {
     }
 
     func enabledDetectors(for message: MKMessageType, at indexPath: IndexPath, in messagesCollectionView: MessagesCollectionView) -> [DetectorType] {
-        return [.url, .address, .phoneNumber, .date, .transitInformation, .mention, .hashtag]
+        return [.url, .address, .phoneNumber, .date, .transitInformation, .mentionRange([MentionInfo(range: NSRange(location: 2, length: 6), target: "targetMention")]), .hashtag]
     }
 
     // MARK: - All Messages
@@ -376,6 +376,12 @@ extension AdvancedExampleViewController: MKMessagesDisplayDelegate {
             imageView.pin_setImage(from: imageURL)
         } else {
             imageView.pin_cancelImageDownload()
+        }
+    }
+    
+    func configureReplyMediaMessageImageView(_ imageView: UIImageView, for message: MKReplyMessageType, at indexPath: IndexPath, in messagesCollectionView: MessagesCollectionView) {
+        if case MessageKind.photo(let media) = message.kind, let imageURL = media.url {
+            imageView.pin_setImage(from: imageURL)
         }
     }
     

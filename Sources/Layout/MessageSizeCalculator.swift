@@ -79,7 +79,7 @@ open class MessageSizeCalculator: CellSizeCalculator {
         attributes.replyBodyPadding = replyBodyPadding(for: message)
         attributes.messageContainerPadding = messageContainerPadding(for: message)
         attributes.replyBodySize = replyBodySize(for: message)
-        attributes.messageContainerSize = messageContainerSize(for: message)
+        attributes.messageContainerSize = messageContainerSize(for: message, indexPath: indexPath)
         attributes.cellTopLabelSize = cellTopLabelSize(for: message, at: indexPath)
         attributes.cellTopLabelAlignment = cellTopLabelAlignment(for: message)
         attributes.cellBottomLabelSize = cellBottomLabelSize(for: message, at: indexPath)
@@ -106,7 +106,7 @@ open class MessageSizeCalculator: CellSizeCalculator {
     open func cellContentHeight(for message: MKMessageType, at indexPath: IndexPath) -> CGFloat {
 
         let replyBodyHeight = replyBodySize(for: message).height
-        let messageContainerHeight = messageContainerSize(for: message).height
+        let messageContainerHeight = messageContainerSize(for: message, indexPath: indexPath).height
         let cellBottomLabelHeight = cellBottomLabelSize(for: message, at: indexPath).height
         let messageBottomLabelHeight = messageBottomLabelSize(for: message, at: indexPath).height
         let cellTopLabelHeight = cellTopLabelSize(for: message, at: indexPath).height
@@ -286,13 +286,6 @@ open class MessageSizeCalculator: CellSizeCalculator {
         return isFromCurrentSender ? outgoingMessagePadding : incomingMessagePadding
     }
     
-    internal func messageLabelInsets(for message: MKMessageType) -> UIEdgeInsets {
-        let dataSource = messagesLayout.messagesDataSource
-        let isFromCurrentSender = dataSource.isFromCurrentSender(message: message)
-        return isFromCurrentSender ? outgoingMessageLabelInsets : incomingMessageLabelInsets
-    }
-    public var incomingMessageLabelInsets = UIEdgeInsets(top: 7, left: 18, bottom: 7, right: 14)
-    public var outgoingMessageLabelInsets = UIEdgeInsets(top: 7, left: 14, bottom: 7, right: 18)
     open func replyBodySize(for message: MKMessageType) -> CGSize {
         // Returns .zero by default
         switch message.action {
@@ -309,11 +302,9 @@ open class MessageSizeCalculator: CellSizeCalculator {
                 attributedText = NSAttributedString(string: text, attributes: [.font: UIFont.systemFont(ofSize: 13)])
             default:
                 return CGSize(width: 120, height: 80)
-//                fatalError("messageContainerSize received unhandled MessageDataType: \(message.kind)")
             }
 
             messageContainerSize = labelSize(for: attributedText, considering: maxWidth)
-
             messageContainerSize.width += 10
             messageContainerSize.height += 30
             return messageContainerSize
@@ -323,7 +314,7 @@ open class MessageSizeCalculator: CellSizeCalculator {
         
     }
 
-    open func messageContainerSize(for message: MKMessageType) -> CGSize {
+    open func messageContainerSize(for message: MKMessageType, indexPath: IndexPath) -> CGSize {
         // Returns .zero by default
         return .zero
     }

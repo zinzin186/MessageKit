@@ -61,7 +61,7 @@ public protocol MKMessageLabelDelegate: AnyObject {
     ///
     /// - Parameters:
     ///   - mention: The selected mention
-    func didSelectMention(_ mention: String)
+    func didSelectMention(_ mention: String, target: String)
     
     /// Triggered when a tap occurs on a hashtag
     ///
@@ -90,7 +90,7 @@ public extension MKMessageLabelDelegate {
     
     func didSelectTransitInformation(_ transitInformation: [String: String]) {}
 
-    func didSelectMention(_ mention: String) {}
+    func didSelectMention(_ mention: String, target: String) {}
 
     func didSelectHashtag(_ hashtag: String) {}
 
