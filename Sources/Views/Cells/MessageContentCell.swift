@@ -86,6 +86,7 @@ open class MessageContentCell: MessageCollectionViewCell, UIGestureRecognizerDel
     open var messageTopLabel: InsetLabel = {
         let label = InsetLabel()
         label.numberOfLines = 0
+        label.backgroundColor = .systemPink
         return label
     }()
 
