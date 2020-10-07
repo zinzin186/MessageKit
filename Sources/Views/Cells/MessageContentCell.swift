@@ -419,7 +419,7 @@ open class MessageContentCell: MessageCollectionViewCell, UIGestureRecognizerDel
                 let messageHeight = attributes.messageContainerSize.height + attributes.messageContainerPadding.vertical
                 origin.y = (attributes.size.height / 2) - (messageHeight / 2)
             } else {
-                origin.y = attributes.cellTopLabelSize.height + attributes.messageTopLabelSize.height + attributes.messageContainerPadding.top + attributes.replyBodySize.height - 20
+                origin.y = attributes.cellTopLabelSize.height + attributes.messageTopLabelSize.height + attributes.messageContainerPadding.top + attributes.replyBodySize.height
             }
         }
 
