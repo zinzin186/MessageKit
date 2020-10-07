@@ -132,6 +132,7 @@ open class MessageContentCell: MessageCollectionViewCell, UIGestureRecognizerDel
         contentView.addSubview(avatarView)
         contentView.addSubview(sendStatusImageView)
         setupViewContainter()
+        contentView.backgroundColor = .systemPink
     }
     
     func setupViewContainter() {
