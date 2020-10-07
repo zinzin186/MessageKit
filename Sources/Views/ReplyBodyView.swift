@@ -76,6 +76,7 @@ open class ReplyBodyView: UIView {
             label.trailingAnchor.constraint(equalTo: self.trailingAnchor, constant: -5),
             label.bottomAnchor.constraint(equalTo: self.bottomAnchor, constant: -25)
         ])
+        addSubview(tapButton)
         NSLayoutConstraint.activate([
             tapButton.leadingAnchor.constraint(equalTo: self.leadingAnchor),
             tapButton.topAnchor.constraint(equalTo: self.topAnchor),
