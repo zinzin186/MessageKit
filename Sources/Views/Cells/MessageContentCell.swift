@@ -38,6 +38,7 @@ open class MessageContentCell: MessageCollectionViewCell, UIGestureRecognizerDel
         let replyView = ReplyBodyView()
         replyView.backgroundColor = UIColor.groupTableViewBackground
         replyView.clipsToBounds = true
+        replyView.backgroundColor = .yellow
         replyView.layer.cornerRadius = 10
         return replyView
     }()
@@ -70,6 +71,7 @@ open class MessageContentCell: MessageCollectionViewCell, UIGestureRecognizerDel
     open var cellTopLabel: InsetLabel = {
         let label = InsetLabel()
         label.numberOfLines = 0
+        label.backgroundColor = .brown
         label.textAlignment = .center
         return label
     }()
