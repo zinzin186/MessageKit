@@ -68,7 +68,6 @@ open class MessageContentCell: MessageCollectionViewCell, UIGestureRecognizerDel
     /// The top label of the cell.
     open var cellTopLabel: InsetLabel = {
         let label = InsetLabel()
-        label.backgroundColor = .red
         label.numberOfLines = 0
         label.textAlignment = .center
         return label
@@ -132,7 +131,6 @@ open class MessageContentCell: MessageCollectionViewCell, UIGestureRecognizerDel
         contentView.addSubview(avatarView)
         contentView.addSubview(sendStatusImageView)
         setupViewContainter()
-        contentView.backgroundColor = .systemPink
     }
     
     func setupViewContainter() {

@@ -33,6 +33,13 @@ class BasicExampleViewController: ChatViewController {
         messagesCollectionView.messagesLayoutDelegate = self
         messagesCollectionView.messagesDisplayDelegate = self
     }
+//    override func messageTimestampLabelAttributedText(for message: MKMessageType, at indexPath: IndexPath) -> NSAttributedString? {
+//        return NSAttributedString(string: "dsfdsfdsfd")
+//    }
+    func messageTimestampLabelAttributedText(for message: MKMessageType, at indexPath: IndexPath) -> NSAttributedString? {
+        return NSAttributedString(string: "dsfdsfdsfd")
+    }
+    
 }
 
 // MARK: - MessagesDisplayDelegate
