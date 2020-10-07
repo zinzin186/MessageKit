@@ -68,6 +68,7 @@ open class MessageContentCell: MessageCollectionViewCell, UIGestureRecognizerDel
     /// The top label of the cell.
     open var cellTopLabel: InsetLabel = {
         let label = InsetLabel()
+        label.backgroundColor = .red
         label.numberOfLines = 0
         label.textAlignment = .center
         return label
