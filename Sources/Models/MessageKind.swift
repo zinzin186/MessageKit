@@ -59,6 +59,9 @@ public enum MessageKind {
 
     /// A link preview message.
     case linkPreview(LinkItem)
+    
+    /// to set action (join, leave, change name group...)
+    case action(String)
 
     /// A custom message.
     /// - Note: Using this case requires that you implement the following methods and handle this case:

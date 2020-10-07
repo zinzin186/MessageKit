@@ -25,6 +25,8 @@ open class ActionMessageCell: UICollectionViewCell {
         contentView.addSubview(label)
         label.textAlignment = .center
         label.font = UIFont.italicSystemFont(ofSize: 13)
+        label.numberOfLines = 0
+        label.lineBreakMode = .byWordWrapping
     }
     
     open override func layoutSubviews() {
@@ -35,9 +37,8 @@ open class ActionMessageCell: UICollectionViewCell {
     open func configure(with message: MKMessageType, at indexPath: IndexPath, and messagesCollectionView: MessagesCollectionView) {
         // Do stuff
         switch message.kind {
-        case .custom(let data):
-            guard let systemMessage = data as? String else { return }
-            label.text = systemMessage
+        case .action(let text):
+            label.text = text
         default:
             break
         }

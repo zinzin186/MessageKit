@@ -139,7 +139,8 @@ internal struct MockMessage: MKMessageType {
     }
     
     init(custom: Any?, user: MockUser, messageId: String, date: Date, action: ActionType = .default) {
-        self.init(kind: .custom(custom), user: user, messageId: messageId, date: date, action: action)
+//        self.init(kind: .custom(custom), user: user, messageId: messageId, date: date, action: action)
+        self.init(kind: .action("Someone left the conversation 1234, Someone left the conversation"), user: user, messageId: messageId, date: date, action: action)
     }
 
     init(text: String, user: MockUser, messageId: String, date: Date) {
