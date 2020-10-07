@@ -61,6 +61,7 @@ open class MessageContentCell: MessageCollectionViewCell, UIGestureRecognizerDel
         let imgvReply = UIImageView()
         imgvReply.image = UIImage(named: "mk_icon_mark_reply", in: Bundle.messageKitAssetBundle, compatibleWith: nil)
         imgvReply.clipsToBounds = true
+        imgvReply.isHidden = true
         imgvReply.contentMode = .scaleAspectFill
         return imgvReply
     }()
@@ -187,7 +188,7 @@ open class MessageContentCell: MessageCollectionViewCell, UIGestureRecognizerDel
         cellTopLabel.text = nil
         cellBottomLabel.text = nil
         messageTopLabel.text = nil
-//        iconMarkReply.isHidden = true
+        iconMarkReply.isHidden = true
         messageBottomLabel.text = nil
 //        messageTimestampLabel.attributedText = nil
     }
@@ -252,7 +253,10 @@ open class MessageContentCell: MessageCollectionViewCell, UIGestureRecognizerDel
         replyBodyView.applyUI(isOutgoingMessage: isOutgoingMessage, message: message)
         
         if case ActionType.reply(let replyMessage) = message.action {
+            self.iconMarkReply.isHidden = false
             displayDelegate.configureReplyMediaMessageImageView(replyBodyView.imageView, for: replyMessage, at: indexPath, in: messagesCollectionView)
+        }else{
+            self.iconMarkReply.isHidden = true
         }
     }
 
@@ -462,7 +466,7 @@ open class MessageContentCell: MessageCollectionViewCell, UIGestureRecognizerDel
         messageTopLabel.textInsets = attributes.messageTopLabelAlignment.textInsets
         
         let iconMarkReplySize: CGSize = CGSize(width: 15, height: 15)
-        let y = replyBodyView.frame.minY - attributes.messageContainerPadding.top - attributes.messageTopLabelSize.height
+        let y = replyBodyView.frame.origin.y - attributes.replyBodyPadding.top - attributes.messageTopLabelSize.height
         let origin = CGPoint(x: 0, y: y)
         let iconX: CGFloat
         if attributes.messageTopLabelAlignment.textAlignment == .left{
