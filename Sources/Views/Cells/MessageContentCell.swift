@@ -38,7 +38,6 @@ open class MessageContentCell: MessageCollectionViewCell, UIGestureRecognizerDel
         let replyView = ReplyBodyView()
         replyView.backgroundColor = UIColor.groupTableViewBackground
         replyView.clipsToBounds = true
-        replyView.backgroundColor = .yellow
         replyView.layer.cornerRadius = 10
         return replyView
     }()
@@ -71,7 +70,6 @@ open class MessageContentCell: MessageCollectionViewCell, UIGestureRecognizerDel
     open var cellTopLabel: InsetLabel = {
         let label = InsetLabel()
         label.numberOfLines = 0
-        label.backgroundColor = .brown
         label.textAlignment = .center
         return label
     }()
@@ -88,7 +86,6 @@ open class MessageContentCell: MessageCollectionViewCell, UIGestureRecognizerDel
     open var messageTopLabel: InsetLabel = {
         let label = InsetLabel()
         label.numberOfLines = 0
-        label.backgroundColor = .systemPink
         return label
     }()
 
@@ -383,12 +380,7 @@ open class MessageContentCell: MessageCollectionViewCell, UIGestureRecognizerDel
                 fallthrough
             }
         default:
-            if attributes.accessoryViewSize.height > attributes.replyBodySize.height {
-                let messageHeight = attributes.replyBodySize.height + attributes.replyBodyPadding.vertical
-                origin.y = (attributes.size.height / 2) - (messageHeight / 2)
-            } else {
-                origin.y = attributes.cellTopLabelSize.height + attributes.messageTopLabelSize.height + attributes.replyBodyPadding.top
-            }
+            origin.y = attributes.cellTopLabelSize.height + attributes.messageTopLabelSize.height + attributes.replyBodyPadding.top
         }
 
         let avatarPadding = attributes.avatarLeadingTrailingPadding
