@@ -460,16 +460,20 @@ open class MessageContentCell: MessageCollectionViewCell, UIGestureRecognizerDel
     /// - attributes: The `MessagesCollectionViewLayoutAttributes` for the cell.
     open func layoutMessageTopLabel(with attributes: MessagesCollectionViewLayoutAttributes) {
         messageTopLabel.textAlignment = attributes.messageTopLabelAlignment.textAlignment
-        messageTopLabel.textInsets = attributes.messageTopLabelAlignment.textInsets
         
-        let iconMarkReplySize: CGSize = CGSize(width: 15, height: 15)
+        let textInsets = attributes.messageTopLabelAlignment.textInsets
+        
+        
+        let iconMarkReplySize = attributes.iconMarkReplySize
+        let paddingIcon = iconMarkReplySize == .zero ? 0 : iconMarkReplySize.width + 5
         let y = replyBodyView.frame.origin.y - attributes.replyBodyPadding.top - attributes.messageTopLabelSize.height
         let origin = CGPoint(x: 0, y: y)
         let iconX: CGFloat
+        messageTopLabel.textInsets = UIEdgeInsets(top: textInsets.top, left: textInsets.left + paddingIcon, bottom: textInsets.bottom, right: textInsets.right)
         if attributes.messageTopLabelAlignment.textAlignment == .left{
-            iconX = attributes.messageTopLabelAlignment.textInsets.left - (iconMarkReplySize.width + 5)
+            iconX = attributes.messageTopLabelAlignment.textInsets.left
         }else{
-            iconX = self.frame.width - attributes.messageTopLabelAlignment.textInsets.right - attributes.messageTopLabelSize.width - (iconMarkReplySize.width + 5)
+            iconX = self.frame.width - attributes.messageTopLabelAlignment.textInsets.right - attributes.messageTopLabelSize.width - paddingIcon
         }
         iconMarkReply.frame = CGRect(x: iconX, y: y + (attributes.messageTopLabelSize.height - iconMarkReplySize.height)/2, width: iconMarkReplySize.width, height: iconMarkReplySize.height)
         messageTopLabel.frame = CGRect(origin: origin, size: CGSize(width: self.frame.width, height: attributes.messageTopLabelSize.height))

@@ -94,6 +94,7 @@ open class MessageSizeCalculator: CellSizeCalculator {
         attributes.accessoryViewSize = accessoryViewSize(for: message)
         attributes.accessoryViewPadding = accessoryViewPadding(for: message)
         attributes.accessoryViewPosition = accessoryViewPosition(for: message)
+        attributes.iconMarkReplySize = iconMarkReplySize(for: message)
     }
 
     open override func sizeForItem(at indexPath: IndexPath) -> CGSize {
@@ -315,6 +316,15 @@ open class MessageSizeCalculator: CellSizeCalculator {
         
     }
 
+    open func iconMarkReplySize(for message: MKMessageType) -> CGSize {
+        switch message.action {
+        case .reply:
+            return CGSize(width: 15, height: 15)
+        default:
+            return CGSize.zero
+        }
+    }
+    
     open func messageContainerSize(for message: MKMessageType, indexPath: IndexPath) -> CGSize {
         // Returns .zero by default
         return .zero

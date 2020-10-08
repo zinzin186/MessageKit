@@ -59,6 +59,8 @@ open class MessagesCollectionViewLayoutAttributes: UICollectionViewLayoutAttribu
     public var accessoryViewSize: CGSize = .zero
     public var accessoryViewPadding: HorizontalEdgeInsets = .zero
     public var accessoryViewPosition: AccessoryPosition = .messageCenter
+    
+    public var iconMarkReplySize: CGSize = .zero
 
     public var linkPreviewFonts = LinkPreviewFonts(titleFont: .preferredFont(forTextStyle: .footnote),
                                                    teaserFont: .preferredFont(forTextStyle: .caption2),
@@ -82,6 +84,7 @@ open class MessagesCollectionViewLayoutAttributes: UICollectionViewLayoutAttribu
         copy.cellTopLabelSize = cellTopLabelSize
         copy.cellBottomLabelAlignment = cellBottomLabelAlignment
         copy.cellBottomLabelSize = cellBottomLabelSize
+        copy.iconMarkReplySize = iconMarkReplySize
         copy.messageTimeLabelSize = messageTimeLabelSize
         copy.messageTopLabelAlignment = messageTopLabelAlignment
         copy.messageTopLabelSize = messageTopLabelSize
@@ -111,6 +114,7 @@ open class MessagesCollectionViewLayoutAttributes: UICollectionViewLayoutAttribu
                 && attributes.cellTopLabelSize == cellTopLabelSize
                 && attributes.cellBottomLabelAlignment == cellBottomLabelAlignment
                 && attributes.cellBottomLabelSize == cellBottomLabelSize
+                && attributes.iconMarkReplySize == iconMarkReplySize
                 && attributes.messageTimeLabelSize == messageTimeLabelSize
                 && attributes.messageTopLabelAlignment == messageTopLabelAlignment
                 && attributes.messageTopLabelSize == messageTopLabelSize

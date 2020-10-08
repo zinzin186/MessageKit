@@ -277,9 +277,7 @@ public extension MKMessagesDisplayDelegate {
     
     func configActionMessage(for message: MKMessageType, at indexPath: IndexPath, in messagesCollectionView: MessagesCollectionView) -> [NSAttributedString.Key: Any]{
         return [
-            NSAttributedString.Key.foregroundColor: UIColor.darkText,
-            NSAttributedString.Key.underlineStyle: NSUnderlineStyle.single.rawValue,
-            NSAttributedString.Key.underlineColor: UIColor.darkText,
+            NSAttributedString.Key.foregroundColor: UIColor.lightText,
             NSAttributedString.Key.font: UIFont.italicSystemFont(ofSize: 13)
         ]
     }
