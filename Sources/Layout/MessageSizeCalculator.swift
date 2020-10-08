@@ -115,35 +115,36 @@ open class MessageSizeCalculator: CellSizeCalculator {
         let avatarHeight = avatarSize(for: message).height
         let avatarVerticalPosition = avatarPosition(for: message).vertical
         let accessoryViewHeight = accessoryViewSize(for: message).height
-
+        let paddingContainerViewWithReplyBody: CGFloat = replyBodyHeight > 0 ? 20 : 0
+        
         switch avatarVerticalPosition {
         case .messageCenter:
             let totalLabelHeight: CGFloat = cellTopLabelHeight + messageTopLabelHeight + replyBodyHeight
-                + messageContainerHeight + messageVerticalPadding + messageBottomLabelHeight + cellBottomLabelHeight
+                + messageContainerHeight + messageVerticalPadding + messageBottomLabelHeight + cellBottomLabelHeight - paddingContainerViewWithReplyBody
             let cellHeight = max(avatarHeight, totalLabelHeight)
             return max(cellHeight, accessoryViewHeight)
         case .messageBottom:
             var cellHeight: CGFloat = 0
             cellHeight += messageBottomLabelHeight
             cellHeight += cellBottomLabelHeight
-            let labelsHeight = replyBodyHeight + messageContainerHeight + messageVerticalPadding + cellTopLabelHeight + messageTopLabelHeight
+            let labelsHeight = replyBodyHeight + messageContainerHeight - paddingContainerViewWithReplyBody + messageVerticalPadding + cellTopLabelHeight + messageTopLabelHeight
             cellHeight += max(labelsHeight, avatarHeight)
             return max(cellHeight, accessoryViewHeight)
         case .messageTop:
             var cellHeight: CGFloat = 0
             cellHeight += cellTopLabelHeight
             cellHeight += messageTopLabelHeight
-            let labelsHeight = replyBodyHeight + messageContainerHeight + messageVerticalPadding + messageBottomLabelHeight + cellBottomLabelHeight
+            let labelsHeight = replyBodyHeight + messageContainerHeight - paddingContainerViewWithReplyBody + messageVerticalPadding + messageBottomLabelHeight + cellBottomLabelHeight
             cellHeight += max(labelsHeight, avatarHeight)
             return max(cellHeight, accessoryViewHeight)
         case .messageLabelTop:
             var cellHeight: CGFloat = 0
             cellHeight += cellTopLabelHeight
-            let messageLabelsHeight = replyBodyHeight + messageContainerHeight + messageBottomLabelHeight + messageVerticalPadding + messageTopLabelHeight + cellBottomLabelHeight
+            let messageLabelsHeight = replyBodyHeight + messageContainerHeight - paddingContainerViewWithReplyBody + messageBottomLabelHeight + messageVerticalPadding + messageTopLabelHeight + cellBottomLabelHeight
             cellHeight += max(messageLabelsHeight, avatarHeight)
             return max(cellHeight, accessoryViewHeight)
         case .cellTop, .cellBottom:
-            let totalLabelHeight: CGFloat = cellTopLabelHeight + messageTopLabelHeight + replyBodyHeight
+            let totalLabelHeight: CGFloat = cellTopLabelHeight + messageTopLabelHeight - paddingContainerViewWithReplyBody + replyBodyHeight
                 + messageContainerHeight + messageVerticalPadding + messageBottomLabelHeight + cellBottomLabelHeight
             let cellHeight = max(avatarHeight, totalLabelHeight)
             return max(cellHeight, accessoryViewHeight)

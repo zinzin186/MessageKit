@@ -32,6 +32,8 @@ class BasicExampleViewController: ChatViewController {
         super.configureMessageCollectionView()
         messagesCollectionView.messagesLayoutDelegate = self
         messagesCollectionView.messagesDisplayDelegate = self
+        guard let layout = messagesCollectionView.collectionViewLayout as? MessagesCollectionViewFlowLayout else {return}
+        layout.setMessageIncomingAvatarPosition(AvatarPosition(vertical: .messageBottom))
     }
 //    override func messageTimestampLabelAttributedText(for message: MKMessageType, at indexPath: IndexPath) -> NSAttributedString? {
 //        return NSAttributedString(string: "dsfdsfdsfd")

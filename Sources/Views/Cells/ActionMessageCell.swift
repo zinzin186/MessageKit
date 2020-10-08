@@ -35,10 +35,11 @@ open class ActionMessageCell: UICollectionViewCell {
     }
     
     open func configure(with message: MKMessageType, at indexPath: IndexPath, and messagesCollectionView: MessagesCollectionView) {
-        // Do stuff
         switch message.kind {
         case .action(let text):
-            label.text = text
+            let displayDelegate = messagesCollectionView.messagesDisplayDelegate
+            let attributedText = NSAttributedString(string: text, attributes: displayDelegate?.configActionMessage(for: message, at: indexPath, in: messagesCollectionView))
+            label.attributedText = attributedText
         default:
             break
         }

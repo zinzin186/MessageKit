@@ -115,6 +115,8 @@ public protocol MKMessagesDisplayDelegate: AnyObject {
     ///
     ///   All other senders: UIColor.darkText
     func textColor(for message: MKMessageType, at indexPath: IndexPath, in messagesCollectionView: MessagesCollectionView) -> UIColor
+    
+    func configActionMessage(for message: MKMessageType, at indexPath: IndexPath, in messagesCollectionView: MessagesCollectionView) -> [NSAttributedString.Key: Any]
 
     /// Specifies the `DetectorType`s to check for the `MessageType`'s text against.
     ///
@@ -271,6 +273,15 @@ public extension MKMessagesDisplayDelegate {
             fatalError(MessageKitError.nilMessagesDataSource)
         }
         return dataSource.isFromCurrentSender(message: message) ? .outgoingMessageLabel : .incomingMessageLabel
+    }
+    
+    func configActionMessage(for message: MKMessageType, at indexPath: IndexPath, in messagesCollectionView: MessagesCollectionView) -> [NSAttributedString.Key: Any]{
+        return [
+            NSAttributedString.Key.foregroundColor: UIColor.darkText,
+            NSAttributedString.Key.underlineStyle: NSUnderlineStyle.single.rawValue,
+            NSAttributedString.Key.underlineColor: UIColor.darkText,
+            NSAttributedString.Key.font: UIFont.italicSystemFont(ofSize: 13)
+        ]
     }
 
     func enabledDetectors(for message: MKMessageType, at indexPath: IndexPath, in messagesCollectionView: MessagesCollectionView) -> [DetectorType] {

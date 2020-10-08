@@ -368,10 +368,12 @@ open class MessageContentCell: MessageCollectionViewCell, UIGestureRecognizerDel
     
     open func layoutReplyView(with attributes: MessagesCollectionViewLayoutAttributes) {
         var origin: CGPoint = .zero
+        
+        let paddingMessageContainerViewWith: CGFloat = attributes.replyBodySize == CGSize.zero ? 0 : 20
 
         switch attributes.avatarPosition.vertical {
         case .messageBottom:
-            origin.y = attributes.size.height - attributes.replyBodyPadding.bottom - attributes.cellBottomLabelSize.height - attributes.messageBottomLabelSize.height - attributes.replyBodySize.height - attributes.replyBodyPadding.top
+            origin.y = attributes.size.height - attributes.replyBodyPadding.bottom - attributes.cellBottomLabelSize.height - attributes.messageBottomLabelSize.height - attributes.replyBodySize.height - attributes.replyBodyPadding.top - attributes.messageContainerSize.height + paddingMessageContainerViewWith
         case .messageCenter:
             if attributes.avatarSize.height > attributes.replyBodySize.height {
                 let messageHeight = attributes.replyBodySize.height + attributes.replyBodyPadding.vertical
@@ -400,7 +402,7 @@ open class MessageContentCell: MessageCollectionViewCell, UIGestureRecognizerDel
     /// - attributes: The `MessagesCollectionViewLayoutAttributes` for the cell.
     open func layoutMessageContainerView(with attributes: MessagesCollectionViewLayoutAttributes) {
         var origin: CGPoint = .zero
-
+        let paddingMessageContainerViewWith: CGFloat = attributes.replyBodySize == CGSize.zero ? 0 : 20
         switch attributes.avatarPosition.vertical {
         case .messageBottom:
             origin.y = attributes.size.height - attributes.messageContainerPadding.bottom - attributes.cellBottomLabelSize.height - attributes.messageBottomLabelSize.height - attributes.messageContainerSize.height - attributes.messageContainerPadding.top
@@ -416,7 +418,7 @@ open class MessageContentCell: MessageCollectionViewCell, UIGestureRecognizerDel
                 let messageHeight = attributes.messageContainerSize.height + attributes.messageContainerPadding.vertical
                 origin.y = (attributes.size.height / 2) - (messageHeight / 2)
             } else {
-                origin.y = attributes.cellTopLabelSize.height + attributes.messageTopLabelSize.height + attributes.messageContainerPadding.top + attributes.replyBodySize.height
+                origin.y = attributes.cellTopLabelSize.height + attributes.messageTopLabelSize.height + attributes.messageContainerPadding.top + attributes.replyBodySize.height - paddingMessageContainerViewWith
             }
         }
 

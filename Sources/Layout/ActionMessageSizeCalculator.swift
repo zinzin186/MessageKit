@@ -26,7 +26,8 @@ open class ActionMessageSizeCalculator: MessageSizeCalculator {
         let maxWidth = messagesLayout.itemWidth - 30//messageContainerMaxWidth(for: message)
         switch message.kind {
         case .action(let text):
-            let attributedText = NSAttributedString(string: text, attributes: [NSAttributedString.Key.font: messageLabelFont])
+            let displayDelegate = messagesLayout.messagesCollectionView.messagesDisplayDelegate
+            let attributedText = NSAttributedString(string: text, attributes: displayDelegate?.configActionMessage(for: message, at: indexPath, in: messagesLayout.messagesCollectionView))
             let messageContainerSize = labelSize(for: attributedText, considering: maxWidth)
             return messageContainerSize
         default:
