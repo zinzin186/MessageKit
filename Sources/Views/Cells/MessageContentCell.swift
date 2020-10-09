@@ -36,7 +36,7 @@ open class MessageContentCell: MessageCollectionViewCell, UIGestureRecognizerDel
     /// The container used for styling and holding the message's content view.
     lazy var actionBodyView: ActionBodyView = {
         let replyView = ActionBodyView()
-        replyView.backgroundColor = UIColor.init(red: 246.0/255, green: 246.0/255, blue: 246.0/255, alpha: 1)// UIColor.groupTableViewBackground
+        replyView.backgroundColor = UIColor.fromHexCode("#F6F6F6")
         replyView.clipsToBounds = true
         replyView.layer.cornerRadius = 10
         return replyView
@@ -190,6 +190,7 @@ open class MessageContentCell: MessageCollectionViewCell, UIGestureRecognizerDel
         messageTopLabel.text = nil
         iconMarkReply.isHidden = true
         messageBottomLabel.text = nil
+        
 //        messageTimestampLabel.attributedText = nil
     }
 
@@ -325,16 +326,17 @@ open class MessageContentCell: MessageCollectionViewCell, UIGestureRecognizerDel
         case .natural:
             fatalError(MessageKitError.avatarPositionUnresolved)
         }
+        let contentFrame = messageContainerView.frame.size == .zero ? actionBodyView.frame : messageContainerView.frame
 
         switch attributes.avatarPosition.vertical {
         case .messageLabelTop:
             origin.y = messageTopLabel.frame.minY
         case .messageTop: // Needs messageContainerView frame to be set
-            origin.y = messageContainerView.frame.minY
+            origin.y = contentFrame.minY
         case .messageBottom: // Needs messageContainerView frame to be set
-            origin.y = messageContainerView.frame.maxY - attributes.avatarSize.height
+            origin.y = contentFrame.maxY - attributes.avatarSize.height
         case .messageCenter: // Needs messageContainerView frame to be set
-            origin.y = messageContainerView.frame.midY - (attributes.avatarSize.height/2)
+            origin.y = contentFrame.midY - (attributes.avatarSize.height/2)
         case .cellBottom:
             origin.y = attributes.frame.height - attributes.avatarSize.height
         default:

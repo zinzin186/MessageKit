@@ -69,6 +69,7 @@ open class ActionBodyView: UIView {
         let label: UILabel = .init()
         label.numberOfLines = 0
         label.font = UIFont.systemFont(ofSize: 13)
+        label.textColor = UIColor.fromHexCode("#808080")
         label.translatesAutoresizingMaskIntoConstraints = false
         addSubview(label)
         NSLayoutConstraint.activate([
@@ -90,6 +91,7 @@ open class ActionBodyView: UIView {
         let label: UILabel = .init()
         label.numberOfLines = 0
         label.font = UIFont.systemFont(ofSize: 13)
+        label.textColor = UIColor.fromHexCode("#808080")
         label.translatesAutoresizingMaskIntoConstraints = false
         return label
     }()
@@ -98,6 +100,7 @@ open class ActionBodyView: UIView {
         let label: UILabel = .init()
         label.numberOfLines = 0
         label.font = UIFont.italicSystemFont(ofSize: 13)
+        label.textColor = UIColor.fromHexCode("#999999")
         label.translatesAutoresizingMaskIntoConstraints = false
         addSubview(label)
         NSLayoutConstraint.activate([

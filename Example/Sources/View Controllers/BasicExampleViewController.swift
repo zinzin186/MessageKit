@@ -145,7 +145,7 @@ extension BasicExampleViewController: MKMessagesLayoutDelegate {
     }
     
     func messageTopLabelHeight(for message: MKMessageType, at indexPath: IndexPath, in messagesCollectionView: MessagesCollectionView) -> CGFloat {
-        return 20
+        return 0
     }
     
     func messageBottomLabelHeight(for message: MKMessageType, at indexPath: IndexPath, in messagesCollectionView: MessagesCollectionView) -> CGFloat {
