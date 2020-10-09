@@ -27,6 +27,7 @@ import UIKit
 open class ActionBodyView: UIView {
     
     
+    
     private lazy var tapButton: UIButton = { [unowned self] in
         let button = UIButton(type: .system)
         button.addTarget(self, action: #selector(self.tapReplyMessage), for: .touchUpInside)
@@ -37,108 +38,9 @@ open class ActionBodyView: UIView {
         print("Tapppp")
     }
     
-    lazy var imageView: UIImageView = {[unowned self] in
-        let imageView: UIImageView = .init()
-        imageView.clipsToBounds = true
-        imageView.contentMode = .scaleAspectFill
-        imageView.isHidden = true
-        imageView.translatesAutoresizingMaskIntoConstraints = false
-        self.contentView.subviews.forEach({$0.removeFromSuperview()})
-        self.contentView.addSubview(imageView)
-        NSLayoutConstraint.activate([
-            imageView.leadingAnchor.constraint(equalTo: self.contentView.leadingAnchor, constant: 5),
-            imageView.topAnchor.constraint(equalTo: self.contentView.topAnchor, constant: 5),
-            imageView.widthAnchor.constraint(equalToConstant: 50),
-            imageView.bottomAnchor.constraint(equalTo: self.contentView.bottomAnchor, constant: -25)
-        ])
-        self.contentView.addSubview(teaserLabel)
-        teaserLabel.isHidden = false
-        NSLayoutConstraint.activate([
-            teaserLabel.leadingAnchor.constraint(equalTo: imageView.trailingAnchor, constant: 5),
-            teaserLabel.topAnchor.constraint(equalTo: imageView.topAnchor, constant: 5),
-            teaserLabel.trailingAnchor.constraint(equalTo: self.contentView.trailingAnchor, constant: -5),
-        ])
-        self.contentView.addSubview(tapButton)
-        NSLayoutConstraint.activate([
-            tapButton.leadingAnchor.constraint(equalTo: self.contentView.leadingAnchor),
-            tapButton.topAnchor.constraint(equalTo: self.contentView.topAnchor),
-            tapButton.trailingAnchor.constraint(equalTo: self.contentView.trailingAnchor),
-            tapButton.bottomAnchor.constraint(equalTo: self.contentView.bottomAnchor)
-        ])
-        return imageView
-    }()
-    private lazy var contentLabel: InsetLabel = {[unowned self] in
-        let label: InsetLabel = .init()
-        label.numberOfLines = 0
-        label.font = UIFont.systemFont(ofSize: 13)
-        label.textColor = UIColor.fromHexCode("#808080")
-        label.translatesAutoresizingMaskIntoConstraints = false
-        label.isHidden = true
-        self.contentView.subviews.forEach({$0.removeFromSuperview()})
-        self.contentView.addSubview(label)
-        NSLayoutConstraint.activate([
-            label.leadingAnchor.constraint(equalTo: self.contentView.leadingAnchor, constant: 5),
-            label.topAnchor.constraint(equalTo: self.contentView.topAnchor, constant: 5),
-            label.trailingAnchor.constraint(equalTo: self.contentView.trailingAnchor, constant: -5),
-            label.bottomAnchor.constraint(equalTo: self.contentView.bottomAnchor, constant: -25)
-        ])
-        addSubview(tapButton)
-        NSLayoutConstraint.activate([
-            tapButton.leadingAnchor.constraint(equalTo: self.leadingAnchor),
-            tapButton.topAnchor.constraint(equalTo: self.topAnchor),
-            tapButton.trailingAnchor.constraint(equalTo: self.trailingAnchor),
-            tapButton.bottomAnchor.constraint(equalTo: self.bottomAnchor)
-        ])
-        return label
-    }()
-    lazy var teaserLabel: UILabel = {
-        let label: UILabel = .init()
-        label.numberOfLines = 0
-        label.isHidden = true
-        label.font = UIFont.systemFont(ofSize: 13)
-        label.textColor = UIColor.fromHexCode("#808080")
-        label.translatesAutoresizingMaskIntoConstraints = false
-        return label
-    }()
-    
-    private lazy var contentView: UIView = {[unowned self] in
-        let view = UIView()
-        view.backgroundColor = UIColor.red//fromHexCode("#F6F6F6")
-        view.translatesAutoresizingMaskIntoConstraints = false
-        addSubview(view)
-        NSLayoutConstraint.activate([
-            view.leadingAnchor.constraint(equalTo: self.leadingAnchor),
-            view.topAnchor.constraint(equalTo: self.topAnchor),
-            view.trailingAnchor.constraint(equalTo: self.trailingAnchor),
-            view.bottomAnchor.constraint(equalTo: self.bottomAnchor)
-        ])
-        return view
-    }()
-    
-    private lazy var removeMessageLabel: UILabel = {[unowned self] in
-        let label: UILabel = .init()
-        label.numberOfLines = 0
-        label.font = UIFont.italicSystemFont(ofSize: 13)
-        label.textColor = UIColor.fromHexCode("#999999")
-        label.translatesAutoresizingMaskIntoConstraints = false
-        label.isHidden = true
-        self.contentView.subviews.forEach({$0.removeFromSuperview()})
-        self.contentView.addSubview(label)
-        NSLayoutConstraint.activate([
-            label.leadingAnchor.constraint(equalTo: self.contentView.leadingAnchor, constant: 5),
-            label.topAnchor.constraint(equalTo: self.contentView.topAnchor, constant: 10),
-            label.trailingAnchor.constraint(equalTo: self.contentView.trailingAnchor, constant: -5),
-            label.bottomAnchor.constraint(equalTo: self.contentView.bottomAnchor, constant: -10)
-        ])
-        addSubview(tapButton)
-        NSLayoutConstraint.activate([
-            tapButton.leadingAnchor.constraint(equalTo: self.leadingAnchor),
-            tapButton.topAnchor.constraint(equalTo: self.topAnchor),
-            tapButton.trailingAnchor.constraint(equalTo: self.trailingAnchor),
-            tapButton.bottomAnchor.constraint(equalTo: self.bottomAnchor)
-        ])
-        return label
-    }()
+    var actionRemoveMessageView: ActionRemoveMessageView?
+    var actionReplyTextView: ActionReplyTextView?
+    var actionReplyMediaView: ActionReplyMediaView?
 
     init() {
         super.init(frame: .zero)
@@ -149,11 +51,10 @@ open class ActionBodyView: UIView {
         case .reply(let replyMessage):
             self.getContentText(message: replyMessage)
         case .remove:
-            self.removeMessageLabel.isHidden = false
             if case MessageKind.text(let text) = message.kind {
-                self.removeMessageLabel.text = text
+                self.addActionRemoveMessageView(text: text)
             }else {
-                self.removeMessageLabel.text = "Tin nhắn đã bị xoá"
+                self.addActionRemoveMessageView(text: "Tin nhắn đã bị xoá")
             }
         default:
             break
@@ -161,23 +62,44 @@ open class ActionBodyView: UIView {
         
         
     }
+    func addActionRemoveMessageView(text: String){
+        self.actionRemoveMessageView?.removeFromSuperview()
+        self.actionRemoveMessageView = ActionRemoveMessageView()
+        self.actionRemoveMessageView?.messageLabel.text = text
+        self.addSubview(actionRemoveMessageView!)
+        NSLayoutConstraint.activate([
+            actionRemoveMessageView!.leadingAnchor.constraint(equalTo: self.leadingAnchor),
+            actionRemoveMessageView!.topAnchor.constraint(equalTo: self.topAnchor),
+            actionRemoveMessageView!.trailingAnchor.constraint(equalTo: self.trailingAnchor),
+            actionRemoveMessageView!.bottomAnchor.constraint(equalTo: self.bottomAnchor)
+        ])
+        
+    }
+    func addActionReplyTextView(text: String){
+        self.actionReplyTextView?.removeFromSuperview()
+        self.actionReplyTextView = ActionReplyTextView()
+        self.actionReplyTextView?.messageLabel.text = text
+        
+    }
+    func addActionReplyMediaView(text: String, image: UIImage?){
+        self.actionReplyMediaView?.removeFromSuperview()
+        self.actionReplyMediaView = ActionReplyMediaView()
+        self.actionReplyMediaView?.messageLabel.text = text
+        self.actionReplyMediaView?.imageView.image = image
+        
+    }
     
     private func getContentText(message: MKReplyMessageType){
         switch message.kind {
         case .text(let text), .emoji(let text):
-            self.contentLabel.isHidden = false
-            self.contentLabel.text = text
-        case .attributedText(let text):
-            self.contentLabel.isHidden = false
-            self.contentLabel.attributedText = text
+            self.addActionReplyTextView(text: text)
+//        case .attributedText(let text):
+//            self.contentLabel.isHidden = false
+//            self.contentLabel.attributedText = text
         case .photo(let photo):
-            self.imageView.isHidden = false
-            self.imageView.image = photo.image ?? photo.placeholderImage
-            teaserLabel.text = "Hình ảnh"
+            self.addActionReplyMediaView(text: "Hình ảnh", image: photo.image)
         case .video(let video):
-            self.imageView.isHidden = false
-            self.imageView.image = video.image ?? video.placeholderImage
-            teaserLabel.text = "Video"
+            self.addActionReplyMediaView(text: "Video", image: video.image)
         default:
             break
         }
