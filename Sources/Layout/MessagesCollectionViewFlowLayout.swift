@@ -318,6 +318,11 @@ open class MessagesCollectionViewFlowLayout: UICollectionViewFlowLayout {
     public func setMessageOutgoingAccessoryViewPosition(_ newPosition: AccessoryPosition) {
         messageSizeCalculators().forEach { $0.outgoingAccessoryViewPosition = newPosition }
     }
+    
+    /// Set `fontForMessageLabel` of all `MessageSizeCalculator`s
+    public func setFontMessageLabel(_ font: UIFont) {
+        messageSizeCalculators().forEach { $0.messageLabelFont = font }
+    }
 
     /// Get all `MessageSizeCalculator`s
     open func messageSizeCalculators() -> [MessageSizeCalculator] {

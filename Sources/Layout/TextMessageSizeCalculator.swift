@@ -30,8 +30,6 @@ open class TextMessageSizeCalculator: MessageSizeCalculator {
     public var incomingMessageLabelInsets = UIEdgeInsets(top: 7, left: 18, bottom: 7, right: 14)
     public var outgoingMessageLabelInsets = UIEdgeInsets(top: 7, left: 14, bottom: 7, right: 18)
 
-    public var messageLabelFont = UIFont.preferredFont(forTextStyle: .body)
-
     internal func messageLabelInsets(for message: MKMessageType) -> UIEdgeInsets {
         let dataSource = messagesLayout.messagesDataSource
         let isFromCurrentSender = dataSource.isFromCurrentSender(message: message)
@@ -45,8 +43,10 @@ open class TextMessageSizeCalculator: MessageSizeCalculator {
     }
     
     open override func messageContainerSize(for message: MKMessageType, indexPath: IndexPath) -> CGSize {
+        if case ActionType.remove = message.action {
+            return CGSize.zero
+        }
         let maxWidth = messageContainerMaxWidth(for: message)
-
         var messageContainerSize: CGSize
         let attributedText = self.genAttributeMessage(with: message, at: indexPath)
         messageContainerSize = labelSize(for: attributedText, considering: maxWidth)
@@ -67,7 +67,7 @@ open class TextMessageSizeCalculator: MessageSizeCalculator {
         let message = dataSource.messageForItem(at: indexPath, in: messagesLayout.messagesCollectionView)
 
         attributes.messageLabelInsets = messageLabelInsets(for: message)
-        attributes.messageLabelFont = messageLabelFont
+        self.messageLabelFont = attributes.messageLabelFont
 
         switch message.kind {
         case .attributedText(let text):
@@ -86,7 +86,7 @@ open class TextMessageSizeCalculator: MessageSizeCalculator {
         switch message.kind {
         case .text(let text), .emoji(let text):
             attributedString = NSMutableAttributedString(string: text)
-            attributedString.addAttribute(.font, value: UIFont.preferredFont(forTextStyle: .body), range: NSMakeRange(0, text.count))
+            attributedString.addAttribute(.font, value: messageLabelFont, range: NSMakeRange(0, text.count))
         case .attributedText(let text):
             attributedString = NSMutableAttributedString(attributedString: text)
         default:

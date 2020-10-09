@@ -24,7 +24,8 @@
 
 import UIKit
 
-open class ReplyBodyView: UIView {
+open class ActionBodyView: UIView {
+    
     
     private lazy var tapButton: UIButton = { [unowned self] in
         let button = UIButton(type: .system)
@@ -92,23 +93,49 @@ open class ReplyBodyView: UIView {
         label.translatesAutoresizingMaskIntoConstraints = false
         return label
     }()
+    
+    private lazy var removeMessageLabel: UILabel = {[unowned self] in
+        let label: UILabel = .init()
+        label.numberOfLines = 0
+        label.font = UIFont.italicSystemFont(ofSize: 13)
+        label.translatesAutoresizingMaskIntoConstraints = false
+        addSubview(label)
+        NSLayoutConstraint.activate([
+            label.leadingAnchor.constraint(equalTo: self.leadingAnchor, constant: 5),
+            label.topAnchor.constraint(equalTo: self.topAnchor, constant: 5),
+            label.trailingAnchor.constraint(equalTo: self.trailingAnchor, constant: -5),
+            label.bottomAnchor.constraint(equalTo: self.bottomAnchor, constant: -5)
+        ])
+        addSubview(tapButton)
+        NSLayoutConstraint.activate([
+            tapButton.leadingAnchor.constraint(equalTo: self.leadingAnchor),
+            tapButton.topAnchor.constraint(equalTo: self.topAnchor),
+            tapButton.trailingAnchor.constraint(equalTo: self.trailingAnchor),
+            tapButton.bottomAnchor.constraint(equalTo: self.bottomAnchor)
+        ])
+        return label
+    }()
 
     init() {
         super.init(frame: .zero)
-        
-        
-        
-        
-        
     }
 
     func applyUI(isOutgoingMessage: Bool, message: MKMessageType){
-        if case ActionType.reply(let replyMessage) = message.action {
+        switch message.action {
+        case .reply(let replyMessage):
             self.getContentText(message: replyMessage)
+        case .remove:
+            if case MessageKind.text(let text) = message.kind {
+                self.removeMessageLabel.text = text
+            }else {
+                self.removeMessageLabel.text = "Tin nhắn đã bị xoá"
+            }
+        default:
+            break
         }
         
+        
     }
-    
     
     private func getContentText(message: MKReplyMessageType){
         switch message.kind {

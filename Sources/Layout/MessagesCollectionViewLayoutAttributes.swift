@@ -37,8 +37,8 @@ open class MessagesCollectionViewLayoutAttributes: UICollectionViewLayoutAttribu
     public var sendStatusLeadingTrailingPadding: CGFloat = 0
     public var messageContainerSize: CGSize = .zero
     public var messageContainerPadding: UIEdgeInsets = .zero
-    public var replyBodySize: CGSize = .zero
-    public var replyBodyPadding: UIEdgeInsets = .zero
+    public var actionBodySize: CGSize = .zero
+    public var actionBodyPadding: UIEdgeInsets = .zero
     public var messageLabelFont: UIFont = UIFont.preferredFont(forTextStyle: .body)
     public var messageLabelInsets: UIEdgeInsets = .zero
 
@@ -74,9 +74,9 @@ open class MessagesCollectionViewLayoutAttributes: UICollectionViewLayoutAttribu
         copy.avatarSize = avatarSize
         copy.avatarPosition = avatarPosition
         copy.avatarLeadingTrailingPadding = avatarLeadingTrailingPadding
-        copy.replyBodySize = replyBodySize
+        copy.actionBodySize = actionBodySize
         copy.messageContainerSize = messageContainerSize
-        copy.replyBodyPadding = replyBodyPadding
+        copy.actionBodyPadding = actionBodyPadding
         copy.messageContainerPadding = messageContainerPadding
         copy.messageLabelFont = messageLabelFont
         copy.messageLabelInsets = messageLabelInsets
@@ -104,9 +104,9 @@ open class MessagesCollectionViewLayoutAttributes: UICollectionViewLayoutAttribu
             return super.isEqual(object) && attributes.avatarSize == avatarSize
                 && attributes.avatarPosition == avatarPosition
                 && attributes.avatarLeadingTrailingPadding == avatarLeadingTrailingPadding
-                && attributes.replyBodySize == replyBodySize
+                && attributes.actionBodySize == actionBodySize
                 && attributes.messageContainerSize == messageContainerSize
-                && attributes.replyBodyPadding == replyBodyPadding
+                && attributes.actionBodyPadding == actionBodyPadding
                 && attributes.messageContainerPadding == messageContainerPadding
                 && attributes.messageLabelFont == messageLabelFont
                 && attributes.messageLabelInsets == messageLabelInsets

@@ -60,7 +60,7 @@ public enum MessageKind {
     /// A link preview message.
     case linkPreview(LinkItem)
     
-    /// to set action (join, leave, change name group...)
+    /// to set action (join, leave, ban, block, change name group...)
     case action(String)
 
     /// A custom message.

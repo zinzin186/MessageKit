@@ -35,6 +35,8 @@ open class MessageSizeCalculator: CellSizeCalculator {
 
     public var incomingAvatarSize = CGSize(width: 30, height: 30)
     public var outgoingAvatarSize = CGSize(width: 30, height: 30)
+    
+    public var messageLabelFont =  UIFont.preferredFont(forTextStyle: .body)
 
     public var incomingAvatarPosition = AvatarPosition(vertical: .cellBottom)
     public var outgoingAvatarPosition = AvatarPosition(vertical: .cellBottom)
@@ -76,9 +78,9 @@ open class MessageSizeCalculator: CellSizeCalculator {
         attributes.avatarPosition = avatarPosition(for: message)
         attributes.avatarLeadingTrailingPadding = avatarLeadingTrailingPadding
 
-        attributes.replyBodyPadding = replyBodyPadding(for: message)
+        attributes.actionBodyPadding = replyBodyPadding(for: message)
         attributes.messageContainerPadding = messageContainerPadding(for: message)
-        attributes.replyBodySize = replyBodySize(for: message)
+        attributes.actionBodySize = replyBodySize(for: message)
         attributes.messageContainerSize = messageContainerSize(for: message, indexPath: indexPath)
         attributes.cellTopLabelSize = cellTopLabelSize(for: message, at: indexPath)
         attributes.cellTopLabelAlignment = cellTopLabelAlignment(for: message)
@@ -95,6 +97,7 @@ open class MessageSizeCalculator: CellSizeCalculator {
         attributes.accessoryViewPadding = accessoryViewPadding(for: message)
         attributes.accessoryViewPosition = accessoryViewPosition(for: message)
         attributes.iconMarkReplySize = iconMarkReplySize(for: message)
+        attributes.messageLabelFont = messageLabelFont
     }
 
     open override func sizeForItem(at indexPath: IndexPath) -> CGSize {
@@ -116,7 +119,11 @@ open class MessageSizeCalculator: CellSizeCalculator {
         let avatarHeight = avatarSize(for: message).height
         let avatarVerticalPosition = avatarPosition(for: message).vertical
         let accessoryViewHeight = accessoryViewSize(for: message).height
-        let paddingContainerViewWithReplyBody: CGFloat = replyBodyHeight > 0 ? 20 : 0
+
+        var paddingContainerViewWithReplyBody: CGFloat = replyBodyHeight > 0 ? 20 : 0
+        if case ActionType.remove = message.action{
+            paddingContainerViewWithReplyBody = 0
+        }
         
         switch avatarVerticalPosition {
         case .messageCenter:
@@ -294,7 +301,7 @@ open class MessageSizeCalculator: CellSizeCalculator {
         case .reply(let replyMessage):
             let maxWidth = messageContainerMaxWidth(for: message)
 
-            var messageContainerSize: CGSize
+            var actionContainerSize: CGSize
             let attributedText: NSAttributedString
 
             switch replyMessage.kind {
@@ -306,10 +313,24 @@ open class MessageSizeCalculator: CellSizeCalculator {
                 return CGSize(width: 120, height: 80)
             }
 
-            messageContainerSize = labelSize(for: attributedText, considering: maxWidth)
-            messageContainerSize.width += 10
-            messageContainerSize.height += 30
-            return messageContainerSize
+            actionContainerSize = labelSize(for: attributedText, considering: maxWidth)
+            actionContainerSize.width += 10
+            actionContainerSize.height += 30
+            return actionContainerSize
+        case .remove:
+            let contentText: String
+            if case MessageKind.text(let text) = message.kind {
+                contentText = text
+            }else {
+                contentText = "Tin nhắn đã bị xoá"
+            }
+            let attributedText: NSAttributedString = NSAttributedString(string: contentText, attributes: [.font: UIFont.italicSystemFont(ofSize: 13)])
+            var actionContainerSize: CGSize
+            let maxWidth = messageContainerMaxWidth(for: message)
+            actionContainerSize = labelSize(for: attributedText, considering: maxWidth)
+            actionContainerSize.width += 10
+            actionContainerSize.height += 10
+            return actionContainerSize
         default:
             return CGSize.zero
         }

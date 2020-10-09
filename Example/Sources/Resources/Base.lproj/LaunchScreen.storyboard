@@ -1,11 +1,10 @@
 <?xml version="1.0" encoding="UTF-8"?>
-<document type="com.apple.InterfaceBuilder3.CocoaTouch.Storyboard.XIB" version="3.0" toolsVersion="13529" targetRuntime="iOS.CocoaTouch" propertyAccessControl="none" useAutolayout="YES" launchScreen="YES" useTraitCollections="YES" colorMatched="YES" initialViewController="01J-lp-oVM">
-    <device id="retina4_7" orientation="portrait">
-        <adaptation id="fullscreen"/>
-    </device>
+<document type="com.apple.InterfaceBuilder3.CocoaTouch.Storyboard.XIB" version="3.0" toolsVersion="16097" targetRuntime="iOS.CocoaTouch" propertyAccessControl="none" useAutolayout="YES" launchScreen="YES" useTraitCollections="YES" colorMatched="YES" initialViewController="01J-lp-oVM">
+    <device id="retina4_7" orientation="portrait" appearance="light"/>
     <dependencies>
         <deployment identifier="iOS"/>
-        <plugIn identifier="com.apple.InterfaceBuilder.IBCocoaTouchPlugin" version="13527"/>
+        <plugIn identifier="com.apple.InterfaceBuilder.IBCocoaTouchPlugin" version="16087"/>
+        <capability name="Named colors" minToolsVersion="9.0"/>
         <capability name="documents saved in the Xcode 8 format" minToolsVersion="8.0"/>
     </dependencies>
     <scenes>
@@ -22,13 +21,13 @@
                         <autoresizingMask key="autoresizingMask" widthSizable="YES" heightSizable="YES"/>
                         <subviews>
                             <imageView userInteractionEnabled="NO" contentMode="scaleAspectFit" horizontalHuggingPriority="251" verticalHuggingPriority="251" image="mklogo" translatesAutoresizingMaskIntoConstraints="NO" id="NHX-yN-7Jk">
-                                <rect key="frame" x="76" y="99" width="222" height="127"/>
+                                <rect key="frame" x="76.5" y="79" width="222" height="127"/>
                                 <constraints>
                                     <constraint firstAttribute="width" constant="222" id="O7O-V2-Dmt"/>
                                 </constraints>
                             </imageView>
                         </subviews>
-                        <color key="backgroundColor" red="0.24325716495513916" green="0.76319533586502075" blue="0.32751965522766113" alpha="1" colorSpace="custom" customColorSpace="sRGB"/>
+                        <color key="backgroundColor" name="outgoingMessageBackground"/>
                         <constraints>
                             <constraint firstItem="xb3-aO-Qok" firstAttribute="top" relation="greaterThanOrEqual" secondItem="NHX-yN-7Jk" secondAttribute="bottom" id="1Ce-5w-nEL"/>
                             <constraint firstItem="NHX-yN-7Jk" firstAttribute="top" secondItem="Llm-lL-Icb" secondAttribute="bottom" priority="750" constant="79" id="ReL-Hv-5uq"/>
@@ -42,6 +41,9 @@
         </scene>
     </scenes>
     <resources>
-        <image name="mklogo" width="444" height="127"/>
+        <image name="mklogo" width="444" height="127.5"/>
+        <namedColor name="outgoingMessageBackground">
+            <color red="0.20399999618530273" green="0.77999997138977051" blue="0.34900000691413879" alpha="1" colorSpace="custom" customColorSpace="sRGB"/>
+        </namedColor>
     </resources>
 </document>

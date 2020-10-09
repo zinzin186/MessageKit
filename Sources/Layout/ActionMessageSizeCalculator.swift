@@ -10,10 +10,6 @@ import UIKit
 
 open class ActionMessageSizeCalculator: MessageSizeCalculator {
 
-   
-
-    public var messageLabelFont = UIFont.preferredFont(forTextStyle: .body)
-
     open override func sizeForItem(at indexPath: IndexPath) -> CGSize {
         let dataSource = messagesLayout.messagesDataSource
         let message = dataSource.messageForItem(at: indexPath, in: messagesLayout.messagesCollectionView)
