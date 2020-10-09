@@ -371,11 +371,11 @@ open class MessageContentCell: MessageCollectionViewCell, UIGestureRecognizerDel
     open func layoutReplyView(with attributes: MessagesCollectionViewLayoutAttributes) {
         var origin: CGPoint = .zero
         
-        let paddingMessageContainerViewWith: CGFloat = attributes.actionBodySize == CGSize.zero ? 0 : 20
+//        let paddingMessageContainerViewWith: CGFloat = attributes.actionBodySize == CGSize.zero ? 0 : 20
 
         switch attributes.avatarPosition.vertical {
-        case .messageBottom:
-            origin.y = attributes.size.height - attributes.actionBodyPadding.bottom - attributes.cellBottomLabelSize.height - attributes.messageBottomLabelSize.height - attributes.actionBodySize.height - attributes.actionBodyPadding.top - attributes.messageContainerSize.height + paddingMessageContainerViewWith
+//        case .messageBottom:
+//            origin.y = attributes.size.height - attributes.actionBodyPadding.bottom - attributes.cellBottomLabelSize.height - attributes.messageBottomLabelSize.height - attributes.actionBodySize.height - attributes.actionBodyPadding.top - attributes.messageContainerSize.height + paddingMessageContainerViewWith
         case .messageCenter:
             if attributes.avatarSize.height > attributes.actionBodySize.height {
                 let messageHeight = attributes.actionBodySize.height + attributes.actionBodyPadding.vertical
