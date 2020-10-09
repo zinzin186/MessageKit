@@ -43,14 +43,7 @@ open class ActionBodyView: UIView {
         imageView.contentMode = .scaleAspectFill
         imageView.isHidden = true
         imageView.translatesAutoresizingMaskIntoConstraints = false
-        
-        addSubview(contentView)
-        NSLayoutConstraint.activate([
-            contentView.leadingAnchor.constraint(equalTo: self.leadingAnchor),
-            contentView.topAnchor.constraint(equalTo: self.topAnchor),
-            contentView.trailingAnchor.constraint(equalTo: self.trailingAnchor),
-            contentView.bottomAnchor.constraint(equalTo: self.bottomAnchor)
-        ])
+        self.contentView.subviews.forEach({$0.removeFromSuperview()})
         self.contentView.addSubview(imageView)
         NSLayoutConstraint.activate([
             imageView.leadingAnchor.constraint(equalTo: self.contentView.leadingAnchor, constant: 5),
@@ -81,13 +74,7 @@ open class ActionBodyView: UIView {
         label.textColor = UIColor.fromHexCode("#808080")
         label.translatesAutoresizingMaskIntoConstraints = false
         label.isHidden = true
-        addSubview(contentView)
-        NSLayoutConstraint.activate([
-            contentView.leadingAnchor.constraint(equalTo: self.leadingAnchor),
-            contentView.topAnchor.constraint(equalTo: self.topAnchor),
-            contentView.trailingAnchor.constraint(equalTo: self.trailingAnchor),
-            contentView.bottomAnchor.constraint(equalTo: self.bottomAnchor)
-        ])
+        self.contentView.subviews.forEach({$0.removeFromSuperview()})
         self.contentView.addSubview(label)
         NSLayoutConstraint.activate([
             label.leadingAnchor.constraint(equalTo: self.contentView.leadingAnchor, constant: 5),
@@ -114,10 +101,17 @@ open class ActionBodyView: UIView {
         return label
     }()
     
-    private lazy var contentView: UIView = {
+    private lazy var contentView: UIView = {[unowned self] in
         let view = UIView()
-        view.backgroundColor = UIColor.fromHexCode("#F6F6F6")
+        view.backgroundColor = UIColor.red//fromHexCode("#F6F6F6")
         view.translatesAutoresizingMaskIntoConstraints = false
+        addSubview(view)
+        NSLayoutConstraint.activate([
+            view.leadingAnchor.constraint(equalTo: self.leadingAnchor),
+            view.topAnchor.constraint(equalTo: self.topAnchor),
+            view.trailingAnchor.constraint(equalTo: self.trailingAnchor),
+            view.bottomAnchor.constraint(equalTo: self.bottomAnchor)
+        ])
         return view
     }()
     
@@ -128,13 +122,7 @@ open class ActionBodyView: UIView {
         label.textColor = UIColor.fromHexCode("#999999")
         label.translatesAutoresizingMaskIntoConstraints = false
         label.isHidden = true
-        addSubview(contentView)
-        NSLayoutConstraint.activate([
-            contentView.leadingAnchor.constraint(equalTo: self.leadingAnchor),
-            contentView.topAnchor.constraint(equalTo: self.topAnchor),
-            contentView.trailingAnchor.constraint(equalTo: self.trailingAnchor),
-            contentView.bottomAnchor.constraint(equalTo: self.bottomAnchor)
-        ])
+        self.contentView.subviews.forEach({$0.removeFromSuperview()})
         self.contentView.addSubview(label)
         NSLayoutConstraint.activate([
             label.leadingAnchor.constraint(equalTo: self.contentView.leadingAnchor, constant: 5),
