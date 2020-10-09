@@ -43,27 +43,34 @@ open class ActionBodyView: UIView {
         imageView.contentMode = .scaleAspectFill
         imageView.isHidden = true
         imageView.translatesAutoresizingMaskIntoConstraints = false
-        addSubview(imageView)
-
+        
+        addSubview(contentView)
         NSLayoutConstraint.activate([
-            imageView.leadingAnchor.constraint(equalTo: self.leadingAnchor, constant: 5),
-            imageView.topAnchor.constraint(equalTo: self.topAnchor, constant: 5),
-            imageView.widthAnchor.constraint(equalToConstant: 50),
-            imageView.bottomAnchor.constraint(equalTo: self.bottomAnchor, constant: -25)
+            contentView.leadingAnchor.constraint(equalTo: self.leadingAnchor),
+            contentView.topAnchor.constraint(equalTo: self.topAnchor),
+            contentView.trailingAnchor.constraint(equalTo: self.trailingAnchor),
+            contentView.bottomAnchor.constraint(equalTo: self.bottomAnchor)
         ])
-        addSubview(teaserLabel)
+        self.contentView.addSubview(imageView)
+        NSLayoutConstraint.activate([
+            imageView.leadingAnchor.constraint(equalTo: self.contentView.leadingAnchor, constant: 5),
+            imageView.topAnchor.constraint(equalTo: self.contentView.topAnchor, constant: 5),
+            imageView.widthAnchor.constraint(equalToConstant: 50),
+            imageView.bottomAnchor.constraint(equalTo: self.contentView.bottomAnchor, constant: -25)
+        ])
+        self.contentView.addSubview(teaserLabel)
         teaserLabel.isHidden = false
         NSLayoutConstraint.activate([
             teaserLabel.leadingAnchor.constraint(equalTo: imageView.trailingAnchor, constant: 5),
             teaserLabel.topAnchor.constraint(equalTo: imageView.topAnchor, constant: 5),
-            teaserLabel.trailingAnchor.constraint(equalTo: self.trailingAnchor, constant: -5),
+            teaserLabel.trailingAnchor.constraint(equalTo: self.contentView.trailingAnchor, constant: -5),
         ])
-        addSubview(tapButton)
+        self.contentView.addSubview(tapButton)
         NSLayoutConstraint.activate([
-            tapButton.leadingAnchor.constraint(equalTo: self.leadingAnchor),
-            tapButton.topAnchor.constraint(equalTo: self.topAnchor),
-            tapButton.trailingAnchor.constraint(equalTo: self.trailingAnchor),
-            tapButton.bottomAnchor.constraint(equalTo: self.bottomAnchor)
+            tapButton.leadingAnchor.constraint(equalTo: self.contentView.leadingAnchor),
+            tapButton.topAnchor.constraint(equalTo: self.contentView.topAnchor),
+            tapButton.trailingAnchor.constraint(equalTo: self.contentView.trailingAnchor),
+            tapButton.bottomAnchor.constraint(equalTo: self.contentView.bottomAnchor)
         ])
         return imageView
     }()
@@ -74,12 +81,19 @@ open class ActionBodyView: UIView {
         label.textColor = UIColor.fromHexCode("#808080")
         label.translatesAutoresizingMaskIntoConstraints = false
         label.isHidden = true
-        addSubview(label)
+        addSubview(contentView)
         NSLayoutConstraint.activate([
-            label.leadingAnchor.constraint(equalTo: self.leadingAnchor, constant: 5),
-            label.topAnchor.constraint(equalTo: self.topAnchor, constant: 5),
-            label.trailingAnchor.constraint(equalTo: self.trailingAnchor, constant: -5),
-            label.bottomAnchor.constraint(equalTo: self.bottomAnchor, constant: -25)
+            contentView.leadingAnchor.constraint(equalTo: self.leadingAnchor),
+            contentView.topAnchor.constraint(equalTo: self.topAnchor),
+            contentView.trailingAnchor.constraint(equalTo: self.trailingAnchor),
+            contentView.bottomAnchor.constraint(equalTo: self.bottomAnchor)
+        ])
+        self.contentView.addSubview(label)
+        NSLayoutConstraint.activate([
+            label.leadingAnchor.constraint(equalTo: self.contentView.leadingAnchor, constant: 5),
+            label.topAnchor.constraint(equalTo: self.contentView.topAnchor, constant: 5),
+            label.trailingAnchor.constraint(equalTo: self.contentView.trailingAnchor, constant: -5),
+            label.bottomAnchor.constraint(equalTo: self.contentView.bottomAnchor, constant: -25)
         ])
         addSubview(tapButton)
         NSLayoutConstraint.activate([
@@ -100,6 +114,13 @@ open class ActionBodyView: UIView {
         return label
     }()
     
+    private lazy var contentView: UIView = {
+        let view = UIView()
+        view.backgroundColor = UIColor.fromHexCode("#F6F6F6")
+        view.translatesAutoresizingMaskIntoConstraints = false
+        return view
+    }()
+    
     private lazy var removeMessageLabel: UILabel = {[unowned self] in
         let label: UILabel = .init()
         label.numberOfLines = 0
@@ -107,12 +128,19 @@ open class ActionBodyView: UIView {
         label.textColor = UIColor.fromHexCode("#999999")
         label.translatesAutoresizingMaskIntoConstraints = false
         label.isHidden = true
-        addSubview(label)
+        addSubview(contentView)
         NSLayoutConstraint.activate([
-            label.leadingAnchor.constraint(equalTo: self.leadingAnchor, constant: 5),
-            label.topAnchor.constraint(equalTo: self.topAnchor, constant: 10),
-            label.trailingAnchor.constraint(equalTo: self.trailingAnchor, constant: -5),
-            label.bottomAnchor.constraint(equalTo: self.bottomAnchor, constant: -10)
+            contentView.leadingAnchor.constraint(equalTo: self.leadingAnchor),
+            contentView.topAnchor.constraint(equalTo: self.topAnchor),
+            contentView.trailingAnchor.constraint(equalTo: self.trailingAnchor),
+            contentView.bottomAnchor.constraint(equalTo: self.bottomAnchor)
+        ])
+        self.contentView.addSubview(label)
+        NSLayoutConstraint.activate([
+            label.leadingAnchor.constraint(equalTo: self.contentView.leadingAnchor, constant: 5),
+            label.topAnchor.constraint(equalTo: self.contentView.topAnchor, constant: 10),
+            label.trailingAnchor.constraint(equalTo: self.contentView.trailingAnchor, constant: -5),
+            label.bottomAnchor.constraint(equalTo: self.contentView.bottomAnchor, constant: -10)
         ])
         addSubview(tapButton)
         NSLayoutConstraint.activate([
