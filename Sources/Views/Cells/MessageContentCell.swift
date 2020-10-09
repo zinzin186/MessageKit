@@ -189,8 +189,7 @@ open class MessageContentCell: MessageCollectionViewCell, UIGestureRecognizerDel
         cellBottomLabel.text = nil
         messageTopLabel.text = nil
         iconMarkReply.isHidden = true
-        messageBottomLabel.text = nil
-        
+        messageBottomLabel.text = nil        
 //        messageTimestampLabel.attributedText = nil
     }
 

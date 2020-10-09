@@ -329,7 +329,7 @@ open class MessageSizeCalculator: CellSizeCalculator {
             let maxWidth = messageContainerMaxWidth(for: message)
             actionContainerSize = labelSize(for: attributedText, considering: maxWidth)
             actionContainerSize.width += 10
-            actionContainerSize.height += 10
+            actionContainerSize.height += 20
             return actionContainerSize
         default:
             return CGSize.zero

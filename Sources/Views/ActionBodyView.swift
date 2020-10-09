@@ -41,6 +41,7 @@ open class ActionBodyView: UIView {
         let imageView: UIImageView = .init()
         imageView.clipsToBounds = true
         imageView.contentMode = .scaleAspectFill
+        imageView.isHidden = true
         imageView.translatesAutoresizingMaskIntoConstraints = false
         addSubview(imageView)
 
@@ -51,6 +52,7 @@ open class ActionBodyView: UIView {
             imageView.bottomAnchor.constraint(equalTo: self.bottomAnchor, constant: -25)
         ])
         addSubview(teaserLabel)
+        teaserLabel.isHidden = false
         NSLayoutConstraint.activate([
             teaserLabel.leadingAnchor.constraint(equalTo: imageView.trailingAnchor, constant: 5),
             teaserLabel.topAnchor.constraint(equalTo: imageView.topAnchor, constant: 5),
@@ -65,12 +67,13 @@ open class ActionBodyView: UIView {
         ])
         return imageView
     }()
-    private lazy var contentLabel: UILabel = {[unowned self] in
-        let label: UILabel = .init()
+    private lazy var contentLabel: InsetLabel = {[unowned self] in
+        let label: InsetLabel = .init()
         label.numberOfLines = 0
         label.font = UIFont.systemFont(ofSize: 13)
         label.textColor = UIColor.fromHexCode("#808080")
         label.translatesAutoresizingMaskIntoConstraints = false
+        label.isHidden = true
         addSubview(label)
         NSLayoutConstraint.activate([
             label.leadingAnchor.constraint(equalTo: self.leadingAnchor, constant: 5),
@@ -90,6 +93,7 @@ open class ActionBodyView: UIView {
     lazy var teaserLabel: UILabel = {
         let label: UILabel = .init()
         label.numberOfLines = 0
+        label.isHidden = true
         label.font = UIFont.systemFont(ofSize: 13)
         label.textColor = UIColor.fromHexCode("#808080")
         label.translatesAutoresizingMaskIntoConstraints = false
@@ -102,12 +106,13 @@ open class ActionBodyView: UIView {
         label.font = UIFont.italicSystemFont(ofSize: 13)
         label.textColor = UIColor.fromHexCode("#999999")
         label.translatesAutoresizingMaskIntoConstraints = false
+        label.isHidden = true
         addSubview(label)
         NSLayoutConstraint.activate([
             label.leadingAnchor.constraint(equalTo: self.leadingAnchor, constant: 5),
-            label.topAnchor.constraint(equalTo: self.topAnchor, constant: 5),
+            label.topAnchor.constraint(equalTo: self.topAnchor, constant: 10),
             label.trailingAnchor.constraint(equalTo: self.trailingAnchor, constant: -5),
-            label.bottomAnchor.constraint(equalTo: self.bottomAnchor, constant: -5)
+            label.bottomAnchor.constraint(equalTo: self.bottomAnchor, constant: -10)
         ])
         addSubview(tapButton)
         NSLayoutConstraint.activate([
@@ -128,6 +133,7 @@ open class ActionBodyView: UIView {
         case .reply(let replyMessage):
             self.getContentText(message: replyMessage)
         case .remove:
+            self.removeMessageLabel.isHidden = false
             if case MessageKind.text(let text) = message.kind {
                 self.removeMessageLabel.text = text
             }else {
@@ -143,13 +149,17 @@ open class ActionBodyView: UIView {
     private func getContentText(message: MKReplyMessageType){
         switch message.kind {
         case .text(let text), .emoji(let text):
+            self.contentLabel.isHidden = false
             self.contentLabel.text = text
         case .attributedText(let text):
+            self.contentLabel.isHidden = false
             self.contentLabel.attributedText = text
         case .photo(let photo):
+            self.imageView.isHidden = false
             self.imageView.image = photo.image ?? photo.placeholderImage
             teaserLabel.text = "Hình ảnh"
         case .video(let video):
+            self.imageView.isHidden = false
             self.imageView.image = video.image ?? video.placeholderImage
             teaserLabel.text = "Video"
         default:
