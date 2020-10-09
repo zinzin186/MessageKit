@@ -488,7 +488,7 @@ open class MessageContentCell: MessageCollectionViewCell, UIGestureRecognizerDel
         messageBottomLabel.textInsets = attributes.messageBottomLabelAlignment.textInsets
 
         let y: CGFloat
-        if messageContainerView.frame == .zero{
+        if messageContainerView.frame.size != .zero{
             y = messageContainerView.frame.maxY + attributes.messageContainerPadding.bottom
         }else{
             y = actionBodyView.frame.maxY + attributes.actionBodyPadding.bottom
