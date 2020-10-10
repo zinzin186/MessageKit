@@ -63,32 +63,41 @@ open class ActionBodyView: UIView {
         
     }
     func addActionRemoveMessageView(text: String){
+        self.subviews.forEach({$0.removeFromSuperview()})
         self.actionRemoveMessageView?.removeFromSuperview()
         self.actionRemoveMessageView = ActionRemoveMessageView()
         self.actionRemoveMessageView?.messageLabel.text = text
-        self.addSubview(actionRemoveMessageView!)
-        NSLayoutConstraint.activate([
-            actionRemoveMessageView!.leadingAnchor.constraint(equalTo: self.leadingAnchor),
-            actionRemoveMessageView!.topAnchor.constraint(equalTo: self.topAnchor),
-            actionRemoveMessageView!.trailingAnchor.constraint(equalTo: self.trailingAnchor),
-            actionRemoveMessageView!.bottomAnchor.constraint(equalTo: self.bottomAnchor)
-        ])
+        self.addActionView(view: self.actionRemoveMessageView!)
         
     }
     func addActionReplyTextView(text: String){
+        self.subviews.forEach({$0.removeFromSuperview()})
         self.actionReplyTextView?.removeFromSuperview()
         self.actionReplyTextView = ActionReplyTextView()
         self.actionReplyTextView?.messageLabel.text = text
+        self.addActionView(view: self.actionReplyTextView!)
         
     }
     func addActionReplyMediaView(text: String, image: UIImage?){
+        self.subviews.forEach({$0.removeFromSuperview()})
         self.actionReplyMediaView?.removeFromSuperview()
         self.actionReplyMediaView = ActionReplyMediaView()
         self.actionReplyMediaView?.messageLabel.text = text
         self.actionReplyMediaView?.imageView.image = image
-        
+        self.addActionView(view: self.actionReplyMediaView!)
     }
     
+    private func addActionView(view: UIView){
+        self.subviews.forEach({$0.removeFromSuperview()})
+        view.translatesAutoresizingMaskIntoConstraints = false
+        self.addSubview(view)
+        NSLayoutConstraint.activate([
+            view.leadingAnchor.constraint(equalTo: self.leadingAnchor),
+            view.topAnchor.constraint(equalTo: self.topAnchor),
+            view.trailingAnchor.constraint(equalTo: self.trailingAnchor),
+            view.bottomAnchor.constraint(equalTo: self.bottomAnchor)
+        ])
+    }
     private func getContentText(message: MKReplyMessageType){
         switch message.kind {
         case .text(let text), .emoji(let text):

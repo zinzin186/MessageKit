@@ -254,7 +254,9 @@ open class MessageContentCell: MessageCollectionViewCell, UIGestureRecognizerDel
         
         if case ActionType.reply(let replyMessage) = message.action {
             self.iconMarkReply.isHidden = false
-            displayDelegate.configureReplyMediaMessageImageView(actionBodyView.imageView, for: replyMessage, at: indexPath, in: messagesCollectionView)
+            if let imageView = actionBodyView.actionReplyMediaView?.imageView{
+                displayDelegate.configureReplyMediaMessageImageView(imageView, for: replyMessage, at: indexPath, in: messagesCollectionView)
+            }
         }else{
             self.iconMarkReply.isHidden = true
         }
