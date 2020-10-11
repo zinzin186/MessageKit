@@ -21,7 +21,7 @@ open class DonateMessageSizeCalculator: TextMessageSizeCalculator {
 
 //        let messageInsets = messageLabelInsets(for: message)
         let iconCoinSize: CGSize = CGSize(width: 16, height: 16)
-        messageContainerSize.width += (24 + iconCoinSize.width)
+        messageContainerSize.width += (24 + iconCoinSize.width + 5)
         messageContainerSize.height += 14
 
         return messageContainerSize

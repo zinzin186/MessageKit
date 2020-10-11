@@ -58,6 +58,12 @@ extension BasicExampleViewController: MKMessagesDisplayDelegate {
         return isFromCurrentSender(message: message) ? .white : .darkText
     }
     
+    func textFont(for message: MKMessageType, at indexPath: IndexPath, in messagesCollectionView: MessagesCollectionView) -> UIFont {
+        if case MessageKind.donate = message.kind {
+            return UIFont.boldSystemFont(ofSize: 20)
+        }
+        return UIFont.systemFont(ofSize: 15)
+    }
     func detectorAttributes(for detector: DetectorType, and message: MKMessageType, at indexPath: IndexPath) -> [NSAttributedString.Key: Any] {
         switch detector {
         case .hashtag, .mentionRange: return [.foregroundColor: UIColor.blue, NSAttributedString.Key.font: UIFont.systemFont(ofSize: 22.0)]
