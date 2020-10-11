@@ -62,6 +62,9 @@ public enum MessageKind {
     
     /// to set action (join, leave, ban, block, change name group...)
     case action(String)
+    
+    /// Donate in chat
+    case donate(String)
 
     /// A custom message.
     /// - Note: Using this case requires that you implement the following methods and handle this case:

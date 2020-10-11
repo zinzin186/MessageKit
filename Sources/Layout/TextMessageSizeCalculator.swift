@@ -27,8 +27,8 @@ import UIKit
 
 open class TextMessageSizeCalculator: MessageSizeCalculator {
 
-    public var incomingMessageLabelInsets = UIEdgeInsets(top: 7, left: 10, bottom: 7, right: 10)
-    public var outgoingMessageLabelInsets = UIEdgeInsets(top: 7, left: 10, bottom: 7, right: 10)
+    public var incomingMessageLabelInsets = UIEdgeInsets(top: 7, left: 12, bottom: 7, right: 12)
+    public var outgoingMessageLabelInsets = UIEdgeInsets(top: 7, left: 12, bottom: 7, right: 12)
 
     internal func messageLabelInsets(for message: MKMessageType) -> UIEdgeInsets {
         let dataSource = messagesLayout.messagesDataSource
@@ -67,32 +67,24 @@ open class TextMessageSizeCalculator: MessageSizeCalculator {
         let message = dataSource.messageForItem(at: indexPath, in: messagesLayout.messagesCollectionView)
 
         attributes.messageLabelInsets = messageLabelInsets(for: message)
-        self.messageLabelFont = attributes.messageLabelFont
 
-        switch message.kind {
-        case .attributedText(let text):
-            guard !text.string.isEmpty else { return }
-            guard let font = text.attribute(.font, at: 0, effectiveRange: nil) as? UIFont else { return }
-            attributes.messageLabelFont = font
-        default:
-            break
-        }
     }
-    private func genAttributeMessage(with message: MKMessageType, at indexPath: IndexPath) -> NSAttributedString {
+    
+    internal func genAttributeMessage(with message: MKMessageType, at indexPath: IndexPath) -> NSAttributedString {
         guard let displayDelegate = messagesLayout.messagesCollectionView.messagesDisplayDelegate else {
             fatalError(MessageKitError.nilMessagesDisplayDelegate)
         }
         let attributedString: NSMutableAttributedString
         switch message.kind {
-        case .text(let text), .emoji(let text):
+        case .text(let text), .emoji(let text), .donate(let text):
+            let textFont = displayDelegate.textFont(for: message, at: indexPath, in: messagesLayout.messagesCollectionView)
             attributedString = NSMutableAttributedString(string: text)
-            attributedString.addAttribute(.font, value: messageLabelFont, range: NSMakeRange(0, text.count))
+            attributedString.addAttribute(.font, value: textFont, range: NSMakeRange(0, text.count))
         case .attributedText(let text):
             attributedString = NSMutableAttributedString(attributedString: text)
         default:
             attributedString = NSMutableAttributedString(string: "")
         }
-
         
         let enabledDetectors = displayDelegate.enabledDetectors(for: message, at: indexPath, in: messagesLayout.messagesCollectionView)
         for detector in enabledDetectors {

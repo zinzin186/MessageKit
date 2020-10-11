@@ -64,11 +64,5 @@ open class ContactMessageSizeCalculator: MessageSizeCalculator {
         
         return messageContainerSize
     }
-    
-    open override func configure(attributes: UICollectionViewLayoutAttributes) {
-        super.configure(attributes: attributes)
-        guard let attributes = attributes as? MessagesCollectionViewLayoutAttributes else { return }
-        attributes.messageLabelFont = contactLabelFont
-    }
 
 }

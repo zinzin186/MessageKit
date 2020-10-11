@@ -61,15 +61,6 @@ open class ContactMessageCell: MessageContentCell {
         let disclosure = UIImageView(image: disclosureImage)
         return disclosure
     }()
-    
-    // MARK: - Methods
-    open override func apply(_ layoutAttributes: UICollectionViewLayoutAttributes) {
-        super.apply(layoutAttributes)
-        guard let attributes = layoutAttributes as? MessagesCollectionViewLayoutAttributes else {
-            return
-        }
-        nameLabel.font = attributes.messageLabelFont
-    }
 
     open override func setupSubviews() {
         super.setupSubviews()
@@ -136,6 +127,8 @@ open class ContactMessageCell: MessageContentCell {
             fatalError(MessageKitError.nilMessagesDisplayDelegate)
         }
         let textColor = displayDelegate.textColor(for: message, at: indexPath, in: messagesCollectionView)
+        let textFont = displayDelegate.textFont(for: message, at: indexPath, in: messagesCollectionView)
+        nameLabel.font = textFont
         nameLabel.textColor = textColor
         disclosureImageView.tintColor = textColor
     }

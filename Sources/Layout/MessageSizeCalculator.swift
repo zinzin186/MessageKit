@@ -36,12 +36,11 @@ open class MessageSizeCalculator: CellSizeCalculator {
     public var incomingAvatarSize = CGSize(width: 30, height: 30)
     public var outgoingAvatarSize = CGSize(width: 30, height: 30)
     
-    public var messageLabelFont =  UIFont.preferredFont(forTextStyle: .body)
-
     public var incomingAvatarPosition = AvatarPosition(vertical: .cellBottom)
     public var outgoingAvatarPosition = AvatarPosition(vertical: .cellBottom)
 
     public var avatarLeadingTrailingPadding: CGFloat = 0
+    public var paddingContainerViewWithReplyBody: CGFloat = 0
 
     public var incomingMessagePadding = UIEdgeInsets(top: 0, left: 4, bottom: 0, right: 30)
     public var outgoingMessagePadding = UIEdgeInsets(top: 0, left: 30, bottom: 0, right: 4)
@@ -66,6 +65,10 @@ open class MessageSizeCalculator: CellSizeCalculator {
     
     public var incomingAccessoryViewPosition: AccessoryPosition = .messageCenter
     public var outgoingAccessoryViewPosition: AccessoryPosition = .messageCenter
+    
+    public var linkPreviewFonts = LinkPreviewFonts(titleFont: .preferredFont(forTextStyle: .footnote),
+                                                   teaserFont: .preferredFont(forTextStyle: .caption2),
+                                                   domainFont: .preferredFont(forTextStyle: .caption1))
 
     open override func configure(attributes: UICollectionViewLayoutAttributes) {
         guard let attributes = attributes as? MessagesCollectionViewLayoutAttributes else { return }
@@ -77,6 +80,7 @@ open class MessageSizeCalculator: CellSizeCalculator {
         attributes.avatarSize = avatarSize(for: message)
         attributes.avatarPosition = avatarPosition(for: message)
         attributes.avatarLeadingTrailingPadding = avatarLeadingTrailingPadding
+        attributes.paddingContainerViewWithReplyBody = paddingContainerViewWithReplyBody(for: message)
 
         attributes.actionBodyPadding = replyBodyPadding(for: message)
         attributes.messageContainerPadding = messageContainerPadding(for: message)
@@ -97,7 +101,7 @@ open class MessageSizeCalculator: CellSizeCalculator {
         attributes.accessoryViewPadding = accessoryViewPadding(for: message)
         attributes.accessoryViewPosition = accessoryViewPosition(for: message)
         attributes.iconMarkReplySize = iconMarkReplySize(for: message)
-        attributes.messageLabelFont = messageLabelFont
+        attributes.linkPreviewFonts = linkPreviewFonts
     }
 
     open override func sizeForItem(at indexPath: IndexPath) -> CGSize {
@@ -119,11 +123,6 @@ open class MessageSizeCalculator: CellSizeCalculator {
         let avatarHeight = avatarSize(for: message).height
         let avatarVerticalPosition = avatarPosition(for: message).vertical
         let accessoryViewHeight = accessoryViewSize(for: message).height
-
-        var paddingContainerViewWithReplyBody: CGFloat = replyBodyHeight > 0 ? 20 : 0
-        if case ActionType.remove = message.action{
-            paddingContainerViewWithReplyBody = 0
-        }
         
         switch avatarVerticalPosition {
         case .messageCenter:
@@ -175,6 +174,13 @@ open class MessageSizeCalculator: CellSizeCalculator {
         return position
     }
 
+    open func paddingContainerViewWithReplyBody(for message: MKMessageType) -> CGFloat {
+        if case ActionType.reply = message.action{
+            return 20
+        }
+        return 0
+    }
+    
     open func avatarSize(for message: MKMessageType) -> CGSize {
         let dataSource = messagesLayout.messagesDataSource
         let isFromCurrentSender = dataSource.isFromCurrentSender(message: message)
@@ -205,7 +211,7 @@ open class MessageSizeCalculator: CellSizeCalculator {
 //        return CGSize(width: messagesLayout.itemWidth, height: height)
         let dataSource = messagesLayout.messagesDataSource
         if let attributedText = dataSource.messageTopLabelAttributedText(for: message, at: indexPath){
-            let topLabelWidth = labelWidth(for: attributedText, considering: height)
+            let topLabelWidth = labelSize(for: attributedText, considering: height).width
             return CGSize(width: topLabelWidth, height: height)
         }else{
             return CGSize.zero
@@ -374,12 +380,7 @@ open class MessageSizeCalculator: CellSizeCalculator {
 
         return rect.size
     }
-    internal func labelWidth(for attributedText: NSAttributedString, considering maxHeight: CGFloat) -> CGFloat {
-        let constraintBox = CGSize(width: .greatestFiniteMagnitude, height: maxHeight)
-        let rect = attributedText.boundingRect(with: constraintBox, options: [.usesLineFragmentOrigin, .usesFontLeading], context: nil).integral
 
-        return rect.size.width
-    }
 }
 
 fileprivate extension UIEdgeInsets {

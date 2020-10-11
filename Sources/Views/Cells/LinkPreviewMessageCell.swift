@@ -27,16 +27,17 @@ import UIKit
 open class LinkPreviewMessageCell: TextMessageCell {
     public lazy var linkPreviewView: LinkPreviewView = {
         let view = LinkPreviewView()
+        view.backgroundColor = UIColor.fromHexCode("#F1F1F1")
         view.translatesAutoresizingMaskIntoConstraints = false
         messageContainerView.addSubview(view)
 
         NSLayoutConstraint.activate([
             view.leadingAnchor.constraint(equalTo: messageContainerView.leadingAnchor,
-                                          constant: messageLabel.textInsets.left),
+                                          constant: 0),
             view.trailingAnchor.constraint(equalTo: messageContainerView.trailingAnchor,
-                                           constant: messageLabel.textInsets.right * -1),
+                                           constant: 0),
             view.bottomAnchor.constraint(equalTo: messageContainerView.bottomAnchor,
-                                         constant: messageLabel.textInsets.bottom * -1)
+                                         constant: 0)
         ])
         return view
     }()
@@ -48,7 +49,6 @@ open class LinkPreviewMessageCell: TextMessageCell {
         guard let attributes = layoutAttributes as? MessagesCollectionViewLayoutAttributes else { return }
         linkPreviewView.titleLabel.font = attributes.linkPreviewFonts.titleFont
         linkPreviewView.teaserLabel.font = attributes.linkPreviewFonts.teaserFont
-        linkPreviewView.domainLabel.font = attributes.linkPreviewFonts.domainFont
     }
 
     open override func configure(with message: MKMessageType, at indexPath: IndexPath, and messagesCollectionView: MessagesCollectionView) {
@@ -57,7 +57,6 @@ open class LinkPreviewMessageCell: TextMessageCell {
         if let textColor: UIColor = displayDelegate?.textColor(for: message, at: indexPath, in: messagesCollectionView) {
             linkPreviewView.titleLabel.textColor = textColor
             linkPreviewView.teaserLabel.textColor = textColor
-            linkPreviewView.domainLabel.textColor = textColor
         }
 
         guard case MessageKind.linkPreview(let linkItem) = message.kind else {
@@ -72,7 +71,6 @@ open class LinkPreviewMessageCell: TextMessageCell {
 
         linkPreviewView.titleLabel.text = linkItem.title
         linkPreviewView.teaserLabel.text = linkItem.teaser
-        linkPreviewView.domainLabel.text = linkItem.url.host?.lowercased()
         linkPreviewView.imageView.image = linkItem.thumbnailImage
         linkURL = linkItem.url
 
@@ -83,7 +81,6 @@ open class LinkPreviewMessageCell: TextMessageCell {
         super.prepareForReuse()
         linkPreviewView.titleLabel.text = nil
         linkPreviewView.teaserLabel.text = nil
-        linkPreviewView.domainLabel.text = nil
         linkPreviewView.imageView.image = nil
         linkURL = nil
     }

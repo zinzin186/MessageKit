@@ -97,10 +97,10 @@ struct MockLinkItem: LinkItem {
     let url: URL
     let title: String?
     let teaser: String
-    let thumbnailImage: UIImage
+    let thumbnailImage: UIImage?
 }
 
-internal struct ReplyMessage: MKReplyMessageType{
+internal struct ReplyMessage: MKReplyMessageType {
     var messageId: String
     var sender: MKSenderType {
         return user
@@ -147,7 +147,7 @@ internal struct MockMessage: MKMessageType {
         let mediaItem = ImageMediaItem(imageURL: URL(string: "https://avatars0.githubusercontent.com/u/2911921?s=460&u=418a6180264738f33cf0ea2b6ce1c9fd79d992f2&v=4")!)
         let replyMessage = ReplyMessage(kind: .photo(mediaItem), user: user, messageId: messageId, date: date)
         let action = ActionType.reply(replyMessage)
-        self.init(kind: .text(text), user: user, messageId: messageId, date: date, action: .remove)
+        self.init(kind: .donate("Gửi tặng 1.000.0000 coin"), user: user, messageId: messageId, date: date, action: .default)
     }
 
     init(attributedText: NSAttributedString, user: MockUser, messageId: String, date: Date, action: ActionType = .default) {

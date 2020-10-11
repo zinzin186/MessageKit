@@ -48,7 +48,7 @@ public protocol LinkItem {
     var teaser: String { get }
 
     /// The thumbnail image.
-    var thumbnailImage: UIImage { get }
+    var thumbnailImage: UIImage? { get }
 }
 
 public extension LinkItem {

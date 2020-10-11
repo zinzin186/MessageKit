@@ -34,12 +34,12 @@ open class MessagesCollectionViewLayoutAttributes: UICollectionViewLayoutAttribu
     public var avatarPosition = AvatarPosition(vertical: .cellBottom)
     public var sendStatusPosition = AvatarPosition(vertical: .messageBottom)
     public var avatarLeadingTrailingPadding: CGFloat = 0
+    public var paddingContainerViewWithReplyBody: CGFloat = 0
     public var sendStatusLeadingTrailingPadding: CGFloat = 0
     public var messageContainerSize: CGSize = .zero
     public var messageContainerPadding: UIEdgeInsets = .zero
     public var actionBodySize: CGSize = .zero
     public var actionBodyPadding: UIEdgeInsets = .zero
-    public var messageLabelFont: UIFont = UIFont.preferredFont(forTextStyle: .body)
     public var messageLabelInsets: UIEdgeInsets = .zero
 
     public var cellTopLabelAlignment = LabelAlignment(textAlignment: .center, textInsets: .zero)
@@ -78,7 +78,6 @@ open class MessagesCollectionViewLayoutAttributes: UICollectionViewLayoutAttribu
         copy.messageContainerSize = messageContainerSize
         copy.actionBodyPadding = actionBodyPadding
         copy.messageContainerPadding = messageContainerPadding
-        copy.messageLabelFont = messageLabelFont
         copy.messageLabelInsets = messageLabelInsets
         copy.cellTopLabelAlignment = cellTopLabelAlignment
         copy.cellTopLabelSize = cellTopLabelSize
@@ -94,6 +93,7 @@ open class MessagesCollectionViewLayoutAttributes: UICollectionViewLayoutAttribu
         copy.accessoryViewPadding = accessoryViewPadding
         copy.accessoryViewPosition = accessoryViewPosition
         copy.linkPreviewFonts = linkPreviewFonts
+        copy.paddingContainerViewWithReplyBody = paddingContainerViewWithReplyBody
         return copy
         // swiftlint:enable force_cast
     }
@@ -108,7 +108,6 @@ open class MessagesCollectionViewLayoutAttributes: UICollectionViewLayoutAttribu
                 && attributes.messageContainerSize == messageContainerSize
                 && attributes.actionBodyPadding == actionBodyPadding
                 && attributes.messageContainerPadding == messageContainerPadding
-                && attributes.messageLabelFont == messageLabelFont
                 && attributes.messageLabelInsets == messageLabelInsets
                 && attributes.cellTopLabelAlignment == cellTopLabelAlignment
                 && attributes.cellTopLabelSize == cellTopLabelSize
@@ -124,6 +123,7 @@ open class MessagesCollectionViewLayoutAttributes: UICollectionViewLayoutAttribu
                 && attributes.accessoryViewPadding == accessoryViewPadding
                 && attributes.accessoryViewPosition == accessoryViewPosition
                 && attributes.linkPreviewFonts == linkPreviewFonts
+                && attributes.paddingContainerViewWithReplyBody == paddingContainerViewWithReplyBody
         } else {
             return false
         }

@@ -161,7 +161,7 @@ open class MessagesCollectionViewFlowLayout: UICollectionViewFlowLayout {
     lazy open var attributedTextMessageSizeCalculator = TextMessageSizeCalculator(layout: self)
     lazy open var emojiMessageSizeCalculator: TextMessageSizeCalculator = {
         let sizeCalculator = TextMessageSizeCalculator(layout: self)
-        sizeCalculator.messageLabelFont = UIFont.systemFont(ofSize: sizeCalculator.messageLabelFont.pointSize * 2)
+//        sizeCalculator.messageLabelFont = UIFont.systemFont(ofSize: sizeCalculator.messageLabelFont.pointSize * 2)
         return sizeCalculator
     }()
     lazy open var photoMessageSizeCalculator = MediaMessageSizeCalculator(layout: self)
@@ -172,6 +172,7 @@ open class MessagesCollectionViewFlowLayout: UICollectionViewFlowLayout {
     lazy open var typingIndicatorSizeCalculator = TypingCellSizeCalculator(layout: self)
     lazy open var linkPreviewMessageSizeCalculator = LinkPreviewMessageSizeCalculator(layout: self)
     lazy open var actionMessageSizeCalculator = ActionMessageSizeCalculator(layout: self)
+    lazy open var donateMessageSizeCalculator = DonateMessageSizeCalculator(layout: self)
 
     /// Note:
     /// - If you override this method, remember to call MessageLayoutDelegate's
@@ -204,6 +205,8 @@ open class MessagesCollectionViewFlowLayout: UICollectionViewFlowLayout {
             return linkPreviewMessageSizeCalculator
         case .action:
             return actionMessageSizeCalculator
+        case .donate:
+            return donateMessageSizeCalculator
         case .custom:
             return messagesLayoutDelegate.customCellSizeCalculator(for: message, at: indexPath, in: messagesCollectionView)
         }
@@ -318,12 +321,11 @@ open class MessagesCollectionViewFlowLayout: UICollectionViewFlowLayout {
     public func setMessageOutgoingAccessoryViewPosition(_ newPosition: AccessoryPosition) {
         messageSizeCalculators().forEach { $0.outgoingAccessoryViewPosition = newPosition }
     }
-    
-    /// Set `fontForMessageLabel` of all `MessageSizeCalculator`s
-    public func setFontMessageLabel(_ font: UIFont) {
-        messageSizeCalculators().forEach { $0.messageLabelFont = font }
-    }
 
+    /// Set `linkPreviewFonts` of all `MessageSizeCalculator`s
+    public func setLinkPreviewFonts(_ newLinkPreviewFonts: LinkPreviewFonts) {
+        messageSizeCalculators().forEach { $0.linkPreviewFonts = newLinkPreviewFonts }
+    }
     /// Get all `MessageSizeCalculator`s
     open func messageSizeCalculators() -> [MessageSizeCalculator] {
         return [textMessageSizeCalculator,

@@ -202,9 +202,9 @@ class ChatViewController: MessagesViewController, MKMessagesDataSource {
             let name = self.getTitleText(isOutgoingMessage: outGoing, message: message, replyMessage: replyMessage)
             return NSAttributedString(string: name, attributes: [NSAttributedString.Key.font: UIFont.preferredFont(forTextStyle: .caption1)])
         default:
-//            let name = message.sender.displayName
-//            return NSAttributedString(string: name, attributes: [NSAttributedString.Key.font: UIFont.preferredFont(forTextStyle: .caption1)])
-            return nil
+            let name = message.sender.displayName
+            return NSAttributedString(string: name, attributes: [NSAttributedString.Key.font: UIFont.preferredFont(forTextStyle: .caption1)])
+//            return nil
         }
         
     }

@@ -26,8 +26,10 @@ import Foundation
 
 open class LinkPreviewMessageSizeCalculator: TextMessageSizeCalculator {
 
-    static let imageViewSize: CGFloat = 60
-    static let imageViewMargin: CGFloat = 8
+    static let previewPaddingTopBottom: CGFloat = 10.0
+    static let previewDescPaddingTitle: CGFloat = 4
+    static let paddingLeftRight: CGFloat = 12
+    static let imageRatio: CGFloat = 133.0 / 237.0
 
     public var titleFont: UIFont
     public var teaserFont: UIFont = .preferredFont(forTextStyle: .caption2)
@@ -60,7 +62,6 @@ open class LinkPreviewMessageSizeCalculator: TextMessageSizeCalculator {
         guard case MessageKind.linkPreview(let linkItem) = message.kind else {
             fatalError("messageContainerSize received unhandled MessageDataType: \(message.kind)")
         }
-
         let dummyMessage = ConcreteMessageType(sender: message.sender,
                                                messageId: message.messageId,
                                                sentDate: message.sentDate,
@@ -68,12 +69,11 @@ open class LinkPreviewMessageSizeCalculator: TextMessageSizeCalculator {
 
         var containerSize = super.messageContainerSize(for: dummyMessage, indexPath: indexPath)
         containerSize.width = max(containerSize.width, messageContainerMaxWidth(for: message))
-
+        let maxWidth = containerSize.width
         let labelInsets: UIEdgeInsets = messageLabelInsets(for: dummyMessage)
-
-        let minHeight = containerSize.height + LinkPreviewMessageSizeCalculator.imageViewSize
-        let previewMaxWidth = containerSize.width - (LinkPreviewMessageSizeCalculator.imageViewSize + LinkPreviewMessageSizeCalculator.imageViewMargin + labelInsets.horizontal)
-
+        let minHeight = containerSize.height + maxWidth * LinkPreviewMessageSizeCalculator.imageRatio
+        let previewMaxWidth = containerSize.width// - (maxWidth + LinkPreviewMessageSizeCalculator.imageViewMargin + labelInsets.horizontal)
+        let previewMaxheight = maxWidth * LinkPreviewMessageSizeCalculator.imageRatio
         calculateContainerSize(with: NSAttributedString(string: linkItem.title ?? "", attributes: [.font: titleFont]),
                                containerSize: &containerSize,
                                maxWidth: previewMaxWidth)
@@ -82,11 +82,7 @@ open class LinkPreviewMessageSizeCalculator: TextMessageSizeCalculator {
                                containerSize: &containerSize,
                                maxWidth: previewMaxWidth)
 
-        calculateContainerSize(with: NSAttributedString(string: linkItem.url.host ?? "", attributes: [.font: domainFont]),
-                               containerSize: &containerSize,
-                               maxWidth: previewMaxWidth)
-
-        containerSize.height = max(minHeight, containerSize.height) + labelInsets.vertical
+        containerSize.height = max(minHeight, containerSize.height + previewMaxheight) + LinkPreviewMessageSizeCalculator.previewPaddingTopBottom * 2 + LinkPreviewMessageSizeCalculator.previewDescPaddingTitle + 10
 
         return containerSize
     }
@@ -94,7 +90,9 @@ open class LinkPreviewMessageSizeCalculator: TextMessageSizeCalculator {
     open override func configure(attributes: UICollectionViewLayoutAttributes) {
         super.configure(attributes: attributes)
         guard let attributes = attributes as? MessagesCollectionViewLayoutAttributes else { return }
-        attributes.linkPreviewFonts = LinkPreviewFonts(titleFont: titleFont, teaserFont: teaserFont, domainFont: domainFont)
+        titleFont = attributes.linkPreviewFonts.titleFont
+        teaserFont = attributes.linkPreviewFonts.teaserFont
+        domainFont = attributes.linkPreviewFonts.domainFont
     }
 }
 

@@ -116,6 +116,8 @@ public protocol MKMessagesDisplayDelegate: AnyObject {
     ///   All other senders: UIColor.darkText
     func textColor(for message: MKMessageType, at indexPath: IndexPath, in messagesCollectionView: MessagesCollectionView) -> UIColor
     
+    func textFont(for message: MKMessageType, at indexPath: IndexPath, in messagesCollectionView: MessagesCollectionView) -> UIFont
+    
     func configActionMessage(for message: MKMessageType, at indexPath: IndexPath, in messagesCollectionView: MessagesCollectionView) -> [NSAttributedString.Key: Any]
 
     /// Specifies the `DetectorType`s to check for the `MessageType`'s text against.
@@ -273,6 +275,10 @@ public extension MKMessagesDisplayDelegate {
             fatalError(MessageKitError.nilMessagesDataSource)
         }
         return dataSource.isFromCurrentSender(message: message) ? .outgoingMessageLabel : .incomingMessageLabel
+    }
+    
+    func textFont(for message: MKMessageType, at indexPath: IndexPath, in messagesCollectionView: MessagesCollectionView) -> UIFont {
+        return UIFont.preferredFont(forTextStyle: .body)
     }
     
     func configActionMessage(for message: MKMessageType, at indexPath: IndexPath, in messagesCollectionView: MessagesCollectionView) -> [NSAttributedString.Key: Any]{

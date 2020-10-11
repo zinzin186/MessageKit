@@ -52,6 +52,9 @@ extension BasicExampleViewController: MKMessagesDisplayDelegate {
     // MARK: - Text Messages
     
     func textColor(for message: MKMessageType, at indexPath: IndexPath, in messagesCollectionView: MessagesCollectionView) -> UIColor {
+        if case MessageKind.donate = message.kind {
+            return UIColor.yellow
+        }
         return isFromCurrentSender(message: message) ? .white : .darkText
     }
     
@@ -89,6 +92,10 @@ extension BasicExampleViewController: MKMessagesDisplayDelegate {
         } else {
             imageView.pin_cancelImageDownload()
         }
+    }
+    
+    func configureLinkPreviewImageView(_ imageView: UIImageView, for message: MKMessageType, at indexPath: IndexPath, in messagesCollectionView: MessagesCollectionView) {
+        imageView.pin_setImage(from: URL(string: "https://avatars0.githubusercontent.com/u/2911921?s=460&u=418a6180264738f33cf0ea2b6ce1c9fd79d992f2&v=4")!)
     }
     
     func configureReplyMediaMessageImageView(_ imageView: UIImageView, for message: MKReplyMessageType, at indexPath: IndexPath, in messagesCollectionView: MessagesCollectionView) {
