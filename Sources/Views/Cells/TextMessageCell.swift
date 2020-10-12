@@ -45,7 +45,7 @@ open class TextMessageCell: MessageContentCell {
         super.apply(layoutAttributes)
         if let attributes = layoutAttributes as? MessagesCollectionViewLayoutAttributes {
             messageLabel.textInsets = attributes.messageLabelInsets
-            messageLabel.frame = messageContainerView.bounds
+//            messageLabel.frame = messageContainerView.bounds
         }
     }
 
@@ -58,6 +58,16 @@ open class TextMessageCell: MessageContentCell {
     open override func setupSubviews() {
         super.setupSubviews()
         messageContainerView.addSubview(messageLabel)
+        NSLayoutConstraint.activate([
+            messageLabel.leadingAnchor.constraint(equalTo: messageContainerView.leadingAnchor,
+                                          constant: 0),
+            messageLabel.trailingAnchor.constraint(equalTo: messageContainerView.trailingAnchor,
+                                           constant: 0),
+            messageLabel.bottomAnchor.constraint(equalTo: messageContainerView.bottomAnchor,
+                                         constant: 0),
+            messageLabel.topAnchor.constraint(equalTo: messageContainerView.topAnchor,
+            constant: 0)
+        ])
     }
 
     open override func configure(with message: MKMessageType, at indexPath: IndexPath, and messagesCollectionView: MessagesCollectionView) {
