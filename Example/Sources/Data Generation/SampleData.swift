@@ -172,7 +172,7 @@ final internal class SampleData {
         let uniqueID = UUID().uuidString
         let user = allowedSenders.random()!
         let date = dateAddingRandomTime()
-        return MockMessage(linkItem: linkItem(), user: user, messageId: uniqueID, date: date)
+        return MockMessage(custom: "Someone left the conversation", user: system, messageId: uniqueID, date: date)
 //        switch randomMessageType() {
 //        case .Text:
 ////            let randomSentence = Lorem.sentence()

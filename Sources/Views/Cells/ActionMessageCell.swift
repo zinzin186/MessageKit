@@ -9,7 +9,7 @@ import UIKit
 
 open class ActionMessageCell: UICollectionViewCell {
     
-    let label = UILabel()
+    private let label = UILabel()
     
     public override init(frame: CGRect) {
         super.init(frame: frame)
@@ -20,13 +20,15 @@ open class ActionMessageCell: UICollectionViewCell {
         super.init(coder: aDecoder)
         setupSubviews()
     }
-    
+    open override func prepareForReuse() {
+        super.prepareForReuse()
+        label.text = nil
+    }
     open func setupSubviews() {
         contentView.addSubview(label)
-        label.textAlignment = .center
-        label.font = UIFont.italicSystemFont(ofSize: 13)
         label.numberOfLines = 0
         label.lineBreakMode = .byWordWrapping
+        
     }
     
     open override func layoutSubviews() {

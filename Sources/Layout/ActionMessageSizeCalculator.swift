@@ -24,8 +24,8 @@ open class ActionMessageSizeCalculator: MessageSizeCalculator {
         case .action(let text):
             let displayDelegate = messagesLayout.messagesCollectionView.messagesDisplayDelegate
             let attributedText = NSAttributedString(string: text, attributes: displayDelegate?.configActionMessage(for: message, at: indexPath, in: messagesLayout.messagesCollectionView))
-            let messageContainerSize = labelSize(for: attributedText, considering: maxWidth)
-            return messageContainerSize
+            let messageContainerHeight = labelSize(for: attributedText, considering: maxWidth).height
+            return CGSize(width: maxWidth, height: messageContainerHeight)
         default:
             fatalError("messageContainerSize received unhandled MessageDataType: \(message.kind)")
         }

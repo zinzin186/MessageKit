@@ -345,6 +345,15 @@ extension AutocompleteExampleViewController: MKMessagesDisplayDelegate {
             imageView.pin_cancelImageDownload()
         }
     }
+    
+    func configActionMessage(for message: MKMessageType, at indexPath: IndexPath, in messagesCollectionView: MessagesCollectionView) -> [NSAttributedString.Key: Any] {
+        let paragraph = NSMutableParagraphStyle()
+        paragraph.alignment = .center
+        return [
+            NSAttributedString.Key.foregroundColor: UIColor.blue,
+            NSAttributedString.Key.paragraphStyle: paragraph
+        ]
+    }
 }
 
 // MARK: - MessagesLayoutDelegate
