@@ -58,6 +58,7 @@ open class TextMessageCell: MessageContentCell {
     open override func setupSubviews() {
         super.setupSubviews()
         messageContainerView.addSubview(messageLabel)
+        messageLabel.translatesAutoresizingMaskIntoConstraints = false
         NSLayoutConstraint.activate([
             messageLabel.leadingAnchor.constraint(equalTo: messageContainerView.leadingAnchor,
                                           constant: 0),
