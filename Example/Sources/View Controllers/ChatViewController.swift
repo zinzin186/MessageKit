@@ -64,10 +64,10 @@ class ChatViewController: MessagesViewController, MKMessagesDataSource {
     override func viewDidAppear(_ animated: Bool) {
         super.viewDidAppear(animated)
         
-        MockSocket.shared.connect(with: [SampleData.shared.nathan, SampleData.shared.wu])
-            .onNewMessage { [weak self] message in
-                self?.insertMessage(message)
-        }
+//        MockSocket.shared.connect(with: [SampleData.shared.nathan, SampleData.shared.wu])
+//            .onNewMessage { [weak self] message in
+//                self?.insertMessage(message)
+//        }
     }
     
     override func viewDidDisappear(_ animated: Bool) {
@@ -94,15 +94,15 @@ class ChatViewController: MessagesViewController, MKMessagesDataSource {
     }
     
     @objc func loadMoreMessages() {
-        DispatchQueue.global(qos: .userInitiated).asyncAfter(deadline: .now() + 1) {
-            SampleData.shared.getMessages(count: 20) { messages in
-                DispatchQueue.main.async {
-                    self.messageList.insert(contentsOf: messages, at: 0)
-                    self.messagesCollectionView.reloadDataAndKeepOffset()
-                    self.refreshControl.endRefreshing()
-                }
-            }
-        }
+//        DispatchQueue.global(qos: .userInitiated).asyncAfter(deadline: .now() + 1) {
+//            SampleData.shared.getMessages(count: 20) { messages in
+//                DispatchQueue.main.async {
+//                    self.messageList.insert(contentsOf: messages, at: 0)
+//                    self.messagesCollectionView.reloadDataAndKeepOffset()
+//                    self.refreshControl.endRefreshing()
+//                }
+//            }
+//        }
     }
     
     func configureMessageCollectionView() {
@@ -355,15 +355,15 @@ extension ChatViewController: InputBarAccessoryViewDelegate {
         inputBar.sendButton.startAnimating()
         inputBar.inputTextView.placeholder = "Sending..."
         // Resign first responder for iPad split view
-        inputBar.inputTextView.resignFirstResponder()
+//        inputBar.inputTextView.resignFirstResponder()
         DispatchQueue.global(qos: .default).async {
             // fake send request task
-            sleep(1)
+//            sleep(1)
             DispatchQueue.main.async { [weak self] in
                 inputBar.sendButton.stopAnimating()
                 inputBar.inputTextView.placeholder = "Aa"
                 self?.insertMessages(components)
-                self?.messagesCollectionView.scrollToBottom(animated: true)
+//                self?.messagesCollectionView.scrollToBottom(animated: true)
             }
         }
     }

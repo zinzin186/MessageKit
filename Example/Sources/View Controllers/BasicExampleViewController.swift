@@ -35,6 +35,8 @@ class BasicExampleViewController: ChatViewController {
         guard let layout = messagesCollectionView.collectionViewLayout as? MessagesCollectionViewFlowLayout else {return}
         layout.setMessageIncomingAvatarPosition(AvatarPosition(vertical: .messageBottom))
         layout.setMessageOutgoingAvatarPosition(AvatarPosition(vertical: .messageBottom))
+        layout.setMessageOutgoingMessageTopLabelAlignment(LabelAlignment(textAlignment: .right, textInsets: UIEdgeInsets(top: 0, left: 0, bottom: 0, right: 50)))
+        layout.setMessageIncomingMessageTopLabelAlignment(LabelAlignment(textAlignment: .left, textInsets: UIEdgeInsets(top: 0, left: 40, bottom: 0, right: 12)))
     }
 //    override func messageTimestampLabelAttributedText(for message: MKMessageType, at indexPath: IndexPath) -> NSAttributedString? {
 //        return NSAttributedString(string: "dsfdsfdsfd")
@@ -71,9 +73,9 @@ extension BasicExampleViewController: MKMessagesDisplayDelegate {
         }
     }
     
-    func enabledDetectors(for message: MKMessageType, at indexPath: IndexPath, in messagesCollectionView: MessagesCollectionView) -> [DetectorType] {
-        return [.url, .address, .phoneNumber, .date, .transitInformation, .mentionRange([MentionInfo(range: NSRange(location: 1, length: 4), target: "targetMention"), MentionInfo(range: NSRange(location: 8, length: 2), target: "targetMention1")]), .hashtag]
-    }
+//    func enabledDetectors(for message: MKMessageType, at indexPath: IndexPath, in messagesCollectionView: MessagesCollectionView) -> [DetectorType] {
+//        return [.url, .address, .phoneNumber, .date, .transitInformation, .mentionRange([MentionInfo(range: NSRange(location: 1, length: 4), target: "targetMention"), MentionInfo(range: NSRange(location: 8, length: 2), target: "targetMention1")]), .hashtag]
+//    }
     
     // MARK: - All Messages
     

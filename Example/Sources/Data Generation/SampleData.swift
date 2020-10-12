@@ -172,42 +172,42 @@ final internal class SampleData {
         let uniqueID = UUID().uuidString
         let user = allowedSenders.random()!
         let date = dateAddingRandomTime()
-        return MockMessage(custom: "Someone left the conversation", user: system, messageId: uniqueID, date: date)
-//        switch randomMessageType() {
-//        case .Text:
-////            let randomSentence = Lorem.sentence()
-////            return MockMessage(text: randomSentence, user: user, messageId: uniqueID, date: date)
+//        return MockMessage(custom: "Someone left the conversation", user: system, messageId: uniqueID, date: date)
+        switch randomMessageType() {
+        case .Text:
+            let randomSentence = Lorem.sentence()
+            return MockMessage(text: randomSentence, user: user, messageId: uniqueID, date: date)
 //            let imageURL: URL = messageImageURLs.random()!
 //            return MockMessage(imageURL: imageURL, user: user, messageId: uniqueID, date: date)
-//        case .AttributedText:
-//            let randomSentence = Lorem.sentence()
-//            let attributedText = attributedString(with: randomSentence)
-//            return MockMessage(attributedText: attributedText, user: user, messageId: uniqueID, date: date)
-//        case .Photo:
-//            let image = messageImages.random()!
-//            return MockMessage(image: image, user: user, messageId: uniqueID, date: date)
-//        case .PhotoFromURL:
-//            let imageURL: URL = messageImageURLs.random()!
-//            return MockMessage(imageURL: imageURL, user: user, messageId: uniqueID, date: date)
-//        case .Video:
-//            let image = messageImages.random()!
-//            return MockMessage(thumbnail: image, user: user, messageId: uniqueID, date: date)
-//        case .Audio:
-//            let soundURL = sounds.random()!
-//            return MockMessage(audioURL: soundURL, user: user, messageId: uniqueID, date: date)
-//        case .Emoji:
-//            return MockMessage(emoji: emojis.random()!, user: user, messageId: uniqueID, date: date)
-//        case .Location:
-//            return MockMessage(location: locations.random()!, user: user, messageId: uniqueID, date: date)
-//        case .Url:
-//            return MockMessage(linkItem: linkItem(), user: user, messageId: uniqueID, date: date)
-//        case .Phone:
-//            return MockMessage(text: "123-456-7890", user: user, messageId: uniqueID, date: date)
-//        case .Custom:
-//            return MockMessage(custom: "Someone left the conversation", user: system, messageId: uniqueID, date: date)
-//        case .ShareContact:
-//            return MockMessage(contact: contactsToShare.random()!, user: user, messageId: uniqueID, date: date)
-//        }
+        case .AttributedText:
+            let randomSentence = Lorem.sentence()
+            let attributedText = attributedString(with: randomSentence)
+            return MockMessage(attributedText: attributedText, user: user, messageId: uniqueID, date: date)
+        case .Photo:
+            let image = messageImages.random()!
+            return MockMessage(image: image, user: user, messageId: uniqueID, date: date)
+        case .PhotoFromURL:
+            let imageURL: URL = messageImageURLs.random()!
+            return MockMessage(imageURL: imageURL, user: user, messageId: uniqueID, date: date)
+        case .Video:
+            let image = messageImages.random()!
+            return MockMessage(thumbnail: image, user: user, messageId: uniqueID, date: date)
+        case .Audio:
+            let soundURL = sounds.random()!
+            return MockMessage(audioURL: soundURL, user: user, messageId: uniqueID, date: date)
+        case .Emoji:
+            return MockMessage(emoji: emojis.random()!, user: user, messageId: uniqueID, date: date)
+        case .Location:
+            return MockMessage(location: locations.random()!, user: user, messageId: uniqueID, date: date)
+        case .Url:
+            return MockMessage(linkItem: linkItem(), user: user, messageId: uniqueID, date: date)
+        case .Phone:
+            return MockMessage(text: "123-456-7890", user: user, messageId: uniqueID, date: date)
+        case .Custom:
+            return MockMessage(custom: "Someone left the conversation", user: system, messageId: uniqueID, date: date)
+        case .ShareContact:
+            return MockMessage(contact: contactsToShare.random()!, user: user, messageId: uniqueID, date: date)
+        }
     }
     // swiftlint:enable cyclomatic_complexity
 

@@ -211,7 +211,7 @@ open class MessageSizeCalculator: CellSizeCalculator {
 //        return CGSize(width: messagesLayout.itemWidth, height: height)
         let dataSource = messagesLayout.messagesDataSource
         if let attributedText = dataSource.messageTopLabelAttributedText(for: message, at: indexPath){
-            let topLabelWidth = labelSize(for: attributedText, considering: height).width
+            let topLabelWidth = labelWidth(for: attributedText, considering: height)
             return CGSize(width: topLabelWidth, height: height)
         }else{
             return CGSize.zero
@@ -380,7 +380,13 @@ open class MessageSizeCalculator: CellSizeCalculator {
 
         return rect.size
     }
+    
+    internal func labelWidth(for attributedText: NSAttributedString, considering maxHeight: CGFloat) -> CGFloat {
+        let constraintBox = CGSize(width: .greatestFiniteMagnitude, height: maxHeight)
+        let rect = attributedText.boundingRect(with: constraintBox, options: [.usesLineFragmentOrigin, .usesFontLeading], context: nil).integral
 
+        return rect.size.width
+    }
 }
 
 fileprivate extension UIEdgeInsets {
