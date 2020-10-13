@@ -1,17 +1,15 @@
 {
   "images" : [
     {
-      "filename" : "icon_chat_video.png",
+      "filename" : "Simulator Screen Shot - iPhone 6 Plus - 2019-05-25 at 19.26.22.png",
       "idiom" : "universal",
       "scale" : "1x"
     },
     {
-      "filename" : "icon_chat_video@2x.png",
       "idiom" : "universal",
       "scale" : "2x"
     },
     {
-      "filename" : "icon_chat_video@3x.png",
       "idiom" : "universal",
       "scale" : "3x"
     }

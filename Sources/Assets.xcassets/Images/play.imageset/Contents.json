@@ -1,17 +1,17 @@
 {
   "images" : [
     {
-      "filename" : "play.png",
+      "filename" : "icon_chat_video.png",
       "idiom" : "universal",
       "scale" : "1x"
     },
     {
-      "filename" : "play@2x.png",
+      "filename" : "icon_chat_video@2x.png",
       "idiom" : "universal",
       "scale" : "2x"
     },
     {
-      "filename" : "play@3x.png",
+      "filename" : "icon_chat_video@3x.png",
       "idiom" : "universal",
       "scale" : "3x"
     }

@@ -68,10 +68,10 @@ class ChatViewController: MessagesViewController, MKMessagesDataSource {
     override func viewDidAppear(_ animated: Bool) {
         super.viewDidAppear(animated)
         
-//        MockSocket.shared.connect(with: [SampleData.shared.nathan, SampleData.shared.wu])
-//            .onNewMessage { [weak self] message in
-//                self?.insertMessage(message)
-//        }
+        MockSocket.shared.connect(with: [SampleData.shared.nathan, SampleData.shared.wu])
+            .onNewMessage { [weak self] message in
+                self?.insertMessage(message)
+        }
     }
     
     override func viewDidDisappear(_ animated: Bool) {
@@ -132,9 +132,6 @@ class ChatViewController: MessagesViewController, MKMessagesDataSource {
         )
     }
     
-    override func collectionView(_ collectionView: UICollectionView, willDisplay cell: UICollectionViewCell, forItemAt indexPath: IndexPath) {
-        <#code#>
-    }
         
     private func getTitleText(isOutgoingMessage: Bool, message: MKMessageType, replyMessage: MKReplyMessageType) -> String {
         if isOutgoingMessage {

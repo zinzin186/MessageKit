@@ -48,7 +48,7 @@ private struct ImageMediaItem: MediaItem {
 
     init(image: UIImage) {
         self.image = image
-        self.size = CGSize(width: 240, height: 240)
+        self.size = CGSize(width: 1000, height: 2400)
         self.placeholderImage = UIImage()
     }
 

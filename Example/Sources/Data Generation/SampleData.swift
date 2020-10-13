@@ -69,7 +69,7 @@ final internal class SampleData {
 
     var now = Date()
     
-    let messageImages: [UIImage] = [#imageLiteral(resourceName: "img1"), #imageLiteral(resourceName: "img2")]
+    let messageImages: [UIImage] = [#imageLiteral(resourceName: "img1"), #imageLiteral(resourceName: "img2"), #imageLiteral(resourceName: "im5")]
     let messageImageURLs: [URL] = [URL(string: "https://placekitten.com/g/200/300")!,
                                    URL(string: "https://placekitten.com/g/300/300")!,
                                    URL(string: "https://placekitten.com/g/300/400")!,
@@ -172,6 +172,9 @@ final internal class SampleData {
         let uniqueID = UUID().uuidString
         let user = allowedSenders.random()!
         let date = dateAddingRandomTime()
+        let imageURL: URL = messageImageURLs.random()!
+        let image: UIImage = messageImages.random()!
+        return MockMessage(thumbnail: image, user: user, messageId: uniqueID, date: date)
 //        return MockMessage(custom: "Someone left the conversation", user: system, messageId: uniqueID, date: date)
         switch randomMessageType() {
         case .Text:
