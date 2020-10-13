@@ -36,6 +36,10 @@ class ChatViewController: MessagesViewController, MKMessagesDataSource {
 
     lazy var messageList: [MockMessage] = []
     
+    override var isSubView: Bool {
+        return true
+    }
+    
     private(set) lazy var refreshControl: UIRefreshControl = {
         let control = UIRefreshControl()
         control.addTarget(self, action: #selector(loadMoreMessages), for: .valueChanged)
@@ -126,6 +130,10 @@ class ChatViewController: MessagesViewController, MKMessagesDataSource {
             UIColor.primaryColor.withAlphaComponent(0.3),
             for: .highlighted
         )
+    }
+    
+    override func collectionView(_ collectionView: UICollectionView, willDisplay cell: UICollectionViewCell, forItemAt indexPath: IndexPath) {
+        <#code#>
     }
         
     private func getTitleText(isOutgoingMessage: Bool, message: MKMessageType, replyMessage: MKReplyMessageType) -> String {

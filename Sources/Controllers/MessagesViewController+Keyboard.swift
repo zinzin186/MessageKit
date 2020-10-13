@@ -132,6 +132,7 @@ internal extension MessagesViewController {
     /// - Returns: The distance automatically added to contentInset.bottom, if any.
     private var automaticallyAddedBottomInset: CGFloat {
         if #available(iOS 11.0, *) {
+            let paddingBottom = messagesCollectionView.adjustedContentInset.bottom < 100 ? self.view.safeAreaInsets.bottom : 0
             return messagesCollectionView.adjustedContentInset.bottom - messagesCollectionView.contentInset.bottom
         } else {
            return 0

@@ -47,12 +47,14 @@ open class LinkPreviewView: UIView {
     lazy var titleLabel: UILabel = {
         let label: UILabel = .init()
         label.numberOfLines = 0
+        label.textColor = UIColor.fromHexCode("#1A1A1A")
         label.translatesAutoresizingMaskIntoConstraints = false
         return label
     }()
     lazy var teaserLabel: UILabel = {
         let label: UILabel = .init()
         label.numberOfLines = 0
+        label.textColor = UIColor.fromHexCode("#808080")
         label.translatesAutoresizingMaskIntoConstraints = false
         return label
     }()

@@ -30,12 +30,13 @@ final class MessageSubviewViewController: BasicExampleViewController {
     private var keyboardManager = KeyboardManager()
 
     private let subviewInputBar = InputBarAccessoryView()
+    
 
     override func viewDidLoad() {
         super.viewDidLoad()
         subviewInputBar.delegate = self
         // Take into account the height of the bottom input bar
-        additionalBottomInset = 88
+        additionalBottomInset = 48
     }
 
     override func didMove(toParent parent: UIViewController?) {

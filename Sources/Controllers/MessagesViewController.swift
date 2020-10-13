@@ -68,6 +68,10 @@ UICollectionViewDelegateFlowLayout, UICollectionViewDataSource, UIGestureRecogni
             }
         }
     }
+    
+    open var isSubView: Bool {
+        return false
+    }
 
     /// Pan gesture for display the date of message by swiping left.
     private var panGesture: UIPanGestureRecognizer?
@@ -240,9 +244,18 @@ UICollectionViewDelegateFlowLayout, UICollectionViewDataSource, UIGestureRecogni
         let top = messagesCollectionView.topAnchor.constraint(equalTo: view.topAnchor)
         let leading = messagesCollectionView.leadingAnchor.constraint(equalTo: view.leadingAnchor)
         let trailing = messagesCollectionView.trailingAnchor.constraint(equalTo: view.trailingAnchor)
-        let bottom = messagesCollectionView.bottomAnchor.constraint(equalTo: view.bottomAnchor)
-        
+        let bottom: NSLayoutConstraint
+        if #available(iOS 11.0, *) {
+            if isSubView{
+                bottom = messagesCollectionView.bottomAnchor.constraint(equalTo: view.safeAreaLayoutGuide.bottomAnchor)
+            }else{
+                bottom = messagesCollectionView.bottomAnchor.constraint(equalTo: view.bottomAnchor)
+            }
+        } else {
+            bottom = messagesCollectionView.bottomAnchor.constraint(equalTo: view.bottomAnchor)
+        }
         NSLayoutConstraint.activate([top, bottom, trailing, leading])
+        
     }
 
     // MARK: - Typing Indicator API
