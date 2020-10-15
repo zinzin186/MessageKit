@@ -47,8 +47,9 @@ public protocol MKMessageType {
 
 public enum ActionType {
     case `default`
-    case reply(MKReplyMessageType)
+    case reply(replyMessage: MKReplyMessageType)
     case remove
+    case story(urlString: String)
 }
 
 public protocol MKReplyMessageType {

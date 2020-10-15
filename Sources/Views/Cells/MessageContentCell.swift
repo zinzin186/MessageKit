@@ -259,14 +259,21 @@ open class MessageContentCell: MessageCollectionViewCell, UIGestureRecognizerDel
         let isOutgoingMessage = dataSource.isFromCurrentSender(message: message)
         actionBodyView.applyUI(isOutgoingMessage: isOutgoingMessage, message: message)
         
-        if case ActionType.reply(let replyMessage) = message.action {
+        switch message.action {
+        case ActionType.reply(let replyMessage):
             self.iconMarkReply.isHidden = false
             if let imageView = actionBodyView.actionReplyMediaView?.imageView{
-                displayDelegate.configureReplyMediaMessageImageView(imageView, for: replyMessage, at: indexPath, in: messagesCollectionView)
+                displayDelegate.configureActionMessageImageView(imageView, for: message.action, at: indexPath, in: messagesCollectionView)
             }
-        }else{
+        case ActionType.story(let urlString):
+            self.iconMarkReply.isHidden = false
+            if let imageView = actionBodyView.actionChatFromStoryView?.imageView{
+                displayDelegate.configureActionMessageImageView(imageView, for: message.action, at: indexPath, in: messagesCollectionView)
+            }
+        default:
             self.iconMarkReply.isHidden = true
         }
+        
     }
 
     /// Handle tap gesture on contentView and its subviews.
@@ -411,6 +418,8 @@ open class MessageContentCell: MessageCollectionViewCell, UIGestureRecognizerDel
             break
         }
         sendStatusImageView.frame = CGRect(origin: origin, size: attributes.sendStatusSize)
+        sendStatusImageView.layer.cornerRadius = attributes.sendStatusSize.height / 2
+        sendStatusImageView.clipsToBounds = true
     }
     
     open func layoutImageCanReply() {

@@ -175,10 +175,14 @@ open class MessageSizeCalculator: CellSizeCalculator {
     }
 
     open func paddingContainerViewWithReplyBody(for message: MKMessageType) -> CGFloat {
-        if case ActionType.reply = message.action{
+        switch message.action {
+        case .reply:
             return 20
+        case .story:
+            return -10
+        default:
+            return 0
         }
-        return 0
     }
     
     open func avatarSize(for message: MKMessageType) -> CGSize {
@@ -337,7 +341,11 @@ open class MessageSizeCalculator: CellSizeCalculator {
             actionContainerSize.width += 10
             actionContainerSize.height += 20
             return actionContainerSize
-        default:
+        case .story:
+            let imageWidth: CGFloat = 68.0
+            let imageHeight: CGFloat = 98.0
+            return CGSize(width: imageWidth, height: imageHeight)
+        case .default:
             return CGSize.zero
         }
         

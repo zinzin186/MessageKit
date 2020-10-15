@@ -106,10 +106,20 @@ extension BasicExampleViewController: MKMessagesDisplayDelegate {
         imageView.pin_setImage(from: URL(string: "https://avatars0.githubusercontent.com/u/2911921?s=460&u=418a6180264738f33cf0ea2b6ce1c9fd79d992f2&v=4")!)
     }
     
-    func configureReplyMediaMessageImageView(_ imageView: UIImageView, for message: MKReplyMessageType, at indexPath: IndexPath, in messagesCollectionView: MessagesCollectionView) {
-        if case MessageKind.photo(let media) = message.kind, let imageURL = media.url {
-            imageView.pin_setImage(from: imageURL)
+    func configureActionMessageImageView(_ imageView: UIImageView, for action: ActionType, at indexPath: IndexPath, in messagesCollectionView: MessagesCollectionView) {
+        switch action {
+        case .reply(let message):
+            if case MessageKind.photo(let media) = message.kind, let imageURL = media.url {
+                imageView.pin_setImage(from: imageURL)
+            }
+        case .story(let urlString):
+            if let imageURL = URL(string: urlString) {
+                imageView.pin_setImage(from: imageURL)
+            }
+        default:
+            break
         }
+        
     }
     
     // MARK: - Location Messages

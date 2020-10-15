@@ -180,7 +180,7 @@ public protocol MKMessagesDisplayDelegate: AnyObject {
     ///   - messagesCollectionView: The `MessagesCollectionView` in which this cell will be displayed.
     func configureMediaMessageImageView(_ imageView: UIImageView, for message: MKMessageType, at indexPath: IndexPath, in messagesCollectionView: MessagesCollectionView)
     
-    func configureReplyMediaMessageImageView(_ imageView: UIImageView, for message: MKReplyMessageType, at indexPath: IndexPath, in messagesCollectionView: MessagesCollectionView)
+    func configureActionMessageImageView(_ imageView: UIImageView, for action: ActionType, at indexPath: IndexPath, in messagesCollectionView: MessagesCollectionView)
 
     // MARK: - Audio Message
     
@@ -315,7 +315,7 @@ public extension MKMessagesDisplayDelegate {
     func configureMediaMessageImageView(_ imageView: UIImageView, for message: MKMessageType, at indexPath: IndexPath, in messagesCollectionView: MessagesCollectionView) {
     }
     
-    func configureReplyMediaMessageImageView(_ imageView: UIImageView, for message: MKReplyMessageType, at indexPath: IndexPath, in messagesCollectionView: MessagesCollectionView){}
+    func configureActionMessageImageView(_ imageView: UIImageView, for action: ActionType, at indexPath: IndexPath, in messagesCollectionView: MessagesCollectionView){}
 
     // MARK: - Audio Message Defaults
     

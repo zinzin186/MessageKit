@@ -17,14 +17,14 @@ open class ActionReplyMediaView: UIView {
         return imageView
     }()
     
-lazy var messageLabel: UILabel = {[unowned self] in
-      let label: UILabel = .init()
-      label.numberOfLines = 0
-      label.font = UIFont.systemFont(ofSize: 13)
-      label.textColor = UIColor.fromHexCode("#808080")
-      label.translatesAutoresizingMaskIntoConstraints = false
-      return label
-  }()
+    lazy var messageLabel: UILabel = {[unowned self] in
+        let label: UILabel = .init()
+        label.numberOfLines = 0
+        label.font = UIFont.systemFont(ofSize: 13)
+        label.textColor = UIColor.fromHexCode("#808080")
+        label.translatesAutoresizingMaskIntoConstraints = false
+        return label
+    }()
     
 
     init() {

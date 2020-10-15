@@ -41,6 +41,7 @@ open class ActionBodyView: UIView {
     var actionRemoveMessageView: ActionRemoveMessageView?
     var actionReplyTextView: ActionReplyTextView?
     var actionReplyMediaView: ActionReplyMediaView?
+    var actionChatFromStoryView: ActionChatFromStoryView?
 
     init() {
         super.init(frame: .zero)
@@ -50,6 +51,8 @@ open class ActionBodyView: UIView {
         switch message.action {
         case .reply(let replyMessage):
             self.getContentText(message: replyMessage)
+        case .story:
+            self.addActionChatFromStoryView(image: nil)
         case .remove:
             if case MessageKind.text(let text) = message.kind {
                 self.addActionRemoveMessageView(text: text)
@@ -85,6 +88,14 @@ open class ActionBodyView: UIView {
         self.actionReplyMediaView?.messageLabel.text = text
         self.actionReplyMediaView?.imageView.image = image
         self.addActionView(view: self.actionReplyMediaView!)
+    }
+    
+    func addActionChatFromStoryView(image: UIImage?){
+        self.subviews.forEach({$0.removeFromSuperview()})
+        self.actionChatFromStoryView?.removeFromSuperview()
+        self.actionChatFromStoryView = ActionChatFromStoryView()
+        self.actionChatFromStoryView?.imageView.image = image
+        self.addActionView(view: self.actionChatFromStoryView!)
     }
     
     private func addActionView(view: UIView){
