@@ -160,6 +160,10 @@ open class MessageContentCell: MessageCollectionViewCell, UIGestureRecognizerDel
     
     @objc func actionDrag(_ sender:UIPanGestureRecognizer) {
         let translation: CGPoint = sender.translation(in: self.superview)
+        if sender.state == UIGestureRecognizer.State.began {
+            contentView.translatesAutoresizingMaskIntoConstraints = false
+        }
+        
         let center: CGPoint = contentView.center
         var newX: CGFloat = center.x + translation.x
         if newX <= contentView.frame.size.width/2 {
@@ -189,6 +193,7 @@ open class MessageContentCell: MessageCollectionViewCell, UIGestureRecognizerDel
                 delegate?.cellDidRequestReplyMessage(cell: self)
             }
             contentView.center = CGPoint(x: contentView.frame.size.width/2, y: contentView.frame.size.height/2)
+            contentView.translatesAutoresizingMaskIntoConstraints = true
         }
     }
     open override func prepareForReuse() {

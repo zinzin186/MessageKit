@@ -48,7 +48,19 @@ private struct ImageMediaItem: MediaItem {
 
     init(image: UIImage) {
         self.image = image
-        self.size = CGSize(width: 1000, height: 2400)
+        let imageWidth: CGFloat = UIScreen.main.bounds.size.height
+        let imageHeight: CGFloat = UIScreen.main.bounds.size.width
+        let maxHeight: CGFloat = UIScreen.main.bounds.size.width
+        let maxWidth: CGFloat = UIScreen.main.bounds.size.width * 237/375
+        if imageWidth/imageHeight < maxWidth/maxHeight {
+            let newWidth = imageWidth * maxHeight / imageHeight
+            self.size = CGSize(width: newWidth, height: maxHeight)
+        } else {
+            let newHeight = imageHeight * maxHeight / imageWidth
+            self.size = CGSize(width: maxWidth, height: newHeight)
+        }
+
+//        self.size = CGSize(width: 1000, height: 2400)
         self.placeholderImage = UIImage()
     }
 
