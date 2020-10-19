@@ -21,10 +21,10 @@ open class ActionChatFromStoryView: UIView {
         super.init(frame: .zero)
         self.addSubview(imageView)
         NSLayoutConstraint.activate([
-            imageView.leadingAnchor.constraint(equalTo: self.leadingAnchor, constant: 5),
-            imageView.topAnchor.constraint(equalTo: self.topAnchor, constant: 5),
-            imageView.topAnchor.constraint(equalTo: self.topAnchor, constant: -5),
-            imageView.bottomAnchor.constraint(equalTo: self.bottomAnchor, constant: -5)
+            imageView.leadingAnchor.constraint(equalTo: self.leadingAnchor),
+            imageView.topAnchor.constraint(equalTo: self.topAnchor),
+            imageView.trailingAnchor.constraint(equalTo: self.trailingAnchor),
+            imageView.bottomAnchor.constraint(equalTo: self.bottomAnchor)
         ])
 
     }
