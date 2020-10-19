@@ -35,11 +35,14 @@ open class MessageContentCell: MessageCollectionViewCell, UIGestureRecognizerDel
 
     /// The container used for styling and holding the message's content view.
     lazy var actionBodyView: ActionBodyView = {
-        let replyView = ActionBodyView()
-        replyView.backgroundColor = UIColor.fromHexCode("#F6F6F6")
-        replyView.clipsToBounds = true
-        replyView.layer.cornerRadius = 10
-        return replyView
+        let actionView = ActionBodyView()
+        actionView.backgroundColor = UIColor.fromHexCode("#F6F6F6")
+        actionView.clipsToBounds = true
+        actionView.layer.cornerRadius = 10
+        actionView.clickReplyMessageCallback = {[unowned self] in
+            self.delegate?.didTapActionMessage(in: self)
+        }
+        return actionView
     }()
     
     open var messageBodyView: UIView = {

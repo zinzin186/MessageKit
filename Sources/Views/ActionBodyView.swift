@@ -26,8 +26,8 @@ import UIKit
 
 open class ActionBodyView: UIView {
     
-    
-    
+    var clickReplyMessageCallback: (() -> Void)?
+   
     private lazy var tapButton: UIButton = { [unowned self] in
         let button = UIButton(type: .system)
         button.addTarget(self, action: #selector(self.tapReplyMessage), for: .touchUpInside)
@@ -35,7 +35,7 @@ open class ActionBodyView: UIView {
         return button
     }()
     @objc private func tapReplyMessage(){
-        print("Tapppp")
+        self.clickReplyMessageCallback?()
     }
     
     var actionRemoveMessageView: ActionRemoveMessageView?
@@ -66,33 +66,28 @@ open class ActionBodyView: UIView {
         
     }
     func addActionRemoveMessageView(text: String){
-        self.subviews.forEach({$0.removeFromSuperview()})
-        self.actionRemoveMessageView?.removeFromSuperview()
         self.actionRemoveMessageView = ActionRemoveMessageView()
         self.actionRemoveMessageView?.messageLabel.text = text
         self.addActionView(view: self.actionRemoveMessageView!)
         
     }
+   
     func addActionReplyTextView(text: String){
-        self.subviews.forEach({$0.removeFromSuperview()})
-        self.actionReplyTextView?.removeFromSuperview()
         self.actionReplyTextView = ActionReplyTextView()
         self.actionReplyTextView?.messageLabel.text = text
         self.addActionView(view: self.actionReplyTextView!)
+        addButton()
         
     }
     func addActionReplyMediaView(text: String, image: UIImage?){
-        self.subviews.forEach({$0.removeFromSuperview()})
-        self.actionReplyMediaView?.removeFromSuperview()
         self.actionReplyMediaView = ActionReplyMediaView()
         self.actionReplyMediaView?.messageLabel.text = text
         self.actionReplyMediaView?.imageView.image = image
         self.addActionView(view: self.actionReplyMediaView!)
+        addButton()
     }
     
     func addActionChatFromStoryView(image: UIImage?){
-        self.subviews.forEach({$0.removeFromSuperview()})
-        self.actionChatFromStoryView?.removeFromSuperview()
         self.actionChatFromStoryView = ActionChatFromStoryView()
         self.actionChatFromStoryView?.imageView.image = image
         self.addActionView(view: self.actionChatFromStoryView!)
@@ -107,6 +102,16 @@ open class ActionBodyView: UIView {
             view.topAnchor.constraint(equalTo: self.topAnchor),
             view.trailingAnchor.constraint(equalTo: self.trailingAnchor),
             view.bottomAnchor.constraint(equalTo: self.bottomAnchor)
+        ])
+    }
+    
+    private func addButton() {
+        self.addSubview(self.tapButton)
+        NSLayoutConstraint.activate([
+            tapButton.leadingAnchor.constraint(equalTo: self.leadingAnchor),
+            tapButton.topAnchor.constraint(equalTo: self.topAnchor),
+            tapButton.trailingAnchor.constraint(equalTo: self.trailingAnchor),
+            tapButton.bottomAnchor.constraint(equalTo: self.bottomAnchor)
         ])
     }
     private func getContentText(message: MKReplyMessageType){
@@ -124,6 +129,7 @@ open class ActionBodyView: UIView {
             break
         }
     }
+    
     
     required public init?(coder aDecoder: NSCoder) {
         fatalError("init(coder:) has not been implemented")
