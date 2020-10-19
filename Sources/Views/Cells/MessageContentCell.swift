@@ -260,12 +260,12 @@ open class MessageContentCell: MessageCollectionViewCell, UIGestureRecognizerDel
         actionBodyView.applyUI(isOutgoingMessage: isOutgoingMessage, message: message)
         
         switch message.action {
-        case ActionType.reply(let replyMessage):
+        case ActionType.reply:
             self.iconMarkReply.isHidden = false
             if let imageView = actionBodyView.actionReplyMediaView?.imageView{
                 displayDelegate.configureActionMessageImageView(imageView, for: message.action, at: indexPath, in: messagesCollectionView)
             }
-        case ActionType.story(let urlString):
+        case ActionType.story:
             self.iconMarkReply.isHidden = false
             if let imageView = actionBodyView.actionChatFromStoryView?.imageView{
                 displayDelegate.configureActionMessageImageView(imageView, for: message.action, at: indexPath, in: messagesCollectionView)
@@ -392,8 +392,6 @@ open class MessageContentCell: MessageCollectionViewCell, UIGestureRecognizerDel
         case .natural:
             fatalError(MessageKitError.avatarPositionUnresolved)
         }
-        
-
         messageBodyView.frame = CGRect(origin: origin, size: CGSize(width: messageBodyWidth, height: messageBodyHeight))
     }
 

@@ -364,6 +364,10 @@ UICollectionViewDelegateFlowLayout, UICollectionViewDataSource, UIGestureRecogni
             let cell = messagesCollectionView.dequeueReusableCell(MediaMessageCell.self, for: indexPath)
             cell.configure(with: message, at: indexPath, and: messagesCollectionView)
             return cell
+        case .sticker:
+            let cell = messagesCollectionView.dequeueReusableCell(StickerMessageCell.self, for: indexPath)
+            cell.configure(with: message, at: indexPath, and: messagesCollectionView)
+            return cell
         case .location:
             let cell = messagesCollectionView.dequeueReusableCell(LocationMessageCell.self, for: indexPath)
             cell.configure(with: message, at: indexPath, and: messagesCollectionView)

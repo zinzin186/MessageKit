@@ -31,10 +31,10 @@ open class ActionReplyMediaView: UIView {
         super.init(frame: .zero)
         self.addSubview(imageView)
         NSLayoutConstraint.activate([
-            imageView.leadingAnchor.constraint(equalTo: self.leadingAnchor, constant: 5),
-            imageView.topAnchor.constraint(equalTo: self.topAnchor, constant: 5),
-            imageView.widthAnchor.constraint(equalToConstant: 50),
-            imageView.bottomAnchor.constraint(equalTo: self.bottomAnchor, constant: -25)
+            imageView.leadingAnchor.constraint(equalTo: self.leadingAnchor, constant: 10),
+            imageView.topAnchor.constraint(equalTo: self.topAnchor, constant: 8),
+            imageView.widthAnchor.constraint(equalTo: imageView.heightAnchor),
+            imageView.bottomAnchor.constraint(equalTo: self.bottomAnchor, constant: -28)
         ])
         self.addSubview(messageLabel)
         NSLayoutConstraint.activate([

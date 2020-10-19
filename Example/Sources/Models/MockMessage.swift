@@ -146,8 +146,8 @@ internal struct MockMessage: MKMessageType {
     init(text: String, user: MockUser, messageId: String, date: Date) {
         let mediaItem = ImageMediaItem(imageURL: URL(string: "https://avatars0.githubusercontent.com/u/2911921?s=460&u=418a6180264738f33cf0ea2b6ce1c9fd79d992f2&v=4")!)
         let replyMessage = ReplyMessage(kind: .photo(mediaItem), user: user, messageId: messageId, date: date)
-//        let action = ActionType.reply(replyMessage)
-        let action = ActionType.story(urlString: "https://avatars0.githubusercontent.com/u/2911921?s=460&u=418a6180264738f33cf0ea2b6ce1c9fd79d992f2&v=4")
+        let action = ActionType.reply(replyMessage: replyMessage)
+//        let action = ActionType.story(urlString: "https://avatars0.githubusercontent.com/u/2911921?s=460&u=418a6180264738f33cf0ea2b6ce1c9fd79d992f2&v=4")
         self.init(kind: .text(text), user: user, messageId: messageId, date: date, action: action)
     }
 

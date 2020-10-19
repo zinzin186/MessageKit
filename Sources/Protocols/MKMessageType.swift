@@ -59,7 +59,7 @@ public protocol MKReplyMessageType {
 
     /// The unique identifier for the message.
     var messageId: String { get }
-
+    
     /// The date the message was sent.
     var sentDate: Date { get }
 

@@ -179,7 +179,7 @@ open class MessageSizeCalculator: CellSizeCalculator {
         case .reply:
             return 20
         case .story:
-            return -10
+            return -5
         default:
             return 0
         }
@@ -220,8 +220,6 @@ open class MessageSizeCalculator: CellSizeCalculator {
         }else{
             return CGSize.zero
         }
-        
-        
     }
     
     open func messageTopLabelAlignment(for message: MKMessageType) -> LabelAlignment {
@@ -324,8 +322,8 @@ open class MessageSizeCalculator: CellSizeCalculator {
             }
 
             actionContainerSize = labelSize(for: attributedText, considering: maxWidth)
-            actionContainerSize.width += 10
-            actionContainerSize.height += 30
+            actionContainerSize.width += 20
+            actionContainerSize.height += 36
             return actionContainerSize
         case .remove:
             let contentText: String

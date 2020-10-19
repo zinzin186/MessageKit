@@ -28,11 +28,16 @@ import UIKit
 open class MediaMessageCell: MessageContentCell {
 
     /// The play button view to display on video messages.
-    open lazy var playButtonView: PlayButtonView = {
-        let playButtonView = PlayButtonView()
-        return playButtonView
-    }()
+//    open lazy var playButtonView: PlayButtonView = {
+//        let playButtonView = PlayButtonView()
+//        return playButtonView
+//    }()
 
+    public let playButtonView: UIImageView = {
+        let imageView = UIImageView()
+        imageView.image = UIImage(named: "play", in: Bundle.messageKitAssetBundle, compatibleWith: nil)
+        return imageView
+    }()
     /// The image view display the media content.
     open var imageView: UIImageView = {
         let imageView = UIImageView()

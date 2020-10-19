@@ -41,6 +41,9 @@ public enum MessageKind {
 
     /// A photo message.
     case photo(MediaItem)
+    
+    /// A Sticker message.
+    case sticker(MediaItem)
 
     /// A video message.
     case video(MediaItem)
