@@ -36,6 +36,7 @@ open class StickerMessageCell: MediaMessageCell {
                     displayDelegate.configureMediaMessageImageView(imageView, for: message, at: indexPath, in: messagesCollectionView)
                 }
             }
+            playButtonView.isHidden = true
         default:
             break
         }        
