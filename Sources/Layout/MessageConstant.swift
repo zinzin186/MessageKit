@@ -49,7 +49,7 @@ public enum MKMessageConstant {
             static let mediaSize: CGSize = CGSize(width: 40, height: 40)
             static let mediaRadius: CGFloat = 4
             static let contentTextInset: UIEdgeInsets = UIEdgeInsets(top: 8, left: 12, bottom: 8, right: 12)
-            static let bottomPadding: CGFloat = -24
+            static let bottomPadding: CGFloat = -18
             
         }
         
@@ -63,9 +63,18 @@ public enum MKMessageConstant {
             static let contentInset: UIEdgeInsets = UIEdgeInsets(top: 8, left: 12, bottom: 8, right: 12)
             static let bottomPadding: CGFloat = 0
         }
+        
         static let backgroundColor: UIColor = UIColor.fromHexCode("#F6F6F6")
         static let cornerRadius: CGFloat = 10
     }
+    enum ActionNote {
+        static let contentInset: UIEdgeInsets = UIEdgeInsets(top: 8, left: 12, bottom: 8, right: 12)
+        static let bottomPadding: CGFloat = 0
+    }
     static let replyImage: UIImage? = UIImage(named: "mk_icon_chat_reply", in: Bundle.messageKitAssetBundle, compatibleWith: nil)
     static let markReplyImage: UIImage? = UIImage(named: "mk_icon_mark_reply", in: Bundle.messageKitAssetBundle, compatibleWith: nil)
+    
+    enum Limit {
+        static let minContainerBodyHeight: CGFloat = abs(MKMessageConstant.ActionView.ReplyView.bottomPadding) * 2
+    }
 }

@@ -17,14 +17,17 @@ open class ActionMessageSizeCalculator: MessageSizeCalculator {
         return CGSize(width: messageSize.width, height: messageSize.height)
     }
     
-    
     open override func messageContainerSize(for message: MKMessageType, indexPath: IndexPath) -> CGSize {
         let maxWidth = messagesLayout.itemWidth - 30//messageContainerMaxWidth(for: message)
         switch message.kind {
         case .action(let text):
             let displayDelegate = messagesLayout.messagesCollectionView.messagesDisplayDelegate
             let attributedText = NSAttributedString(string: text, attributes: displayDelegate?.configActionMessage(for: message, at: indexPath, in: messagesLayout.messagesCollectionView))
-            let messageContainerHeight = labelSize(for: attributedText, considering: maxWidth).height
+            let contentInset = MKMessageConstant.ActionNote.contentInset
+            var messageContainerHeight = labelSize(for: attributedText, considering: maxWidth).height + contentInset.top + contentInset.bottom
+            if messageContainerHeight < MKMessageConstant.Limit.minContainerBodyHeight {
+                messageContainerHeight = MKMessageConstant.Limit.minContainerBodyHeight
+            }
             return CGSize(width: maxWidth, height: messageContainerHeight)
         default:
             fatalError("messageContainerSize received unhandled MessageDataType: \(message.kind)")

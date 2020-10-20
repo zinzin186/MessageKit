@@ -2,8 +2,10 @@ PODS:
   - InputBarAccessoryView (4.3.2):
     - InputBarAccessoryView/Core (= 4.3.2)
   - InputBarAccessoryView/Core (4.3.2)
+  - lottie-ios (3.1.8)
   - MessageKit (3.3.0):
     - InputBarAccessoryView (~> 4.3.2)
+    - lottie-ios
   - PINCache (3.0.1-beta.8):
     - PINCache/Arc-exception-safe (= 3.0.1-beta.8)
     - PINCache/Core (= 3.0.1-beta.8)
@@ -30,6 +32,7 @@ DEPENDENCIES:
 
 SPEC REPOS:
   trunk:
+    - lottie-ios
     - PINCache
     - PINOperation
     - PINRemoteImage
@@ -48,7 +51,8 @@ CHECKOUT OPTIONS:
 
 SPEC CHECKSUMS:
   InputBarAccessoryView: 7985d418040a05fe894bd4b8328dd43ab35517c3
-  MessageKit: 0d4beb33510f40b601e205b7136662a8d6e74256
+  lottie-ios: 48fac6be217c76937e36e340e2d09cf7b10b7f5f
+  MessageKit: 636839d3355090bcdf57884dc806b0530635016c
   PINCache: 534fd41d358d828dfdf227a0d327f3673a65e20b
   PINOperation: 24b774353ca248fcf87d67b2d61eef42087c125a
   PINRemoteImage: e2b89e19fb6e77ffc099f9d9f3b3fe1745e3f9f9
@@ -56,4 +60,4 @@ SPEC CHECKSUMS:
 
 PODFILE CHECKSUM: 9d3c353f530c35e6ce07c18f1ac8bf03de25c1ee
 
-COCOAPODS: 1.9.3
+COCOAPODS: 1.9.1

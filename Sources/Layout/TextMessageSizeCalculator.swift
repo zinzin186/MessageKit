@@ -27,8 +27,8 @@ import UIKit
 
 open class TextMessageSizeCalculator: MessageSizeCalculator {
 
-    public var incomingMessageLabelInsets = UIEdgeInsets(top: 7, left: 12, bottom: 7, right: 12)
-    public var outgoingMessageLabelInsets = UIEdgeInsets(top: 7, left: 12, bottom: 7, right: 12)
+    public var incomingMessageLabelInsets = UIEdgeInsets(top: 8, left: 12, bottom: 8, right: 12)
+    public var outgoingMessageLabelInsets = UIEdgeInsets(top: 8, left: 12, bottom: 8, right: 12)
 
     internal func messageLabelInsets(for message: MKMessageType) -> UIEdgeInsets {
         let dataSource = messagesLayout.messagesDataSource
@@ -54,7 +54,9 @@ open class TextMessageSizeCalculator: MessageSizeCalculator {
         let messageInsets = messageLabelInsets(for: message)
         messageContainerSize.width += messageInsets.horizontal
         messageContainerSize.height += messageInsets.vertical
-
+        if messageContainerSize.height < MKMessageConstant.Limit.minContainerBodyHeight{
+            messageContainerSize.height = MKMessageConstant.Limit.minContainerBodyHeight
+        }
         return messageContainerSize
     }
 

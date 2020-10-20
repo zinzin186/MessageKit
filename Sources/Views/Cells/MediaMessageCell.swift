@@ -77,14 +77,16 @@ open class MediaMessageCell: MessageContentCell {
         case .photo(let mediaItem):
             imageView.image = mediaItem.image ?? mediaItem.placeholderImage
             playButtonView.isHidden = true
+            displayDelegate.configureMediaMessageImageView(imageView, for: message, at: indexPath, in: messagesCollectionView)
         case .video(let mediaItem):
             imageView.image = mediaItem.image ?? mediaItem.placeholderImage
             playButtonView.isHidden = false
+            displayDelegate.configureMediaMessageImageView(imageView, for: message, at: indexPath, in: messagesCollectionView)
         default:
             break
         }
 
-        displayDelegate.configureMediaMessageImageView(imageView, for: message, at: indexPath, in: messagesCollectionView)
+        
     }
     
     /// Handle tap gesture on contentView and its subviews.
