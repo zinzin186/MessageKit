@@ -9,9 +9,9 @@ import Foundation
 
 open class ActionReplyTextView: UIView {
     
-lazy var messageLabel: UILabel = {[unowned self] in
+lazy var contentLabel: UILabel = {[unowned self] in
       let label: UILabel = .init()
-      label.numberOfLines = 0
+      label.numberOfLines = 2
       label.font = UIFont.systemFont(ofSize: 13)
       label.textColor = UIColor.fromHexCode("#808080")
       label.translatesAutoresizingMaskIntoConstraints = false
@@ -21,12 +21,13 @@ lazy var messageLabel: UILabel = {[unowned self] in
 
     init() {
         super.init(frame: .zero)
-        self.addSubview(messageLabel)
+        self.addSubview(contentLabel)
+        let contentInset = MKMessageConstant.ActionView.ReplyView.contentTextInset
         NSLayoutConstraint.activate([
-            messageLabel.leadingAnchor.constraint(equalTo: self.leadingAnchor, constant: 5),
-            messageLabel.topAnchor.constraint(equalTo: self.topAnchor, constant: 5),
-            messageLabel.trailingAnchor.constraint(equalTo: self.trailingAnchor, constant: -5),
-            messageLabel.bottomAnchor.constraint(equalTo: self.bottomAnchor, constant: -25)
+            contentLabel.leadingAnchor.constraint(equalTo: self.leadingAnchor, constant: contentInset.left),
+            contentLabel.topAnchor.constraint(equalTo: self.topAnchor, constant: contentInset.top),
+            contentLabel.trailingAnchor.constraint(equalTo: self.trailingAnchor, constant: -contentInset.right),
+            contentLabel.bottomAnchor.constraint(equalTo: self.bottomAnchor, constant: -contentInset.bottom)
         ])
     }
     

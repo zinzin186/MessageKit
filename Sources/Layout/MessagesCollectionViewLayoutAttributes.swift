@@ -34,7 +34,7 @@ open class MessagesCollectionViewLayoutAttributes: UICollectionViewLayoutAttribu
     public var avatarPosition = AvatarPosition(vertical: .cellBottom)
     public var sendStatusPosition = AvatarPosition(vertical: .messageBottom)
     public var avatarLeadingTrailingPadding: CGFloat = 0
-    public var paddingContainerViewWithReplyBody: CGFloat = 0
+    public var paddingContainerViewWithActionBody: CGFloat = 0
     public var sendStatusLeadingTrailingPadding: CGFloat = 0
     public var messageContainerSize: CGSize = .zero
     public var messageContainerPadding: UIEdgeInsets = .zero
@@ -93,7 +93,7 @@ open class MessagesCollectionViewLayoutAttributes: UICollectionViewLayoutAttribu
         copy.accessoryViewPadding = accessoryViewPadding
         copy.accessoryViewPosition = accessoryViewPosition
         copy.linkPreviewFonts = linkPreviewFonts
-        copy.paddingContainerViewWithReplyBody = paddingContainerViewWithReplyBody
+        copy.paddingContainerViewWithActionBody = paddingContainerViewWithActionBody
         return copy
         // swiftlint:enable force_cast
     }
@@ -123,7 +123,7 @@ open class MessagesCollectionViewLayoutAttributes: UICollectionViewLayoutAttribu
                 && attributes.accessoryViewPadding == accessoryViewPadding
                 && attributes.accessoryViewPosition == accessoryViewPosition
                 && attributes.linkPreviewFonts == linkPreviewFonts
-                && attributes.paddingContainerViewWithReplyBody == paddingContainerViewWithReplyBody
+                && attributes.paddingContainerViewWithActionBody == paddingContainerViewWithActionBody
         } else {
             return false
         }

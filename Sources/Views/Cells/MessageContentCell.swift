@@ -36,9 +36,9 @@ open class MessageContentCell: MessageCollectionViewCell, UIGestureRecognizerDel
     /// The container used for styling and holding the message's content view.
     lazy var actionBodyView: ActionBodyView = {
         let actionView = ActionBodyView()
-        actionView.backgroundColor = UIColor.fromHexCode("#F6F6F6")
+        actionView.backgroundColor = MKMessageConstant.ActionView.backgroundColor
         actionView.clipsToBounds = true
-        actionView.layer.cornerRadius = 10
+        actionView.layer.cornerRadius = MKMessageConstant.ActionView.cornerRadius
         actionView.clickReplyMessageCallback = {[unowned self] in
             self.delegate?.didTapActionMessage(in: self)
         }
@@ -61,14 +61,15 @@ open class MessageContentCell: MessageCollectionViewCell, UIGestureRecognizerDel
     
     open var iconReply: UIImageView = {
         let imgvCanReply = UIImageView()
-        imgvCanReply.image = UIImage(named: "mk_icon_chat_reply", in: Bundle.messageKitAssetBundle, compatibleWith: nil)
+        imgvCanReply.alpha = 0.0
+        imgvCanReply.image = MKMessageConstant.replyImage
         imgvCanReply.contentMode = .scaleAspectFit
         return imgvCanReply
     }()
     
     lazy var iconMarkReply: UIImageView = {
         let imgvReply = UIImageView()
-        imgvReply.image = UIImage(named: "mk_icon_mark_reply", in: Bundle.messageKitAssetBundle, compatibleWith: nil)
+        imgvReply.image = MKMessageConstant.markReplyImage
         imgvReply.clipsToBounds = true
         imgvReply.isHidden = true
         imgvReply.contentMode = .scaleAspectFill
@@ -170,6 +171,8 @@ open class MessageContentCell: MessageCollectionViewCell, UIGestureRecognizerDel
             // Vượt quá breakX sẽ là action reply
             let breakX = frame.width/2 - CGFloat(60)
             newX = max(breakX, newX)
+            let padding = newX - frame.width/2
+            iconReply.alpha =  abs(padding) / 60
             let newY: CGFloat = center.y
             contentView.center = CGPoint(x: newX, y: newY)
             sender.setTranslation(CGPoint.zero, in: self.superview)
@@ -185,6 +188,8 @@ open class MessageContentCell: MessageCollectionViewCell, UIGestureRecognizerDel
                     }
                 }
             }
+        }else {
+            iconReply.alpha = 1
         }
         
         if sender.state == UIGestureRecognizer.State.ended {
@@ -194,6 +199,7 @@ open class MessageContentCell: MessageCollectionViewCell, UIGestureRecognizerDel
             }
             contentView.center = CGPoint(x: contentView.frame.size.width/2, y: contentView.frame.size.height/2)
             contentView.translatesAutoresizingMaskIntoConstraints = true
+            iconReply.alpha = 0
         }
     }
     open override func prepareForReuse() {
@@ -371,7 +377,7 @@ open class MessageContentCell: MessageCollectionViewCell, UIGestureRecognizerDel
     open func layoutMessageBodyView(with attributes: MessagesCollectionViewLayoutAttributes) {
         var origin: CGPoint = .zero
         let messageBodyWidth: CGFloat = max(attributes.messageContainerSize.width + attributes.messageContainerPadding.left + attributes.messageContainerPadding.right, attributes.actionBodySize.width + attributes.actionBodyPadding.left + attributes.actionBodyPadding.right)
-        let messageBodyHeight: CGFloat = attributes.messageContainerSize.height + attributes.actionBodySize.height - attributes.paddingContainerViewWithReplyBody
+        let messageBodyHeight: CGFloat = attributes.messageContainerSize.height + attributes.actionBodySize.height + attributes.paddingContainerViewWithActionBody
         switch attributes.avatarPosition.vertical {
         case .messageBottom:
             origin.y = attributes.size.height - attributes.messageContainerPadding.bottom - attributes.cellBottomLabelSize.height - attributes.messageBottomLabelSize.height - messageBodyHeight - attributes.messageContainerPadding.top
@@ -453,7 +459,7 @@ open class MessageContentCell: MessageCollectionViewCell, UIGestureRecognizerDel
     /// - attributes: The `MessagesCollectionViewLayoutAttributes` for the cell.
     open func layoutMessageContainerView(with attributes: MessagesCollectionViewLayoutAttributes) {
         var origin: CGPoint = .zero
-        origin.y = self.actionBodyView.frame.maxY - attributes.paddingContainerViewWithReplyBody
+        origin.y = self.actionBodyView.frame.maxY + attributes.paddingContainerViewWithActionBody
         switch attributes.avatarPosition.horizontal {
         case .cellLeading:
             origin.x = attributes.messageContainerPadding.left

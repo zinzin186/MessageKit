@@ -80,11 +80,11 @@ open class MessageSizeCalculator: CellSizeCalculator {
         attributes.avatarSize = avatarSize(for: message)
         attributes.avatarPosition = avatarPosition(for: message)
         attributes.avatarLeadingTrailingPadding = avatarLeadingTrailingPadding
-        attributes.paddingContainerViewWithReplyBody = paddingContainerViewWithReplyBody(for: message)
+        attributes.paddingContainerViewWithActionBody = paddingContainerViewWithActionBody(for: message)
 
         attributes.actionBodyPadding = replyBodyPadding(for: message)
         attributes.messageContainerPadding = messageContainerPadding(for: message)
-        attributes.actionBodySize = replyBodySize(for: message)
+        attributes.actionBodySize = actionBodySize(for: message)
         attributes.messageContainerSize = messageContainerSize(for: message, indexPath: indexPath)
         attributes.cellTopLabelSize = cellTopLabelSize(for: message, at: indexPath)
         attributes.cellTopLabelAlignment = cellTopLabelAlignment(for: message)
@@ -113,7 +113,7 @@ open class MessageSizeCalculator: CellSizeCalculator {
 
     open func cellContentHeight(for message: MKMessageType, at indexPath: IndexPath) -> CGFloat {
 
-        let replyBodyHeight = replyBodySize(for: message).height
+        let replyBodyHeight = actionBodySize(for: message).height
         let messageContainerHeight = messageContainerSize(for: message, indexPath: indexPath).height
         let cellBottomLabelHeight = cellBottomLabelSize(for: message, at: indexPath).height
         let messageBottomLabelHeight = messageBottomLabelSize(for: message, at: indexPath).height
@@ -127,31 +127,31 @@ open class MessageSizeCalculator: CellSizeCalculator {
         switch avatarVerticalPosition {
         case .messageCenter:
             let totalLabelHeight: CGFloat = cellTopLabelHeight + messageTopLabelHeight + replyBodyHeight
-                + messageContainerHeight + messageVerticalPadding + messageBottomLabelHeight + cellBottomLabelHeight - paddingContainerViewWithReplyBody
+                + messageContainerHeight + messageVerticalPadding + messageBottomLabelHeight + cellBottomLabelHeight + paddingContainerViewWithReplyBody
             let cellHeight = max(avatarHeight, totalLabelHeight)
             return max(cellHeight, accessoryViewHeight)
         case .messageBottom:
             var cellHeight: CGFloat = 0
             cellHeight += messageBottomLabelHeight
             cellHeight += cellBottomLabelHeight
-            let labelsHeight = replyBodyHeight + messageContainerHeight - paddingContainerViewWithReplyBody + messageVerticalPadding + cellTopLabelHeight + messageTopLabelHeight
+            let labelsHeight = replyBodyHeight + messageContainerHeight + paddingContainerViewWithReplyBody + messageVerticalPadding + cellTopLabelHeight + messageTopLabelHeight
             cellHeight += max(labelsHeight, avatarHeight)
             return max(cellHeight, accessoryViewHeight)
         case .messageTop:
             var cellHeight: CGFloat = 0
             cellHeight += cellTopLabelHeight
             cellHeight += messageTopLabelHeight
-            let labelsHeight = replyBodyHeight + messageContainerHeight - paddingContainerViewWithReplyBody + messageVerticalPadding + messageBottomLabelHeight + cellBottomLabelHeight
+            let labelsHeight = replyBodyHeight + messageContainerHeight + paddingContainerViewWithReplyBody + messageVerticalPadding + messageBottomLabelHeight + cellBottomLabelHeight
             cellHeight += max(labelsHeight, avatarHeight)
             return max(cellHeight, accessoryViewHeight)
         case .messageLabelTop:
             var cellHeight: CGFloat = 0
             cellHeight += cellTopLabelHeight
-            let messageLabelsHeight = replyBodyHeight + messageContainerHeight - paddingContainerViewWithReplyBody + messageBottomLabelHeight + messageVerticalPadding + messageTopLabelHeight + cellBottomLabelHeight
+            let messageLabelsHeight = replyBodyHeight + messageContainerHeight + paddingContainerViewWithReplyBody + messageBottomLabelHeight + messageVerticalPadding + messageTopLabelHeight + cellBottomLabelHeight
             cellHeight += max(messageLabelsHeight, avatarHeight)
             return max(cellHeight, accessoryViewHeight)
         case .cellTop, .cellBottom:
-            let totalLabelHeight: CGFloat = cellTopLabelHeight + messageTopLabelHeight - paddingContainerViewWithReplyBody + replyBodyHeight
+            let totalLabelHeight: CGFloat = cellTopLabelHeight + messageTopLabelHeight + paddingContainerViewWithReplyBody + replyBodyHeight
                 + messageContainerHeight + messageVerticalPadding + messageBottomLabelHeight + cellBottomLabelHeight
             let cellHeight = max(avatarHeight, totalLabelHeight)
             return max(cellHeight, accessoryViewHeight)
@@ -174,12 +174,12 @@ open class MessageSizeCalculator: CellSizeCalculator {
         return position
     }
 
-    open func paddingContainerViewWithReplyBody(for message: MKMessageType) -> CGFloat {
+    open func paddingContainerViewWithActionBody(for message: MKMessageType) -> CGFloat {
         switch message.action {
         case .reply:
-            return 20
+            return MKMessageConstant.ActionView.ReplyView.bottomPadding
         case .story:
-            return -5
+            return MKMessageConstant.ActionView.StoryView.bottomPadding
         default:
             return 0
         }
@@ -303,7 +303,7 @@ open class MessageSizeCalculator: CellSizeCalculator {
         return isFromCurrentSender ? outgoingMessagePadding : incomingMessagePadding
     }
     
-    open func replyBodySize(for message: MKMessageType) -> CGSize {
+    open func actionBodySize(for message: MKMessageType) -> CGSize {
         // Returns .zero by default
         switch message.action {
         case .reply(let replyMessage):
@@ -318,12 +318,13 @@ open class MessageSizeCalculator: CellSizeCalculator {
             case .text(let text), .emoji(let text):
                 attributedText = NSAttributedString(string: text, attributes: [.font: UIFont.systemFont(ofSize: 13)])
             default:
-                return CGSize(width: 120, height: 80)
+                return self.getSizeOfReplyMedia()
             }
 
             actionContainerSize = labelSize(for: attributedText, considering: maxWidth)
-            actionContainerSize.width += 20
-            actionContainerSize.height += 36
+            let contentInset = MKMessageConstant.ActionView.ReplyView.contentTextInset
+            actionContainerSize.width += (contentInset.left + contentInset.right)
+            actionContainerSize.height += (contentInset.top + contentInset.bottom - MKMessageConstant.ActionView.ReplyView.bottomPadding)
             return actionContainerSize
         case .remove:
             let contentText: String
@@ -336,19 +337,25 @@ open class MessageSizeCalculator: CellSizeCalculator {
             var actionContainerSize: CGSize
             let maxWidth = messageContainerMaxWidth(for: message)
             actionContainerSize = labelSize(for: attributedText, considering: maxWidth)
-            actionContainerSize.width += 10
-            actionContainerSize.height += 20
+            let contentInset = MKMessageConstant.ActionView.RemoveView.contentInset
+            actionContainerSize.width += (contentInset.left + contentInset.right)
+            actionContainerSize.height += (contentInset.top + contentInset.bottom + MKMessageConstant.ActionView.RemoveView.bottomPadding)
             return actionContainerSize
         case .story:
-            let imageWidth: CGFloat = 68.0
-            let imageHeight: CGFloat = 98.0
-            return CGSize(width: imageWidth, height: imageHeight)
+            return MKMessageConstant.ActionView.StoryView.mediaSize
         case .default:
             return CGSize.zero
         }
         
     }
 
+    private func getSizeOfReplyMedia() -> CGSize {
+        let contentOffset = MKMessageConstant.ActionView.ReplyView.contentMediaInset
+        let heightOfImage: CGFloat = MKMessageConstant.ActionView.ReplyView.mediaSize.height
+        let padding: CGFloat = MKMessageConstant.ActionView.ReplyView.bottomPadding
+        let height: CGFloat = contentOffset.top + heightOfImage + contentOffset.bottom - padding
+        return CGSize(width: 120, height: height)
+    }
     open func iconMarkReplySize(for message: MKMessageType) -> CGSize {
         switch message.action {
         case .reply:

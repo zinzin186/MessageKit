@@ -67,15 +67,15 @@ open class ActionBodyView: UIView {
     }
     func addActionRemoveMessageView(text: String){
         self.actionRemoveMessageView = ActionRemoveMessageView()
-        self.actionRemoveMessageView?.messageLabel.text = text
-        self.addActionView(view: self.actionRemoveMessageView!)
+        self.actionRemoveMessageView?.contentLabel.text = text
+        self.addActionView(view: self.actionRemoveMessageView!, bottomPadding: MKMessageConstant.ActionView.RemoveView.bottomPadding)
         
     }
    
     func addActionReplyTextView(text: String){
         self.actionReplyTextView = ActionReplyTextView()
-        self.actionReplyTextView?.messageLabel.text = text
-        self.addActionView(view: self.actionReplyTextView!)
+        self.actionReplyTextView?.contentLabel.text = text
+        self.addActionView(view: self.actionReplyTextView!, bottomPadding: MKMessageConstant.ActionView.ReplyView.bottomPadding)
         addButton()
         
     }
@@ -83,17 +83,17 @@ open class ActionBodyView: UIView {
         self.actionReplyMediaView = ActionReplyMediaView()
         self.actionReplyMediaView?.messageLabel.text = text
         self.actionReplyMediaView?.imageView.image = image
-        self.addActionView(view: self.actionReplyMediaView!)
+        self.addActionView(view: self.actionReplyMediaView!, bottomPadding: MKMessageConstant.ActionView.ReplyView.bottomPadding)
         addButton()
     }
     
     func addActionChatFromStoryView(image: UIImage?){
         self.actionChatFromStoryView = ActionChatFromStoryView()
         self.actionChatFromStoryView?.imageView.image = image
-        self.addActionView(view: self.actionChatFromStoryView!)
+        self.addActionView(view: self.actionChatFromStoryView!, bottomPadding: MKMessageConstant.ActionView.StoryView.bottomPadding)
     }
     
-    private func addActionView(view: UIView){
+    private func addActionView(view: UIView, bottomPadding: CGFloat = 0){
         self.subviews.forEach({$0.removeFromSuperview()})
         view.translatesAutoresizingMaskIntoConstraints = false
         self.addSubview(view)
@@ -101,7 +101,7 @@ open class ActionBodyView: UIView {
             view.leadingAnchor.constraint(equalTo: self.leadingAnchor),
             view.topAnchor.constraint(equalTo: self.topAnchor),
             view.trailingAnchor.constraint(equalTo: self.trailingAnchor),
-            view.bottomAnchor.constraint(equalTo: self.bottomAnchor)
+            view.bottomAnchor.constraint(equalTo: self.bottomAnchor, constant: bottomPadding)
         ])
     }
     

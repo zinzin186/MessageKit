@@ -29,14 +29,51 @@ import PINRemoteImage
 
 class BasicExampleViewController: ChatViewController {
     override func configureMessageCollectionView() {
-        super.configureMessageCollectionView()
+//        super.configureMessageCollectionView()
+//        guard let layout = messagesCollectionView.collectionViewLayout as? MessagesCollectionViewFlowLayout else {return}
+//        layout.setMessageIncomingAvatarPosition(AvatarPosition(vertical: .messageBottom))
+//        layout.setMessageOutgoingAvatarPosition(AvatarPosition(vertical: .messageBottom))
+//        layout.setMessageOutgoingMessageTopLabelAlignment(LabelAlignment(textAlignment: .right, textInsets: UIEdgeInsets(top: 0, left: 0, bottom: 0, right: 50)))
+//        layout.setMessageIncomingMessageTopLabelAlignment(LabelAlignment(textAlignment: .left, textInsets: UIEdgeInsets(top: 0, left: 40, bottom: 0, right: 12)))
         messagesCollectionView.messagesLayoutDelegate = self
         messagesCollectionView.messagesDisplayDelegate = self
+        messagesCollectionView.messagesDataSource = self
+        messagesCollectionView.messageCellDelegate = self
+        scrollsToBottomOnKeyboardBeginsEditing = true // default false
+        maintainPositionOnKeyboardFrameChanged = true // default false
         guard let layout = messagesCollectionView.collectionViewLayout as? MessagesCollectionViewFlowLayout else {return}
+        self.configFlowLayout(layout)
+    }
+    
+    private func configFlowLayout(_ layout: MessagesCollectionViewFlowLayout) {
+        layout.sectionInset = UIEdgeInsets(top: 1, left: 8, bottom: 1, right: 8)
+        
+        // Hide the outgoing avatar and adjust the label alignment to line up with the messages
+        layout.setMessageOutgoingAvatarSize(.zero)
+        layout.setMessageOutgoingMessageTopLabelAlignment(LabelAlignment(textAlignment: .right, textInsets: UIEdgeInsets(top: 0, left: 0, bottom: 0, right: 17)))
+        layout.setMessageOutgoingMessageBottomLabelAlignment(LabelAlignment(textAlignment: .right, textInsets: UIEdgeInsets(top: 0, left: 0, bottom: 0, right: 0)))
+        layout.setMessageIncomingMessageBottomLabelAlignment(LabelAlignment(textAlignment: .left, textInsets: UIEdgeInsets(top: 0, left: 40, bottom: 0, right: 0)))
+
+        // Set outgoing avatar to overlap with the message bubble
+        layout.setMessageIncomingMessageTopLabelAlignment(LabelAlignment(textAlignment: .left, textInsets: UIEdgeInsets(top: 0, left: 40, bottom: 0, right: 0)))
+        layout.setMessageIncomingAvatarSize(CGSize(width: 30, height: 30))
         layout.setMessageIncomingAvatarPosition(AvatarPosition(vertical: .messageBottom))
-        layout.setMessageOutgoingAvatarPosition(AvatarPosition(vertical: .messageBottom))
-        layout.setMessageOutgoingMessageTopLabelAlignment(LabelAlignment(textAlignment: .right, textInsets: UIEdgeInsets(top: 0, left: 0, bottom: 0, right: 50)))
-        layout.setMessageIncomingMessageTopLabelAlignment(LabelAlignment(textAlignment: .left, textInsets: UIEdgeInsets(top: 0, left: 40, bottom: 0, right: 12)))
+        let paddingRight = UIScreen.main.bounds.size.width - (MKMessageConstant.calcMaxWidthCell() + 10 + 60)
+        layout.setMessageIncomingMessagePadding(UIEdgeInsets(top: 0, left: 5, bottom: 0, right: paddingRight))
+        layout.setMessageOutgoingMessagePadding(UIEdgeInsets(top: 0, left: paddingRight, bottom: 0, right: 2))
+        //cellBottomLabelAttributedText
+        layout.setMessageOutgoingCellBottomLabelAlignment(LabelAlignment(textAlignment: .right, textInsets: UIEdgeInsets(top: 0, left: 0, bottom: 0, right: 0)))
+        layout.setMessageIncomingCellBottomLabelAlignment(LabelAlignment(textAlignment: .right, textInsets: UIEdgeInsets(top: 0, left: 0, bottom: 0, right: 0)))
+        layout.setMessageIncomingAccessoryViewSize(CGSize(width: 30, height: 30))
+        layout.setMessageIncomingAccessoryViewPadding(HorizontalEdgeInsets(left: 8, right: 0))
+        layout.setMessageIncomingAccessoryViewPosition(.messageBottom)
+        layout.setMessageOutgoingAccessoryViewSize(CGSize(width: 10, height: 10))
+        layout.setMessageOutgoingAccessoryViewPadding(HorizontalEdgeInsets(left: 0, right: 8))
+        layout.setMessageOutgoingAccessoryViewPosition(.messageBottom)
+//        let linkPreviewFonts = LinkPreviewFonts(titleFont: ChatUtils.previewTitleFont,
+//                                   teaserFont: ChatUtils.previewDescFont,
+//                                   domainFont: ChatUtils.previewTitleFont)
+//        layout.setLinkPreviewFonts(linkPreviewFonts)
     }
 //    override func messageTimestampLabelAttributedText(for message: MKMessageType, at indexPath: IndexPath) -> NSAttributedString? {
 //        return NSAttributedString(string: "dsfdsfdsfd")
@@ -104,6 +141,12 @@ extension BasicExampleViewController: MKMessagesDisplayDelegate {
     
     func configureLinkPreviewImageView(_ imageView: UIImageView, for message: MKMessageType, at indexPath: IndexPath, in messagesCollectionView: MessagesCollectionView) {
         imageView.pin_setImage(from: URL(string: "https://avatars0.githubusercontent.com/u/2911921?s=460&u=418a6180264738f33cf0ea2b6ce1c9fd79d992f2&v=4")!)
+    }
+    
+    func configureSendStatusView(_ sendStatusView: UIImageView, for message: MKMessageType, at indexPath: IndexPath, in messagesCollectionView: MessagesCollectionView) {
+        sendStatusView.isHidden = false
+        sendStatusView.backgroundColor = .red
+
     }
     
     func configureActionMessageImageView(_ imageView: UIImageView, for action: ActionType, at indexPath: IndexPath, in messagesCollectionView: MessagesCollectionView) {

@@ -37,7 +37,7 @@ class ChatViewController: MessagesViewController, MKMessagesDataSource {
     lazy var messageList: [MockMessage] = []
     
     override var isSubView: Bool {
-        return true
+        return false
     }
     
     private(set) lazy var refreshControl: UIRefreshControl = {
@@ -131,8 +131,7 @@ class ChatViewController: MessagesViewController, MKMessagesDataSource {
             for: .highlighted
         )
     }
-    
-        
+     
     private func getTitleText(isOutgoingMessage: Bool, message: MKMessageType, replyMessage: MKReplyMessageType) -> String {
         if isOutgoingMessage {
             if message.sender.senderId == replyMessage.sender.senderId {
