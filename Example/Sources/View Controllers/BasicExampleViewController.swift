@@ -123,7 +123,7 @@ extension BasicExampleViewController: MKMessagesDisplayDelegate {
     func messageStyle(for message: MKMessageType, at indexPath: IndexPath, in messagesCollectionView: MessagesCollectionView) -> MessageStyle {
         
         let tail: MessageStyle.TailCorner = isFromCurrentSender(message: message) ? .bottomRight : .bottomLeft
-        return .bubbleTail(tail, .curved)
+        return .none
     }
     
     func configureAvatarView(_ avatarView: AvatarView, for message: MKMessageType, at indexPath: IndexPath, in messagesCollectionView: MessagesCollectionView) {

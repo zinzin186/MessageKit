@@ -114,9 +114,9 @@ public protocol MKMessagesDisplayDelegate: AnyObject {
     ///   Current sender: UIColor.white
     ///
     ///   All other senders: UIColor.darkText
-    func textColor(for message: MKMessageType, at indexPath: IndexPath, in messagesCollectionView: MessagesCollectionView) -> UIColor
+    func textAttributes(for message: MKMessageType, at indexPath: IndexPath, in messagesCollectionView: MessagesCollectionView) -> [NSAttributedString.Key: Any]
     
-    func textFont(for message: MKMessageType, at indexPath: IndexPath, in messagesCollectionView: MessagesCollectionView) -> UIFont
+    func donateTextAttributes(at indexPath: IndexPath, in messagesCollectionView: MessagesCollectionView) -> [NSAttributedString.Key: Any]
     
     func configureTextForActionMessage(at indexPath: IndexPath, in messagesCollectionView: MessagesCollectionView) -> [NSAttributedString.Key: Any]
 
@@ -270,16 +270,16 @@ public extension MKMessagesDisplayDelegate {
     func configureAccessoryView(_ accessoryView: UIView, for message: MKMessageType, at indexPath: IndexPath, in messagesCollectionView: MessagesCollectionView) {}
 
     // MARK: - Text Messages Defaults
-
-    func textColor(for message: MKMessageType, at indexPath: IndexPath, in messagesCollectionView: MessagesCollectionView) -> UIColor {
+    
+    func textAttributes(for message: MKMessageType, at indexPath: IndexPath, in messagesCollectionView: MessagesCollectionView) -> [NSAttributedString.Key: Any] {
         guard let dataSource = messagesCollectionView.messagesDataSource else {
             fatalError(MessageKitError.nilMessagesDataSource)
         }
-        return dataSource.isFromCurrentSender(message: message) ? .outgoingMessageLabel : .incomingMessageLabel
+        return dataSource.isFromCurrentSender(message: message) ? [NSAttributedString.Key.font : UIFont.preferredFont(forTextStyle: .body), NSAttributedString.Key.foregroundColor: UIColor.outgoingMessageLabel] : [NSAttributedString.Key.font : UIFont.preferredFont(forTextStyle: .body), NSAttributedString.Key.foregroundColor: UIColor.incomingMessageLabel]
     }
     
-    func textFont(for message: MKMessageType, at indexPath: IndexPath, in messagesCollectionView: MessagesCollectionView) -> UIFont {
-        return UIFont.preferredFont(forTextStyle: .body)
+    func donateTextAttributes(at indexPath: IndexPath, in messagesCollectionView: MessagesCollectionView) -> [NSAttributedString.Key: Any] {
+        return [NSAttributedString.Key.font : MKMessageConstant.Fonts.amountDonate, NSAttributedString.Key.foregroundColor: MKMessageConstant.Colors.Donate.text]
     }
     
     func configureTextForActionMessage(at indexPath: IndexPath, in messagesCollectionView: MessagesCollectionView) -> [NSAttributedString.Key: Any]{

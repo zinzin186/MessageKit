@@ -126,11 +126,13 @@ open class ContactMessageCell: MessageContentCell {
         guard let displayDelegate = messagesCollectionView.messagesDisplayDelegate else {
             fatalError(MessageKitError.nilMessagesDisplayDelegate)
         }
-        let textColor = displayDelegate.textColor(for: message, at: indexPath, in: messagesCollectionView)
-        let textFont = displayDelegate.textFont(for: message, at: indexPath, in: messagesCollectionView)
-        nameLabel.font = textFont
-        nameLabel.textColor = textColor
-        disclosureImageView.tintColor = textColor
+        let attributes = displayDelegate.textAttributes(for: message, at: indexPath, in: messagesCollectionView)
+        nameLabel.attributedText = NSAttributedString(string: contactItem.displayName, attributes: attributes)
+//        let textColor = displayDelegate.textColor(for: message, at: indexPath, in: messagesCollectionView)
+//        let textFont = displayDelegate.textFont(for: message, at: indexPath, in: messagesCollectionView)
+//        nameLabel.font = textFont
+//        nameLabel.textColor = textColor
+        disclosureImageView.tintColor = attributes[.foregroundColor] as? UIColor ?? UIColor.black
     }
     
 }

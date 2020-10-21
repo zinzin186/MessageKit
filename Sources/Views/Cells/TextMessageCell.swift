@@ -78,20 +78,15 @@ open class TextMessageCell: MessageContentCell {
             }
             switch message.kind {
             case .text(let text), .emoji(let text):
-                let textColor = displayDelegate.textColor(for: message, at: indexPath, in: messagesCollectionView)
-                let textFont = displayDelegate.textFont(for: message, at: indexPath, in: messagesCollectionView)
-                messageLabel.text = text
-                messageLabel.textColor = textColor
-                messageLabel.font = textFont
+                let attributes = displayDelegate.textAttributes(for: message, at: indexPath, in: messagesCollectionView)
+                messageLabel.attributedText = NSAttributedString(string: text, attributes: attributes)
+                
 //                if let font = messageLabel.messageLabelFont {
 //                    messageLabel.font = font
 //                }
             case .donate( _, let text):
-                let textColor = displayDelegate.textColor(for: message, at: indexPath, in: messagesCollectionView)
-                let textFont = displayDelegate.textFont(for: message, at: indexPath, in: messagesCollectionView)
-                messageLabel.text = text
-                messageLabel.textColor = textColor
-                messageLabel.font = textFont
+                let attributes = displayDelegate.donateTextAttributes(at: indexPath, in: messagesCollectionView)
+                messageLabel.attributedText = NSAttributedString(string: text ?? "", attributes: attributes)
             case .attributedText(let text):
                 messageLabel.attributedText = text
             default:

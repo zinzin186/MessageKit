@@ -7,7 +7,25 @@
 
 import UIKit
 
-class DonateMessageCell: TextMessageCell {
+class DonateMessageCell: MessageContentCell {
+    
+    // MARK: - Properties
+
+    /// The `MessageCellDelegate` for the cell.
+    open override weak var delegate: MKMessageCellDelegate? {
+        didSet {
+            messageLabel.delegate = delegate
+        }
+    }
+
+    /// The label used to display the message's text.
+    open lazy var messageLabel: MessageLabel = {
+        let label = MessageLabel()
+        messageTextView.addSubview(label)
+        label.fillSuperview()
+        label.textInsets = messageInsets
+        return label
+    }()
     
     lazy var donateView: DonateView = {
         let view = DonateView()
@@ -15,30 +33,64 @@ class DonateMessageCell: TextMessageCell {
         view.clipsToBounds = true
         return view
     }()
+    
+    lazy var messageTextView: UIView = {
+        let view = UIView()
+        view.backgroundColor = MKMessageConstant.Colors.Donate.background
+        messageContainerView.addSubview(view)
+        return view
+    }()
 
+    private var messageInsets: UIEdgeInsets = .zero
+    // MARK: - Methods
+
+    open override func apply(_ layoutAttributes: UICollectionViewLayoutAttributes) {
+        super.apply(layoutAttributes)
+        if let attributes = layoutAttributes as? MessagesCollectionViewLayoutAttributes {
+            messageInsets = attributes.messageLabelInsets
+        }
+    }
+
+    open override func prepareForReuse() {
+        super.prepareForReuse()
+        messageLabel.attributedText = nil
+        messageLabel.text = nil
+    }
+    
+    
     override func setupSubviews() {
         super.setupSubviews()
         messageContainerView.addSubview(donateView)
-//        NSLayoutConstraint.activate([
-//            donateView.leadingAnchor.constraint(equalTo: messageContainerView.leadingAnchor,
-//                                          constant: 0),
-//            donateView.trailingAnchor.constraint(equalTo: messageContainerView.trailingAnchor,
-//                                           constant: 0),
-//            donateView.bottomAnchor.constraint(equalTo: messageContainerView.bottomAnchor,
-//                                         constant: 0)
-//        ])
     }
     
     open override func configure(with message: MKMessageType, at indexPath: IndexPath, and messagesCollectionView: MessagesCollectionView) {
         super.configure(with: message, at: indexPath, and: messagesCollectionView)
-        guard case let .donate(donateInfo, _) = message.kind else { fatalError("Failed decorate donate cell") }
+        guard case let .donate(donateInfo, messageText) = message.kind else { fatalError("Failed decorate donate cell") }
+        guard let dataSource = messagesCollectionView.messagesDataSource else {
+            fatalError(MessageKitError.nilMessagesDataSource)
+        }
         guard let displayDelegate = messagesCollectionView.messagesDisplayDelegate else {
             fatalError(MessageKitError.nilMessagesDisplayDelegate)
         }
-        let textColor = displayDelegate.textColor(for: message, at: indexPath, in: messagesCollectionView)
-        let textFont = displayDelegate.textFont(for: message, at: indexPath, in: messagesCollectionView)
-        let attributedText = NSAttributedString(string: donateInfo, attributes: [NSAttributedString.Key.font : textFont])
-        var donateInfoSize = labelSize(for: attributedText, considering: messageContainerView.bounds.width)
+        let isOutgoingMessage = dataSource.isFromCurrentSender(message: message)
+        
+        var messageTextSize: CGSize = CGSize.zero
+        if let text = messageText {
+            let attributes = displayDelegate.textAttributes(for: message, at: indexPath, in: messagesCollectionView)
+            let attributedString = NSMutableAttributedString(string: text, attributes: attributes)
+            messageLabel.attributedText = attributedString
+            messageTextSize = labelSize(for: attributedString, considering: messageContainerView.bounds.width)
+            messageTextSize.width += messageInsets.horizontal
+            messageTextSize.height += messageInsets.vertical
+            if messageTextSize.height < MKMessageConstant.Limit.minContainerBodyHeight{
+                messageTextSize.height = MKMessageConstant.Limit.minContainerBodyHeight
+            }
+        }
+        
+        let donateAttributes = displayDelegate.donateTextAttributes(at: indexPath, in: messagesCollectionView)
+        let attributedDonateInfoText = NSAttributedString(string: donateInfo, attributes: donateAttributes)
+        donateView.lblAmountCoin.attributedText = attributedDonateInfoText
+        var donateInfoSize = labelSize(for: attributedDonateInfoText, considering: messageContainerView.bounds.width)
         let contentInset: UIEdgeInsets = MKMessageConstant.ContentInsets.donate
         let coinIconSize: CGSize = MKMessageConstant.Sizes.Donate.iconCoin
         donateInfoSize.width += (contentInset.left + 4 + coinIconSize.width + contentInset.right)
@@ -46,15 +98,21 @@ class DonateMessageCell: TextMessageCell {
         if donateInfoSize.height < MKMessageConstant.Sizes.Donate.donateInfoHeight {
             donateInfoSize.height = MKMessageConstant.Sizes.Donate.donateInfoHeight
         }
-        
-        
-        donateView.frame = CGRect(origin: CGPoint.zero, size: donateInfoSize)
-        messageLabel.frame = CGRect(0, donateInfoSize.height + 2, messageContainerView.bounds.width, messageContainerView.bounds.height)
-        messageLabel.backgroundColor = MKMessageConstant.Colors.Donate.background
-        donateView.lblAmountCoin.text = donateInfo
-        donateView.lblAmountCoin.textColor = textColor
-        donateView.lblAmountCoin.font = textFont
-                
+        if isOutgoingMessage {
+            donateView.frame = CGRect(origin: CGPoint(x: messageContainerView.bounds.width - donateInfoSize.width, y: 0), size: donateInfoSize)
+            if messageTextSize != .zero {
+                messageTextView.frame = CGRect(origin: CGPoint(x: messageContainerView.bounds.width - messageTextSize.width, y: donateView.frame.maxY + 2), size: messageTextSize)
+                self.cornerTextMessageView(isOutgoing: isOutgoingMessage)
+            }
+        } else {
+            donateView.frame = CGRect(origin: CGPoint.zero, size: donateInfoSize)
+            if messageTextSize != .zero {
+                messageTextView.frame = CGRect(origin: CGPoint(x: 0, y: donateView.frame.maxY + 2), size: messageTextSize)
+                self.cornerTextMessageView(isOutgoing: isOutgoingMessage)
+            }
+        }
+        self.cornerDonateView(isOutgoing: isOutgoingMessage)
+        self.messageContainerView.backgroundColor = UIColor.clear
     }
 
     internal func labelSize(for attributedText: NSAttributedString, considering maxWidth: CGFloat) -> CGSize {
@@ -62,5 +120,46 @@ class DonateMessageCell: TextMessageCell {
         let rect = attributedText.boundingRect(with: constraintBox, options: [.usesLineFragmentOrigin, .usesFontLeading], context: nil).integral
 
         return rect.size
+    }
+    
+    open override func cellContentView(canHandle touchPoint: CGPoint) -> Bool {
+        return messageLabel.handleGesture(touchPoint)
+    }
+    
+    private func cornerDonateView(isOutgoing: Bool) {
+        var corners: UIRectCorner = []
+        corners.formUnion(.topLeft)
+        corners.formUnion(.topRight)
+         if isOutgoing {
+             corners.formUnion(.bottomLeft)
+         } else {
+             corners.formUnion(.bottomRight)
+         }
+        let radius: CGFloat = 16
+        let smallCorner: CGFloat = 4
+        donateView.layer.cornerRadius = smallCorner
+        let path = UIBezierPath(roundedRect: donateView.bounds, byRoundingCorners: corners, cornerRadii: CGSize(width: radius, height: radius))
+        let mask = CAShapeLayer()
+        mask.path = path.cgPath
+        donateView.layer.mask = mask
+    }
+    
+    private func cornerTextMessageView(isOutgoing: Bool) {
+        var corners: UIRectCorner = []
+        corners.formUnion(.bottomLeft)
+        corners.formUnion(.bottomRight)
+         if isOutgoing {
+             corners.formUnion(.topLeft)
+         } else {
+             corners.formUnion(.topRight)
+         }
+        let radius: CGFloat = 16
+        let smallCorner: CGFloat = 4
+        messageTextView.layer.cornerRadius = smallCorner
+        messageTextView.clipsToBounds = true
+        let path = UIBezierPath(roundedRect: messageTextView.bounds, byRoundingCorners: corners, cornerRadii: CGSize(width: radius, height: radius))
+        let mask = CAShapeLayer()
+        mask.path = path.cgPath
+        messageTextView.layer.mask = mask
     }
 }

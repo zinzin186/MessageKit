@@ -82,11 +82,11 @@ open class TextMessageSizeCalculator: MessageSizeCalculator {
         let attributedString: NSMutableAttributedString
         switch message.kind {
         case .text(let text), .emoji(let text):
-            let textFont = displayDelegate.textFont(for: message, at: indexPath, in: messagesLayout.messagesCollectionView)
-            attributedString = NSMutableAttributedString(string: text, attributes: [NSAttributedString.Key.font : textFont])
+            let attributes = displayDelegate.textAttributes(for: message, at: indexPath, in: messagesLayout.messagesCollectionView)
+            attributedString = NSMutableAttributedString(string: text, attributes: attributes)
         case .donate( _, let text):
-            let textFont = displayDelegate.textFont(for: message, at: indexPath, in: messagesLayout.messagesCollectionView)
-            attributedString = NSMutableAttributedString(string: text ?? "", attributes: [NSAttributedString.Key.font : textFont])
+            let attributes = displayDelegate.textAttributes(for: message, at: indexPath, in: messagesLayout.messagesCollectionView)
+            attributedString = NSMutableAttributedString(string: text ?? "", attributes: attributes)
         case .attributedText(let text):
             attributedString = NSMutableAttributedString(attributedString: text)
         default:
