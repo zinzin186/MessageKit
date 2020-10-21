@@ -333,6 +333,7 @@ open class MessagesCollectionViewFlowLayout: UICollectionViewFlowLayout {
     open func messageSizeCalculators() -> [MessageSizeCalculator] {
         return [textMessageSizeCalculator,
                 attributedTextMessageSizeCalculator,
+                donateMessageSizeCalculator,
                 emojiMessageSizeCalculator,
                 photoMessageSizeCalculator,
                 stickerMessageSizeCalculator,

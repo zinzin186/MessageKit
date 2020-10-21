@@ -49,6 +49,9 @@ open class TextMessageSizeCalculator: MessageSizeCalculator {
         let maxWidth = messageContainerMaxWidth(for: message)
         var messageContainerSize: CGSize
         let attributedText = self.genAttributeMessage(with: message, at: indexPath)
+        if attributedText.string.isEmpty {
+            return CGSize.zero
+        }
         messageContainerSize = labelSize(for: attributedText, considering: maxWidth)
 
         let messageInsets = messageLabelInsets(for: message)
@@ -78,10 +81,12 @@ open class TextMessageSizeCalculator: MessageSizeCalculator {
         }
         let attributedString: NSMutableAttributedString
         switch message.kind {
-        case .text(let text), .emoji(let text), .donate(let text):
+        case .text(let text), .emoji(let text):
             let textFont = displayDelegate.textFont(for: message, at: indexPath, in: messagesLayout.messagesCollectionView)
-            attributedString = NSMutableAttributedString(string: text)
-            attributedString.addAttribute(.font, value: textFont, range: NSMakeRange(0, text.count))
+            attributedString = NSMutableAttributedString(string: text, attributes: [NSAttributedString.Key.font : textFont])
+        case .donate( _, let text):
+            let textFont = displayDelegate.textFont(for: message, at: indexPath, in: messagesLayout.messagesCollectionView)
+            attributedString = NSMutableAttributedString(string: text ?? "", attributes: [NSAttributedString.Key.font : textFont])
         case .attributedText(let text):
             attributedString = NSMutableAttributedString(attributedString: text)
         default:

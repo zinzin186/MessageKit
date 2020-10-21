@@ -17,29 +17,29 @@ open class DonateView: UIView {
     lazy var lblAmountCoin: UILabel = {
         let label = UILabel()
         label.textAlignment = NSTextAlignment.center
-        label.font = UIFont.boldSystemFont(ofSize: 16)
+        label.font = MKMessageConstant.Fonts.amountDonate
         label.translatesAutoresizingMaskIntoConstraints = false
         return label
     }()
 
     init() {
         super.init(frame: .zero)
-        self.backgroundColor = UIColor.fromHexCode("#9E57D1")
-        let padding: CGFloat = 12
+        let contentInset = MKMessageConstant.ContentInsets.donate
+        let coinIconSize = MKMessageConstant.Sizes.Donate.iconCoin
+        self.backgroundColor = MKMessageConstant.Colors.Donate.background
         self.addSubview(imageViewCoin)
-        let coinImageSize: CGFloat = 16.0
         NSLayoutConstraint.activate([
-            imageViewCoin.trailingAnchor.constraint(equalTo: self.trailingAnchor, constant: -padding),
+            imageViewCoin.trailingAnchor.constraint(equalTo: self.trailingAnchor, constant: -contentInset.right),
             imageViewCoin.centerYAnchor.constraint(equalTo: self.centerYAnchor),
-            imageViewCoin.widthAnchor.constraint(equalToConstant: coinImageSize),
-            imageViewCoin.heightAnchor.constraint(equalToConstant: coinImageSize)
+            imageViewCoin.widthAnchor.constraint(equalToConstant: coinIconSize.width),
+            imageViewCoin.heightAnchor.constraint(equalToConstant: coinIconSize.height)
         ])
         self.addSubview(lblAmountCoin)
         NSLayoutConstraint.activate([
-            lblAmountCoin.trailingAnchor.constraint(equalTo: imageViewCoin.leadingAnchor, constant: -5),
-            lblAmountCoin.centerYAnchor.constraint(equalTo: self.centerYAnchor),
-            lblAmountCoin.heightAnchor.constraint(equalToConstant: 22),
-            lblAmountCoin.leadingAnchor.constraint(equalTo: self.leadingAnchor, constant: padding),
+            lblAmountCoin.trailingAnchor.constraint(equalTo: imageViewCoin.leadingAnchor, constant: -4),
+            lblAmountCoin.topAnchor.constraint(equalTo: self.topAnchor, constant: contentInset.top),
+            lblAmountCoin.bottomAnchor.constraint(equalTo: self.bottomAnchor, constant: -contentInset.bottom),
+            lblAmountCoin.leadingAnchor.constraint(equalTo: self.leadingAnchor, constant: contentInset.left),
         ])
     }
     

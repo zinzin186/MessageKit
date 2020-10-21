@@ -14,17 +14,32 @@ open class DonateMessageSizeCalculator: TextMessageSizeCalculator {
         if case MKActionType.remove = message.action {
             return CGSize.zero
         }
+        let contentTextSize = super.messageContainerSize(for: message, indexPath: indexPath)
+        let padding: CGFloat = 2
         let maxWidth = messageContainerMaxWidth(for: message)
-        var messageContainerSize: CGSize
-        let attributedText = self.genAttributeMessage(with: message, at: indexPath)
-        messageContainerSize = labelSize(for: attributedText, considering: maxWidth)
+        
+        if case MKMessageKind.donate(let donateInfo, _) = message.kind {
+            guard let displayDelegate = messagesLayout.messagesCollectionView.messagesDisplayDelegate else {
+                fatalError(MessageKitError.nilMessagesDisplayDelegate)
+            }
+            let textFont = displayDelegate.textFont(for: message, at: indexPath, in: messagesLayout.messagesCollectionView)
+            let attributedText = NSAttributedString(string: donateInfo, attributes: [NSAttributedString.Key.font : textFont])
+            var donateInfoSize = labelSize(for: attributedText, considering: maxWidth)
+            let contentInset: UIEdgeInsets = MKMessageConstant.ContentInsets.donate
+            let coinIconSize: CGSize = MKMessageConstant.Sizes.Donate.iconCoin
+            donateInfoSize.width += (contentInset.left + 4 + coinIconSize.width + contentInset.right)
+            donateInfoSize.height += (contentInset.top + contentInset.bottom)
+            if donateInfoSize.height < MKMessageConstant.Sizes.Donate.donateInfoHeight {
+                donateInfoSize.height = MKMessageConstant.Sizes.Donate.donateInfoHeight
+            }
+            let heightOfContainer: CGFloat = donateInfoSize.height + contentTextSize.height + padding
+            let widthOfContainer: CGFloat = max(donateInfoSize.width, contentTextSize.width)
+            return CGSize(width: widthOfContainer, height: heightOfContainer)
+        }
+        
+        
 
-//        let messageInsets = messageLabelInsets(for: message)
-        let iconCoinSize: CGSize = CGSize(width: 16, height: 16)
-        messageContainerSize.width += (24 + iconCoinSize.width + 5)
-        messageContainerSize.height += 14
-
-        return messageContainerSize
+        return CGSize.zero
     }
 
     open override func configure(attributes: UICollectionViewLayoutAttributes) {

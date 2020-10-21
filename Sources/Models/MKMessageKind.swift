@@ -67,7 +67,7 @@ public enum MKMessageKind {
     case action(String)
     
     /// Donate in chat
-    case donate(String)
+    case donate(amount: String, message: String? = nil)
 
     /// A custom message.
     /// - Note: Using this case requires that you implement the following methods and handle this case:

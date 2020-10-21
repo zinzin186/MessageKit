@@ -77,6 +77,30 @@ public enum MKMessageConstant {
     
     enum Limit {
         static let minContainerBodyHeight: CGFloat = abs(MKMessageConstant.ActionView.ReplyView.bottomPadding) * 2
-        static let maxActionReplyTextHeight: CGFloat = 32
+        static let maxActionReplyTextHeight: CGFloat = 34
+    }
+    
+    enum Fonts {
+        static let amountDonate: UIFont = UIFont.boldSystemFont(ofSize: 16)
+    }
+    
+    enum Colors {
+        
+        enum Donate {
+            static let background: UIColor = UIColor.fromHexCode("9E57D1")
+            static let text: UIColor = UIColor.fromHexCode("#FFD600")
+        }
+    }
+    
+    enum Sizes {
+        
+        enum Donate {
+            static let iconCoin: CGSize = CGSize(width: 16, height: 16)
+            static let donateInfoHeight: CGFloat = 36
+        }
+    }
+    
+    enum ContentInsets {
+        static let donate: UIEdgeInsets = UIEdgeInsets(top: 7, left: 12, bottom: 7, right: 12)
     }
 }
