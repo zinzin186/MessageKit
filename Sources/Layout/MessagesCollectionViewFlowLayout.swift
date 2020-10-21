@@ -335,6 +335,7 @@ open class MessagesCollectionViewFlowLayout: UICollectionViewFlowLayout {
                 attributedTextMessageSizeCalculator,
                 emojiMessageSizeCalculator,
                 photoMessageSizeCalculator,
+                stickerMessageSizeCalculator,
                 videoMessageSizeCalculator,
                 locationMessageSizeCalculator,
                 audioMessageSizeCalculator,
