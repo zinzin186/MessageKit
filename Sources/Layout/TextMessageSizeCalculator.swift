@@ -43,7 +43,7 @@ open class TextMessageSizeCalculator: MessageSizeCalculator {
     }
     
     open override func messageContainerSize(for message: MKMessageType, indexPath: IndexPath) -> CGSize {
-        if case ActionType.remove = message.action {
+        if case MKActionType.remove = message.action {
             return CGSize.zero
         }
         let maxWidth = messageContainerMaxWidth(for: message)

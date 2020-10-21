@@ -247,6 +247,12 @@ open class MessageContentCell: MessageCollectionViewCell, UIGestureRecognizerDel
         }
 
         delegate = messagesCollectionView.messageCellDelegate
+        
+        if case MKActionType.remove = message.action {
+            iconReply.isHidden = true
+        } else {
+            iconReply.isHidden = false
+        }
 
         let messageColor = displayDelegate.backgroundColor(for: message, at: indexPath, in: messagesCollectionView)
         let messageStyle = displayDelegate.messageStyle(for: message, at: indexPath, in: messagesCollectionView)
@@ -271,15 +277,15 @@ open class MessageContentCell: MessageCollectionViewCell, UIGestureRecognizerDel
         messageBottomLabel.attributedText = bottomMessageLabelText
 //        messageTimestampLabel.attributedText = messageTimestampLabelText
         let isOutgoingMessage = dataSource.isFromCurrentSender(message: message)
-        actionBodyView.applyUI(isOutgoingMessage: isOutgoingMessage, message: message)
+        actionBodyView.applyUI(isOutgoingMessage: isOutgoingMessage, message: message, attributedText: dataSource.messageActionLabelAttributedText(for: message.action, at: indexPath))
         
         switch message.action {
-        case ActionType.reply:
+        case MKActionType.reply:
             self.iconMarkReply.isHidden = false
             if let imageView = actionBodyView.actionReplyMediaView?.imageView{
                 displayDelegate.configureActionMessageImageView(imageView, for: message.action, at: indexPath, in: messagesCollectionView)
             }
-        case ActionType.story:
+        case MKActionType.story:
             self.iconMarkReply.isHidden = false
             if let imageView = actionBodyView.actionChatFromStoryView?.imageView{
                 displayDelegate.configureActionMessageImageView(imageView, for: message.action, at: indexPath, in: messagesCollectionView)
@@ -317,6 +323,7 @@ open class MessageContentCell: MessageCollectionViewCell, UIGestureRecognizerDel
     /// Handle long press gesture, return true when gestureRecognizer's touch point in `messageContainerView`'s frame
     open override func gestureRecognizerShouldBegin(_ gestureRecognizer: UIGestureRecognizer) -> Bool {
         if gestureRecognizer == panGesture {
+            guard !iconReply.isHidden else {return false}
             let velocity = panGesture.velocity(in: contentView)
             if velocity.x < 0 {
                 if abs(velocity.y) > abs(velocity.x) {

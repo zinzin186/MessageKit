@@ -59,7 +59,7 @@ open class LinkPreviewMessageCell: TextMessageCell {
 //            linkPreviewView.teaserLabel.textColor = textColor
 //        }
 
-        guard case MessageKind.linkPreview(let linkItem) = message.kind else {
+        guard case MKMessageKind.linkPreview(let linkItem) = message.kind else {
             fatalError("LinkPreviewMessageCell received unhandled MessageDataType: \(message.kind)")
         }
 

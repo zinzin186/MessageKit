@@ -84,7 +84,7 @@ open class MessageSizeCalculator: CellSizeCalculator {
 
         attributes.actionBodyPadding = replyBodyPadding(for: message)
         attributes.messageContainerPadding = messageContainerPadding(for: message)
-        attributes.actionBodySize = actionBodySize(for: message)
+        attributes.actionBodySize = actionBodySize(for: message, indexPath: indexPath)
         attributes.messageContainerSize = messageContainerSize(for: message, indexPath: indexPath)
         attributes.cellTopLabelSize = cellTopLabelSize(for: message, at: indexPath)
         attributes.cellTopLabelAlignment = cellTopLabelAlignment(for: message)
@@ -113,7 +113,7 @@ open class MessageSizeCalculator: CellSizeCalculator {
 
     open func cellContentHeight(for message: MKMessageType, at indexPath: IndexPath) -> CGFloat {
 
-        let replyBodyHeight = actionBodySize(for: message).height
+        let replyBodyHeight = actionBodySize(for: message, indexPath: indexPath).height
         let messageContainerHeight = messageContainerSize(for: message, indexPath: indexPath).height
         let cellBottomLabelHeight = cellBottomLabelSize(for: message, at: indexPath).height
         let messageBottomLabelHeight = messageBottomLabelSize(for: message, at: indexPath).height
@@ -303,39 +303,32 @@ open class MessageSizeCalculator: CellSizeCalculator {
         return isFromCurrentSender ? outgoingMessagePadding : incomingMessagePadding
     }
     
-    open func actionBodySize(for message: MKMessageType) -> CGSize {
+    open func actionBodySize(for message: MKMessageType, indexPath: IndexPath) -> CGSize {
         // Returns .zero by default
+        let dataSource = messagesLayout.messagesDataSource
+        let attributedText: NSAttributedString = dataSource.messageActionLabelAttributedText(for: message.action, at: indexPath) ?? NSAttributedString(string: "")
+        let maxWidth = messageContainerMaxWidth(for: message)
         switch message.action {
         case .reply(let replyMessage):
-            let maxWidth = messageContainerMaxWidth(for: message)
-
-            var actionContainerSize: CGSize
-            let attributedText: NSAttributedString
-
+            
             switch replyMessage.kind {
-            case .attributedText(let text):
-                attributedText = text
-            case .text(let text), .emoji(let text):
-                attributedText = NSAttributedString(string: text, attributes: [.font: UIFont.systemFont(ofSize: 13)])
-            default:
+            case .photo, .video, .sticker:
                 return self.getSizeOfReplyMedia()
+            default:
+                break
             }
-
+            
+            var actionContainerSize: CGSize
             actionContainerSize = labelSize(for: attributedText, considering: maxWidth)
+            if actionContainerSize.height > MKMessageConstant.Limit.maxActionReplyTextHeight {
+                actionContainerSize.height = MKMessageConstant.Limit.maxActionReplyTextHeight
+            }
             let contentInset = MKMessageConstant.ActionView.ReplyView.contentTextInset
             actionContainerSize.width += (contentInset.left + contentInset.right)
             actionContainerSize.height += (contentInset.top + contentInset.bottom - MKMessageConstant.ActionView.ReplyView.bottomPadding)
             return actionContainerSize
         case .remove:
-            let contentText: String
-            if case MessageKind.text(let text) = message.kind {
-                contentText = text
-            }else {
-                contentText = "Tin nhắn đã bị xoá"
-            }
-            let attributedText: NSAttributedString = NSAttributedString(string: contentText, attributes: [.font: UIFont.italicSystemFont(ofSize: 13)])
             var actionContainerSize: CGSize
-            let maxWidth = messageContainerMaxWidth(for: message)
             actionContainerSize = labelSize(for: attributedText, considering: maxWidth)
             let contentInset = MKMessageConstant.ActionView.RemoveView.contentInset
             actionContainerSize.width += (contentInset.left + contentInset.right)

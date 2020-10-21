@@ -52,8 +52,8 @@ public protocol LinkItem {
 }
 
 public extension LinkItem {
-    var textKind: MessageKind {
-        let kind: MessageKind
+    var textKind: MKMessageKind {
+        let kind: MKMessageKind
         if let text = self.text {
             kind = .text(text)
         } else if let attributedText = self.attributedText {

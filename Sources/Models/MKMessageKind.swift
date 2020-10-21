@@ -25,7 +25,7 @@
 import Foundation
 
 /// An enum representing the kind of message and its underlying kind.
-public enum MessageKind {
+public enum MKMessageKind {
 
     /// A standard text message.
     ///

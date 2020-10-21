@@ -59,7 +59,7 @@ open class LinkPreviewMessageSizeCalculator: TextMessageSizeCalculator {
     }
 
     open override func messageContainerSize(for message: MKMessageType, indexPath: IndexPath) -> CGSize {
-        guard case MessageKind.linkPreview(let linkItem) = message.kind else {
+        guard case MKMessageKind.linkPreview(let linkItem) = message.kind else {
             fatalError("messageContainerSize received unhandled MessageDataType: \(message.kind)")
         }
         let dummyMessage = ConcreteMessageType(sender: message.sender,

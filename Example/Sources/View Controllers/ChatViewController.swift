@@ -217,6 +217,28 @@ class ChatViewController: MessagesViewController, MKMessagesDataSource {
         let dateString = formatter.string(from: message.sentDate)
         return NSAttributedString(string: dateString, attributes: [NSAttributedString.Key.font: UIFont.preferredFont(forTextStyle: .caption2)])
     }
+    
+    func messageActionLabelAttributedText(for action: MKActionType, at indexPath: IndexPath) -> NSAttributedString? {
+        switch action {
+        case .reply(let replyMessage):
+            let attributedText: NSAttributedString
+            switch replyMessage.kind {
+            case .attributedText(let text):
+                attributedText = text
+            case .text(let text), .emoji(let text):
+                attributedText = NSAttributedString(string: text, attributes: [.font: UIFont.systemFont(ofSize: 13)])
+            default:
+                return nil
+            }
+            return attributedText
+        case .remove:
+            let contentText = "Tin nhắn đã bị xoá"
+            let attributedText: NSAttributedString = NSAttributedString(string: contentText, attributes: [.font: UIFont.italicSystemFont(ofSize: 13)])
+            return attributedText
+        default:
+            return nil
+        }
+    }
 }
 
 // MARK: - MessageCellDelegate
@@ -292,6 +314,10 @@ extension ChatViewController: MKMessageCellDelegate {
 
     func didTapAccessoryView(in cell: MessageCollectionViewCell) {
         print("Accessory view tapped")
+    }
+    
+    func didTapActionMessage(in cell: MessageCollectionViewCell) {
+        print("MessageCollectionViewCell tapped")
     }
 
 }

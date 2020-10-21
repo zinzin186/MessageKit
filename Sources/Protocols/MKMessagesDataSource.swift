@@ -112,6 +112,17 @@ public protocol MKMessagesDataSource: AnyObject {
     ///   - messagesCollectionView: The `MessagesCollectionView` in which this cell will be displayed.
     ///
     /// The default value returned by this method is `nil`.
+    func messageActionLabelAttributedText(for action: MKActionType, at indexPath: IndexPath) -> NSAttributedString?
+
+    /// The attributed text to be used for cell's timestamp label.
+    /// The timestamp label is shown when showMessageTimestampOnSwipeLeft is enabled by swiping left over the chat controller.
+    ///
+    /// - Parameters:
+    ///   - message: The `MessageType` that will be displayed by this cell.
+    ///   - indexPath: The `IndexPath` of the cell.
+    ///   - messagesCollectionView: The `MessagesCollectionView` in which this cell will be displayed.
+    ///
+    /// The default value returned by this method is `nil`.
     func messageTimestampLabelAttributedText(for message: MKMessageType, at indexPath: IndexPath) -> NSAttributedString?
     
     /// Custom collectionView cell for message with `custom` message type.
@@ -160,6 +171,10 @@ public extension MKMessagesDataSource {
         return nil
     }
 
+    func messageActionLabelAttributedText(for action: MKActionType, at indexPath: IndexPath) -> NSAttributedString? {
+        return nil
+    }
+    
     func messageTimestampLabelAttributedText(for message: MKMessageType, at indexPath: IndexPath) -> NSAttributedString? {
         let sentDate = message.sentDate
         let sentDateString = MessageKitDateFormatter.shared.string(from: sentDate)

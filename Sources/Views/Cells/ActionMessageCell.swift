@@ -40,7 +40,7 @@ open class ActionMessageCell: UICollectionViewCell {
         switch message.kind {
         case .action(let text):
             let displayDelegate = messagesCollectionView.messagesDisplayDelegate
-            let attributedText = NSAttributedString(string: text, attributes: displayDelegate?.configActionMessage(for: message, at: indexPath, in: messagesCollectionView))
+            let attributedText = NSAttributedString(string: text, attributes: displayDelegate?.configureTextForActionMessage(at: indexPath, in: messagesCollectionView))
             label.attributedText = attributedText
         default:
             break

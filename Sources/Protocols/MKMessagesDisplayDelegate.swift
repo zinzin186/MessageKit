@@ -118,7 +118,7 @@ public protocol MKMessagesDisplayDelegate: AnyObject {
     
     func textFont(for message: MKMessageType, at indexPath: IndexPath, in messagesCollectionView: MessagesCollectionView) -> UIFont
     
-    func configActionMessage(for message: MKMessageType, at indexPath: IndexPath, in messagesCollectionView: MessagesCollectionView) -> [NSAttributedString.Key: Any]
+    func configureTextForActionMessage(at indexPath: IndexPath, in messagesCollectionView: MessagesCollectionView) -> [NSAttributedString.Key: Any]
 
     /// Specifies the `DetectorType`s to check for the `MessageType`'s text against.
     ///
@@ -180,7 +180,7 @@ public protocol MKMessagesDisplayDelegate: AnyObject {
     ///   - messagesCollectionView: The `MessagesCollectionView` in which this cell will be displayed.
     func configureMediaMessageImageView(_ imageView: UIImageView, for message: MKMessageType, at indexPath: IndexPath, in messagesCollectionView: MessagesCollectionView)
     
-    func configureActionMessageImageView(_ imageView: UIImageView, for action: ActionType, at indexPath: IndexPath, in messagesCollectionView: MessagesCollectionView)
+    func configureActionMessageImageView(_ imageView: UIImageView, for action: MKActionType, at indexPath: IndexPath, in messagesCollectionView: MessagesCollectionView)
 
     // MARK: - Audio Message
     
@@ -229,6 +229,7 @@ public protocol MKMessagesDisplayDelegate: AnyObject {
     ///   - indexPath: The `IndexPath` of the cell.
     ///   - messagesCollectionView: The `MessagesCollectionView` in which this cell will be displayed.
     func configureLinkPreviewImageView(_ imageView: UIImageView, for message: MKMessageType, at indexPath: IndexPath, in messagesCollectionView: MessagesCollectionView)
+    
 }
 
 public extension MKMessagesDisplayDelegate {
@@ -281,7 +282,7 @@ public extension MKMessagesDisplayDelegate {
         return UIFont.preferredFont(forTextStyle: .body)
     }
     
-    func configActionMessage(for message: MKMessageType, at indexPath: IndexPath, in messagesCollectionView: MessagesCollectionView) -> [NSAttributedString.Key: Any]{
+    func configureTextForActionMessage(at indexPath: IndexPath, in messagesCollectionView: MessagesCollectionView) -> [NSAttributedString.Key: Any]{
         return [
             NSAttributedString.Key.foregroundColor: UIColor.lightText,
             NSAttributedString.Key.font: UIFont.italicSystemFont(ofSize: 13)
@@ -315,7 +316,7 @@ public extension MKMessagesDisplayDelegate {
     func configureMediaMessageImageView(_ imageView: UIImageView, for message: MKMessageType, at indexPath: IndexPath, in messagesCollectionView: MessagesCollectionView) {
     }
     
-    func configureActionMessageImageView(_ imageView: UIImageView, for action: ActionType, at indexPath: IndexPath, in messagesCollectionView: MessagesCollectionView){}
+    func configureActionMessageImageView(_ imageView: UIImageView, for action: MKActionType, at indexPath: IndexPath, in messagesCollectionView: MessagesCollectionView){}
 
     // MARK: - Audio Message Defaults
     
@@ -351,4 +352,5 @@ public extension MKMessagesDisplayDelegate {
 
     func configureLinkPreviewImageView(_ imageView: UIImageView, for message: MKMessageType, at indexPath: IndexPath, in messagesCollectionView: MessagesCollectionView) {
     }
+    
 }

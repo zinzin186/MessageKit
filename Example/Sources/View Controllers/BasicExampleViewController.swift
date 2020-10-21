@@ -91,14 +91,14 @@ extension BasicExampleViewController: MKMessagesDisplayDelegate {
     // MARK: - Text Messages
     
     func textColor(for message: MKMessageType, at indexPath: IndexPath, in messagesCollectionView: MessagesCollectionView) -> UIColor {
-        if case MessageKind.donate = message.kind {
+        if case MKMessageKind.donate = message.kind {
             return UIColor.yellow
         }
         return isFromCurrentSender(message: message) ? .white : .darkText
     }
     
     func textFont(for message: MKMessageType, at indexPath: IndexPath, in messagesCollectionView: MessagesCollectionView) -> UIFont {
-        if case MessageKind.donate = message.kind {
+        if case MKMessageKind.donate = message.kind {
             return UIFont.boldSystemFont(ofSize: 20)
         }
         return UIFont.systemFont(ofSize: 15)
@@ -132,7 +132,7 @@ extension BasicExampleViewController: MKMessagesDisplayDelegate {
     }
 
     func configureMediaMessageImageView(_ imageView: UIImageView, for message: MKMessageType, at indexPath: IndexPath, in messagesCollectionView: MessagesCollectionView) {
-        if case MessageKind.photo(let media) = message.kind, let imageURL = media.url {
+        if case MKMessageKind.photo(let media) = message.kind, let imageURL = media.url {
             imageView.pin_setImage(from: imageURL)
         } else {
             imageView.pin_cancelImageDownload()
@@ -149,10 +149,10 @@ extension BasicExampleViewController: MKMessagesDisplayDelegate {
 
     }
     
-    func configureActionMessageImageView(_ imageView: UIImageView, for action: ActionType, at indexPath: IndexPath, in messagesCollectionView: MessagesCollectionView) {
+    func configureActionMessageImageView(_ imageView: UIImageView, for action: MKActionType, at indexPath: IndexPath, in messagesCollectionView: MessagesCollectionView) {
         switch action {
         case .reply(let message):
-            if case MessageKind.photo(let media) = message.kind, let imageURL = media.url {
+            if case MKMessageKind.photo(let media) = message.kind, let imageURL = media.url {
                 imageView.pin_setImage(from: imageURL)
             }
         case .story(let urlString):

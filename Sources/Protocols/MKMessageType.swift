@@ -38,14 +38,14 @@ public protocol MKMessageType {
     var sentDate: Date { get }
 
     /// The kind of message and its underlying kind.
-    var kind: MessageKind { get }
+    var kind: MKMessageKind { get }
     
-    var action: ActionType { get }
+    var action: MKActionType { get }
 
 }
 
 
-public enum ActionType {
+public enum MKActionType {
     case `default`
     case reply(replyMessage: MKReplyMessageType)
     case remove
@@ -64,6 +64,6 @@ public protocol MKReplyMessageType {
     var sentDate: Date { get }
 
     /// The kind of message and its underlying kind.
-    var kind: MessageKind { get }
+    var kind: MKMessageKind { get }
     
 }

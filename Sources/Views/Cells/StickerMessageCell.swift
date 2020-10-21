@@ -10,7 +10,11 @@ import Lottie
 
 open class StickerMessageCell: MediaMessageCell {
     
-    let animationView = AnimationView()
+    lazy var animationView: AnimationView = {
+        let view = AnimationView()
+        view.isHidden = true
+        return view
+    }()
     
     open override func configure(with message: MKMessageType, at indexPath: IndexPath, and messagesCollectionView: MessagesCollectionView) {
         super.configure(with: message, at: indexPath, and: messagesCollectionView)

@@ -50,6 +50,7 @@ public enum MKMessageConstant {
             static let mediaRadius: CGFloat = 4
             static let contentTextInset: UIEdgeInsets = UIEdgeInsets(top: 8, left: 12, bottom: 8, right: 12)
             static let bottomPadding: CGFloat = -18
+            static let contentFont: UIFont = UIFont.systemFont(ofSize: 13)
             
         }
         
@@ -76,5 +77,6 @@ public enum MKMessageConstant {
     
     enum Limit {
         static let minContainerBodyHeight: CGFloat = abs(MKMessageConstant.ActionView.ReplyView.bottomPadding) * 2
+        static let maxActionReplyTextHeight: CGFloat = 32
     }
 }

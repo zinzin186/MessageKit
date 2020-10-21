@@ -47,41 +47,37 @@ open class ActionBodyView: UIView {
         super.init(frame: .zero)
     }
 
-    func applyUI(isOutgoingMessage: Bool, message: MKMessageType){
+    func applyUI(isOutgoingMessage: Bool, message: MKMessageType, attributedText: NSAttributedString?){
         switch message.action {
         case .reply(let replyMessage):
-            self.getContentText(message: replyMessage)
+            self.getContentText(message: replyMessage, attributedText: attributedText)
         case .story:
             self.addActionChatFromStoryView(image: nil)
         case .remove:
-            if case MessageKind.text(let text) = message.kind {
-                self.addActionRemoveMessageView(text: text)
-            }else {
-                self.addActionRemoveMessageView(text: "Tin nhắn đã bị xoá")
-            }
+            self.addActionRemoveMessageView(attributedText: attributedText)
         default:
             break
         }
         
         
     }
-    func addActionRemoveMessageView(text: String){
+    func addActionRemoveMessageView(attributedText: NSAttributedString?){
         self.actionRemoveMessageView = ActionRemoveMessageView()
-        self.actionRemoveMessageView?.contentLabel.text = text
+        self.actionRemoveMessageView?.contentLabel.attributedText = attributedText
         self.addActionView(view: self.actionRemoveMessageView!, bottomPadding: MKMessageConstant.ActionView.RemoveView.bottomPadding)
         
     }
    
-    func addActionReplyTextView(text: String){
+    func addActionReplyTextView(attributedText: NSAttributedString?){
         self.actionReplyTextView = ActionReplyTextView()
-        self.actionReplyTextView?.contentLabel.text = text
+        self.actionReplyTextView?.contentLabel.attributedText = attributedText
         self.addActionView(view: self.actionReplyTextView!, bottomPadding: MKMessageConstant.ActionView.ReplyView.bottomPadding)
         addButton()
         
     }
-    func addActionReplyMediaView(text: String, image: UIImage?){
+    func addActionReplyMediaView(attributedText: NSAttributedString?, image: UIImage?){
         self.actionReplyMediaView = ActionReplyMediaView()
-        self.actionReplyMediaView?.messageLabel.text = text
+        self.actionReplyMediaView?.messageLabel.attributedText = attributedText
         self.actionReplyMediaView?.imageView.image = image
         self.addActionView(view: self.actionReplyMediaView!, bottomPadding: MKMessageConstant.ActionView.ReplyView.bottomPadding)
         addButton()
@@ -91,6 +87,7 @@ open class ActionBodyView: UIView {
         self.actionChatFromStoryView = ActionChatFromStoryView()
         self.actionChatFromStoryView?.imageView.image = image
         self.addActionView(view: self.actionChatFromStoryView!, bottomPadding: MKMessageConstant.ActionView.StoryView.bottomPadding)
+        addButton()
     }
     
     private func addActionView(view: UIView, bottomPadding: CGFloat = 0){
@@ -114,17 +111,14 @@ open class ActionBodyView: UIView {
             tapButton.bottomAnchor.constraint(equalTo: self.bottomAnchor)
         ])
     }
-    private func getContentText(message: MKReplyMessageType){
+    private func getContentText(message: MKReplyMessageType, attributedText: NSAttributedString?){
         switch message.kind {
-        case .text(let text), .emoji(let text):
-            self.addActionReplyTextView(text: text)
-//        case .attributedText(let text):
-//            self.contentLabel.isHidden = false
-//            self.contentLabel.attributedText = text
+        case .text, .emoji:
+            self.addActionReplyTextView(attributedText: attributedText)
         case .photo(let photo):
-            self.addActionReplyMediaView(text: "Hình ảnh", image: photo.image)
+            self.addActionReplyMediaView(attributedText: attributedText, image: photo.image)
         case .video(let video):
-            self.addActionReplyMediaView(text: "Video", image: video.image)
+            self.addActionReplyMediaView(attributedText: attributedText, image: video.image)
         default:
             break
         }
