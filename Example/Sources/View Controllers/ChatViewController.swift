@@ -226,7 +226,7 @@ class ChatViewController: MessagesViewController, MKMessagesDataSource {
             case .attributedText(let text):
                 attributedText = text
             case .text(let text), .emoji(let text):
-                attributedText = NSAttributedString(string: text, attributes: [.font: UIFont.systemFont(ofSize: 13)])
+                attributedText = NSAttributedString(string: text, attributes: [.font: UIFont.italicSystemFont(ofSize: 13)])
             default:
                 return nil
             }

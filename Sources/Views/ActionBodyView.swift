@@ -38,10 +38,10 @@ open class ActionBodyView: UIView {
         self.clickReplyMessageCallback?()
     }
     
-    var actionRemoveMessageView: ActionRemoveMessageView?
-    var actionReplyTextView: ActionReplyTextView?
-    var actionReplyMediaView: ActionReplyMediaView?
-    var actionChatFromStoryView: ActionChatFromStoryView?
+    open var actionRemoveMessageView: ActionRemoveMessageView?
+    open var actionReplyTextView: ActionReplyTextView?
+    open var actionReplyMediaView: ActionReplyMediaView?
+    open var actionChatFromStoryView: ActionChatFromStoryView?
 
     init() {
         super.init(frame: .zero)

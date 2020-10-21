@@ -9,7 +9,7 @@ import UIKit
 
 open class ActionChatFromStoryView: UIView {
     
-    lazy var imageView: UIImageView = {[unowned self] in
+    open lazy var imageView: UIImageView = {[unowned self] in
         let imageView: UIImageView = .init()
         imageView.clipsToBounds = true
         imageView.layer.cornerRadius = MKMessageConstant.ActionView.StoryView.mediaRadius

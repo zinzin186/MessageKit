@@ -34,7 +34,7 @@ open class MessageContentCell: MessageCollectionViewCell, UIGestureRecognizerDel
     open var sendStatusImageView = UIImageView()
 
     /// The container used for styling and holding the message's content view.
-    lazy var actionBodyView: ActionBodyView = {
+    open lazy var actionBodyView: ActionBodyView = {
         let actionView = ActionBodyView()
         actionView.backgroundColor = MKMessageConstant.ActionView.backgroundColor
         actionView.clipsToBounds = true
