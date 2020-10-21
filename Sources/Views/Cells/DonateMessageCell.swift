@@ -111,7 +111,7 @@ class DonateMessageCell: MessageContentCell {
                 self.cornerTextMessageView(isOutgoing: isOutgoingMessage)
             }
         }
-        self.cornerDonateView(isOutgoing: isOutgoingMessage, hasMessageText: (messageText?.isEmpty ?? false))
+        self.cornerDonateView(isOutgoing: isOutgoingMessage, hasMessageText: !(messageText?.isEmpty ?? true))
         self.messageContainerView.backgroundColor = UIColor.clear
     }
 

@@ -5,7 +5,7 @@
 //  Created by Gapo on 10/9/20.
 //
 
-
+import Lottie
 
 open class ActionReplyMediaView: UIView {
     

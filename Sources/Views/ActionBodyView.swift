@@ -115,7 +115,7 @@ open class ActionBodyView: UIView {
         switch message.kind {
         case .text, .emoji:
             self.addActionReplyTextView(attributedText: attributedText)
-        case .photo(let photo):
+        case .photo(let photo), .sticker(let photo):
             self.addActionReplyMediaView(attributedText: attributedText, image: photo.image)
         case .video(let video):
             self.addActionReplyMediaView(attributedText: attributedText, image: video.image)
