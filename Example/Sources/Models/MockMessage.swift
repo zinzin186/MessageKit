@@ -163,7 +163,7 @@ internal struct MockMessage: MKMessageType {
 //        let action = MKActionType.remove
 //        let action = MKActionType.story(urlString: "https://avatars0.githubusercontent.com/u/2911921?s=460&u=418a6180264738f33cf0ea2b6ce1c9fd79d992f2&v=4")
 //        self.init(kind: .donate(amount: "Gui tang 10.000", message: "Tang doanate"), user: user, messageId: messageId, date: date, action: .default)
-        self.init(kind: .donate(amount: "Gui tang 10.000", message: "Tang doanate"), user: user, messageId: messageId, date: date, action: .default)
+        self.init(kind: .donate(amount: "Gui tang 10.000", message: nil), user: user, messageId: messageId, date: date, action: .default)
 //        self.init(kind: .sticker(mediaItem), user: user, messageId: messageId, date: date, action: action)
     }
 

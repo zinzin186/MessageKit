@@ -111,7 +111,7 @@ class DonateMessageCell: MessageContentCell {
                 self.cornerTextMessageView(isOutgoing: isOutgoingMessage)
             }
         }
-        self.cornerDonateView(isOutgoing: isOutgoingMessage)
+        self.cornerDonateView(isOutgoing: isOutgoingMessage, hasMessageText: (messageText?.isEmpty ?? false))
         self.messageContainerView.backgroundColor = UIColor.clear
     }
 
@@ -126,15 +126,23 @@ class DonateMessageCell: MessageContentCell {
         return messageLabel.handleGesture(touchPoint)
     }
     
-    private func cornerDonateView(isOutgoing: Bool) {
+    private func cornerDonateView(isOutgoing: Bool, hasMessageText: Bool) {
         var corners: UIRectCorner = []
-        corners.formUnion(.topLeft)
-        corners.formUnion(.topRight)
-         if isOutgoing {
-             corners.formUnion(.bottomLeft)
-         } else {
-             corners.formUnion(.bottomRight)
-         }
+        if hasMessageText {
+            corners.formUnion(.topLeft)
+            corners.formUnion(.topRight)
+             if isOutgoing {
+                 corners.formUnion(.bottomLeft)
+             } else {
+                 corners.formUnion(.bottomRight)
+             }
+        } else {
+            corners.formUnion(.topLeft)
+            corners.formUnion(.topRight)
+            corners.formUnion(.bottomLeft)
+            corners.formUnion(.bottomRight)
+        }
+        
         let radius: CGFloat = 16
         let smallCorner: CGFloat = 4
         donateView.layer.cornerRadius = smallCorner
