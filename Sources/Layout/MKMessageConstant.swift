@@ -72,8 +72,18 @@ public enum MKMessageConstant {
         static let contentInset: UIEdgeInsets = UIEdgeInsets(top: 8, left: 12, bottom: 8, right: 12)
         static let bottomPadding: CGFloat = 0
     }
-    static let replyImage: UIImage? = UIImage(named: "mk_icon_chat_reply", in: Bundle.messageKitAssetBundle, compatibleWith: nil)
-    static let markReplyImage: UIImage? = UIImage(named: "mk_icon_mark_reply", in: Bundle.messageKitAssetBundle, compatibleWith: nil)
+    
+    enum Images {
+        static let replyImage: UIImage? = UIImage(named: "mk_icon_chat_reply", in: Bundle.messageKitAssetBundle, compatibleWith: nil)
+        static let markReplyImage: UIImage? = UIImage(named: "mk_icon_mark_reply", in: Bundle.messageKitAssetBundle, compatibleWith: nil)
+        enum Call {
+            static let incoming: UIImage? = UIImage(named: "ic_call_incoming", in: Bundle.messageKitAssetBundle, compatibleWith: nil)
+            static let outgoing: UIImage? = UIImage(named: "ic_call_outgoing", in: Bundle.messageKitAssetBundle, compatibleWith: nil)
+            static let misscall: UIImage? = UIImage(named: "ic_call_misscall", in: Bundle.messageKitAssetBundle, compatibleWith: nil)
+            static let reject: UIImage? = UIImage(named: "ic_call_reject", in: Bundle.messageKitAssetBundle, compatibleWith: nil)
+        }
+    }
+    
     
     enum Limit {
         static let minContainerBodyHeight: CGFloat = abs(MKMessageConstant.ActionView.ReplyView.bottomPadding) * 2
@@ -98,9 +108,21 @@ public enum MKMessageConstant {
             static let iconCoin: CGSize = CGSize(width: 16, height: 16)
             static let donateInfoHeight: CGFloat = 36
         }
+        
+        enum Call {
+            static let callView: CGSize = CGSize(width: 195, height: 64)
+            static let statusIcon: CGSize = CGSize(width: 40, height: 40)
+        }
     }
     
     enum ContentInsets {
         static let donate: UIEdgeInsets = UIEdgeInsets(top: 7, left: 12, bottom: 7, right: 12)
+        enum Call {
+            static let statusIcon: UIEdgeInsets = UIEdgeInsets(top: 12, left: 12, bottom: 12, right: 12)
+            static let callInfo: UIEdgeInsets = UIEdgeInsets(top: 12, left: 12, bottom: 12, right: 12)
+        }
+        
     }
+    
+    
 }

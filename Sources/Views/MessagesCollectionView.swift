@@ -87,6 +87,7 @@ open class MessagesCollectionView: UICollectionView {
         register(TypingIndicatorCell.self)
         register(LinkPreviewMessageCell.self)
         register(DonateMessageCell.self)
+        register(CallMessageCell.self)
         register(MessageReusableView.self, forSupplementaryViewOfKind: UICollectionView.elementKindSectionHeader)
         register(MessageReusableView.self, forSupplementaryViewOfKind: UICollectionView.elementKindSectionFooter)
     }

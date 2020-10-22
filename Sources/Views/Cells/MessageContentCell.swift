@@ -62,14 +62,14 @@ open class MessageContentCell: MessageCollectionViewCell, UIGestureRecognizerDel
     open var iconReply: UIImageView = {
         let imgvCanReply = UIImageView()
         imgvCanReply.alpha = 0.0
-        imgvCanReply.image = MKMessageConstant.replyImage
+        imgvCanReply.image = MKMessageConstant.Images.replyImage
         imgvCanReply.contentMode = .scaleAspectFit
         return imgvCanReply
     }()
     
     lazy var iconMarkReply: UIImageView = {
         let imgvReply = UIImageView()
-        imgvReply.image = MKMessageConstant.markReplyImage
+        imgvReply.image = MKMessageConstant.Images.markReplyImage
         imgvReply.clipsToBounds = true
         imgvReply.isHidden = true
         imgvReply.contentMode = .scaleAspectFill

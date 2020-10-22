@@ -51,4 +51,5 @@ open class StickerMessageCell: MediaMessageCell {
         messageContainerView.addSubview(animationView)
         animationView.fillSuperview()
     }
+    
 }

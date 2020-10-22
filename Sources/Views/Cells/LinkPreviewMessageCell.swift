@@ -25,6 +25,7 @@
 import UIKit
 
 open class LinkPreviewMessageCell: TextMessageCell {
+    
     public lazy var linkPreviewView: LinkPreviewView = {
         let view = LinkPreviewView()
         view.backgroundColor = UIColor.fromHexCode("#F1F1F1")
