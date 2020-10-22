@@ -124,7 +124,8 @@ open class CallMessageCell: MessageContentCell {
         case 0:
             if duration == 0{
                 statusImage = MKMessageConstant.Images.Call.reject
-                typeCallLabel = "Nhấn để gọi lại"
+                typeCallLabel = "Từ chối cuộc gọi"
+                callInfoString = "Nhấn để gọi lại"
             } else {
                 statusImage = MKMessageConstant.Images.Call.outgoing
                 typeCallLabel = "Cuộc gọi đi"
@@ -133,7 +134,8 @@ open class CallMessageCell: MessageContentCell {
         case 1:
             if duration == 0{
                 statusImage = MKMessageConstant.Images.Call.reject
-                typeCallLabel = "Nhấn để gọi lại"
+                typeCallLabel = "Từ chối cuộc gọi"
+                callInfoString = "Nhấn để gọi lại"
             } else {
                 statusImage = MKMessageConstant.Images.Call.incoming
                 typeCallLabel = "Cuộc gọi đến"
