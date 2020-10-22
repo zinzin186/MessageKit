@@ -1,5 +1,5 @@
 //
-//  MessageConstant.swift
+//  MKMessageConstant.swift
 //  MessageKit
 //
 //  Created by Gapo on 10/20/20.
@@ -66,7 +66,7 @@ public enum MKMessageConstant {
         }
         
         static let backgroundColor: UIColor = UIColor.fromHexCode("#F6F6F6")
-        static let cornerRadius: CGFloat = 10
+        static let cornerRadius: CGFloat = 14
     }
     enum ActionNote {
         static let contentInset: UIEdgeInsets = UIEdgeInsets(top: 8, left: 12, bottom: 8, right: 12)

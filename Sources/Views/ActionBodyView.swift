@@ -50,7 +50,7 @@ open class ActionBodyView: UIView {
     func applyUI(isOutgoingMessage: Bool, message: MKMessageType, attributedText: NSAttributedString?){
         switch message.action {
         case .reply(let replyMessage):
-            self.getContentText(message: replyMessage, attributedText: attributedText, medias: replyMessage.medias)
+            self.setupContent(message: replyMessage, attributedText: attributedText)
         case .story:
             self.addActionChatFromStoryView(image: nil)
         case .remove:
@@ -113,8 +113,8 @@ open class ActionBodyView: UIView {
             tapButton.bottomAnchor.constraint(equalTo: self.bottomAnchor)
         ])
     }
-    private func getContentText(message: MKReplyMessageType, attributedText: NSAttributedString?, medias: [String]?){
-        if let medias = medias {
+    private func setupContent(message: MKReplyMessageType, attributedText: NSAttributedString?){
+        if let medias = message.medias, !message.deleted {
             self.addActionReplyMediaView(attributedText: attributedText, medias: medias)
         } else {
             self.addActionReplyTextView(attributedText: attributedText)

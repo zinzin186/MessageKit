@@ -71,4 +71,6 @@ public protocol MKReplyMessageType {
     
     /// The media (photo, video, sticker,...) in the reply message .
     var medias: [String]? { get }
+    
+    var deleted: Bool  { get }
 }

@@ -319,7 +319,7 @@ open class MessageSizeCalculator: CellSizeCalculator {
         switch message.action {
         case .reply(let replyMessage):
             
-            if let medias = replyMessage.medias, medias.count > 0{
+            if let medias = replyMessage.medias, medias.count > 0, !replyMessage.deleted{
                 var contentSize: CGSize = .zero
                 if let attributedString = dataSource.messageActionLabelAttributedText(for: message.action, at: indexPath) {
                     contentSize = self.labelSize(for: attributedString, considering: 120)
