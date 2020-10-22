@@ -43,7 +43,26 @@ class BasicExampleViewController: ChatViewController {
         maintainPositionOnKeyboardFrameChanged = true // default false
         guard let layout = messagesCollectionView.collectionViewLayout as? MessagesCollectionViewFlowLayout else {return}
         self.configFlowLayout(layout)
+        setupLongGestureOnCollectionView()
+        
+        
     }
+
+    override func gestureRecognizerShouldBegin(_ gestureRecognizer: UIGestureRecognizer) -> Bool {
+        return true
+    }
+    func setupLongGestureOnCollectionView() {
+        let longPressedGesture = UILongPressGestureRecognizer(target: self, action: #selector(longPress))
+        longPressedGesture.minimumPressDuration = 0.3
+        longPressedGesture.delegate = self
+        messagesCollectionView.addGestureRecognizer(longPressedGesture)
+    }
+    
+    @objc func longPress() {
+        print("longpress..............")
+    }
+    
+    
     
     private func configFlowLayout(_ layout: MessagesCollectionViewFlowLayout) {
         layout.sectionInset = UIEdgeInsets(top: 1, left: 8, bottom: 1, right: 8)
@@ -152,7 +171,7 @@ extension BasicExampleViewController: MKMessagesDisplayDelegate {
     func configureActionMessageImageView(_ imageView: UIImageView, for action: MKActionType, at indexPath: IndexPath, in messagesCollectionView: MessagesCollectionView) {
         switch action {
         case .reply(let message):
-            if case MKMessageKind.photo(let media) = message.kind, let imageURL = media.url {
+            if let urlString = message.medias?.first, let imageURL = URL(string: urlString) {
                 imageView.pin_setImage(from: imageURL)
             }
         case .story(let urlString):

@@ -221,15 +221,7 @@ class ChatViewController: MessagesViewController, MKMessagesDataSource {
     func messageActionLabelAttributedText(for action: MKActionType, at indexPath: IndexPath) -> NSAttributedString? {
         switch action {
         case .reply(let replyMessage):
-            let attributedText: NSAttributedString
-            switch replyMessage.kind {
-            case .attributedText(let text):
-                attributedText = text
-            case .text(let text), .emoji(let text):
-                attributedText = NSAttributedString(string: text, attributes: [.font: UIFont.italicSystemFont(ofSize: 13)])
-            default:
-                return nil
-            }
+            let attributedText = NSAttributedString(string: replyMessage.content, attributes: [.font: UIFont.italicSystemFont(ofSize: 15)])
             return attributedText
         case .remove:
             let contentText = "Tin nhắn đã bị xoá"

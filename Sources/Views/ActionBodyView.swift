@@ -50,7 +50,7 @@ open class ActionBodyView: UIView {
     func applyUI(isOutgoingMessage: Bool, message: MKMessageType, attributedText: NSAttributedString?){
         switch message.action {
         case .reply(let replyMessage):
-            self.getContentText(message: replyMessage, attributedText: attributedText)
+            self.getContentText(message: replyMessage, attributedText: attributedText, medias: replyMessage.medias)
         case .story:
             self.addActionChatFromStoryView(image: nil)
         case .remove:
@@ -75,10 +75,12 @@ open class ActionBodyView: UIView {
         addButton()
         
     }
-    func addActionReplyMediaView(attributedText: NSAttributedString?, image: UIImage?){
+    func addActionReplyMediaView(attributedText: NSAttributedString?, medias: [String]){
         self.actionReplyMediaView = ActionReplyMediaView()
         self.actionReplyMediaView?.messageLabel.attributedText = attributedText
-        self.actionReplyMediaView?.imageView.image = image
+        if let urlString = medias.first, urlString.hasSuffix("json"), let url = URL(string: urlString) {
+            actionReplyMediaView?.loadAnimationSticker(url)
+        }
         self.addActionView(view: self.actionReplyMediaView!, bottomPadding: MKMessageConstant.ActionView.ReplyView.bottomPadding)
         addButton()
     }
@@ -111,17 +113,13 @@ open class ActionBodyView: UIView {
             tapButton.bottomAnchor.constraint(equalTo: self.bottomAnchor)
         ])
     }
-    private func getContentText(message: MKReplyMessageType, attributedText: NSAttributedString?){
-        switch message.kind {
-        case .text, .emoji:
+    private func getContentText(message: MKReplyMessageType, attributedText: NSAttributedString?, medias: [String]?){
+        if let medias = medias {
+            self.addActionReplyMediaView(attributedText: attributedText, medias: medias)
+        } else {
             self.addActionReplyTextView(attributedText: attributedText)
-        case .photo(let photo), .sticker(let photo):
-            self.addActionReplyMediaView(attributedText: attributedText, image: photo.image)
-        case .video(let video):
-            self.addActionReplyMediaView(attributedText: attributedText, image: video.image)
-        default:
-            break
         }
+
     }
     
     

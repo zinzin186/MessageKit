@@ -380,7 +380,7 @@ extension AdvancedExampleViewController: MKMessagesDisplayDelegate {
     }
     
     func configureReplyMediaMessageImageView(_ imageView: UIImageView, for message: MKReplyMessageType, at indexPath: IndexPath, in messagesCollectionView: MessagesCollectionView) {
-        if case MKMessageKind.photo(let media) = message.kind, let imageURL = media.url {
+        if let urlString = message.medias?.first, let imageURL = URL(string: urlString) {
             imageView.pin_setImage(from: imageURL)
         }
     }

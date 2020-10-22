@@ -62,8 +62,13 @@ public protocol MKReplyMessageType {
     
     /// The date the message was sent.
     var sentDate: Date { get }
-
-    /// The kind of message and its underlying kind.
-    var kind: MKMessageKind { get }
+//
+//    /// The kind of message and its underlying kind.
+//    var kind: MKMessageKind { get }
     
+    /// The cotent the message was sent.
+    var content: String { get }
+    
+    /// The media (photo, video, sticker,...) in the reply message .
+    var medias: [String]? { get }
 }

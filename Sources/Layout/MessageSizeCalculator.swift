@@ -308,31 +308,30 @@ open class MessageSizeCalculator: CellSizeCalculator {
         let dataSource = messagesLayout.messagesDataSource
         let attributedText: NSAttributedString = dataSource.messageActionLabelAttributedText(for: message.action, at: indexPath) ?? NSAttributedString(string: "")
         let maxWidth = messageContainerMaxWidth(for: message)
+        var actionContainerSize: CGSize
+        actionContainerSize = labelSize(for: attributedText, considering: maxWidth)
+        if actionContainerSize.height > MKMessageConstant.Limit.maxActionReplyTextHeight {
+            actionContainerSize.height = MKMessageConstant.Limit.maxActionReplyTextHeight
+        }
+        let contentInset = MKMessageConstant.ActionView.ReplyView.contentTextInset
+        actionContainerSize.width += (contentInset.left + contentInset.right)
+        actionContainerSize.height += (contentInset.top + contentInset.bottom)
         switch message.action {
         case .reply(let replyMessage):
             
-            switch replyMessage.kind {
-            case .photo, .video, .sticker:
-                return self.getSizeOfReplyMedia()
-            default:
-                break
+            if let medias = replyMessage.medias, medias.count > 0{
+                var contentSize: CGSize = .zero
+                if let attributedString = dataSource.messageActionLabelAttributedText(for: message.action, at: indexPath) {
+                    contentSize = self.labelSize(for: attributedString, considering: 120)
+                }
+                return self.getSizeOfReplyMedia(contentSize: contentSize)
             }
-            
-            var actionContainerSize: CGSize
-            actionContainerSize = labelSize(for: attributedText, considering: maxWidth)
-            if actionContainerSize.height > MKMessageConstant.Limit.maxActionReplyTextHeight {
-                actionContainerSize.height = MKMessageConstant.Limit.maxActionReplyTextHeight
-            }
-            let contentInset = MKMessageConstant.ActionView.ReplyView.contentTextInset
-            actionContainerSize.width += (contentInset.left + contentInset.right)
-            actionContainerSize.height += (contentInset.top + contentInset.bottom - MKMessageConstant.ActionView.ReplyView.bottomPadding)
+            let bottomPadding = MKMessageConstant.ActionView.ReplyView.bottomPadding < 0 ? -MKMessageConstant.ActionView.ReplyView.bottomPadding : 0
+            actionContainerSize.height += bottomPadding
             return actionContainerSize
         case .remove:
-            var actionContainerSize: CGSize
-            actionContainerSize = labelSize(for: attributedText, considering: maxWidth)
-            let contentInset = MKMessageConstant.ActionView.RemoveView.contentInset
-            actionContainerSize.width += (contentInset.left + contentInset.right)
-            actionContainerSize.height += (contentInset.top + contentInset.bottom + MKMessageConstant.ActionView.RemoveView.bottomPadding)
+            let bottomPadding = MKMessageConstant.ActionView.RemoveView.bottomPadding < 0 ? -MKMessageConstant.ActionView.ReplyView.bottomPadding : 0
+            actionContainerSize.height += bottomPadding
             return actionContainerSize
         case .story:
             return MKMessageConstant.ActionView.StoryView.mediaSize
@@ -342,12 +341,13 @@ open class MessageSizeCalculator: CellSizeCalculator {
         
     }
 
-    private func getSizeOfReplyMedia() -> CGSize {
+    private func getSizeOfReplyMedia(contentSize: CGSize) -> CGSize {
         let contentOffset = MKMessageConstant.ActionView.ReplyView.contentMediaInset
         let heightOfImage: CGFloat = MKMessageConstant.ActionView.ReplyView.mediaSize.height
+        let widthOfImage: CGFloat = MKMessageConstant.ActionView.ReplyView.mediaSize.width
         let padding: CGFloat = MKMessageConstant.ActionView.ReplyView.bottomPadding
         let height: CGFloat = contentOffset.top + heightOfImage + contentOffset.bottom - padding
-        return CGSize(width: 120, height: height)
+        return CGSize(width: contentOffset.horizontal + widthOfImage + 5 + contentSize.width, height: height)
     }
     open func iconMarkReplySize(for message: MKMessageType) -> CGSize {
         switch message.action {

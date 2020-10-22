@@ -118,15 +118,19 @@ internal struct ReplyMessage: MKReplyMessageType {
         return user
     }
     var sentDate: Date
-    var kind: MKMessageKind
+//    var kind: MKMessageKind
 
     var user: MockUser
+    var content: String
+    var medias: [String]?
     
-    init(kind: MKMessageKind, user: MockUser, messageId: String, date: Date) {
-        self.kind = kind
+    init(user: MockUser, messageId: String, date: Date, content: String, medias: [String]? = nil) {
+//        self.kind = kind
         self.user = user
         self.messageId = messageId
         self.sentDate = date
+        self.content = content
+        self.medias = medias
     }
 }
 
@@ -158,12 +162,12 @@ internal struct MockMessage: MKMessageType {
     init(text: String, user: MockUser, messageId: String, date: Date) {
         let mediaItem = ImageMediaItem(imageURL: URL(string: "https://files-5.gapo.vn/sticker/origin/0b58cc57-93f1-4427-b461-17a9c526b1b2.json")!)
         //https://files-5.gapo.vn/sticker/origin/0b58cc57-93f1-4427-b461-17a9c526b1b2.json
-        let replyMessage = ReplyMessage(kind: .text(text + text), user: user, messageId: messageId, date: date)
+        let replyMessage = ReplyMessage(user: user, messageId: messageId, date: date, content: "Sticker", medias: ["https://files-5.gapo.vn/sticker/origin/0b58cc57-93f1-4427-b461-17a9c526b1b2.json"])
         let action = MKActionType.reply(replyMessage: replyMessage)
 //        let action = MKActionType.remove
 //        let action = MKActionType.story(urlString: "https://avatars0.githubusercontent.com/u/2911921?s=460&u=418a6180264738f33cf0ea2b6ce1c9fd79d992f2&v=4")
 //        self.init(kind: .donate(amount: "Gui tang 10.000", message: "Tang doanate"), user: user, messageId: messageId, date: date, action: .default)
-        self.init(kind: .text(text), user: user, messageId: messageId, date: date, action: .default)
+        self.init(kind: .text(text), user: user, messageId: messageId, date: date, action: action)
 //        self.init(kind: .sticker(mediaItem), user: user, messageId: messageId, date: date, action: action)
     }
 
