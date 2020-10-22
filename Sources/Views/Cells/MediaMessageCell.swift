@@ -23,6 +23,7 @@
  */
 
 import UIKit
+import GTProgressBar
 
 /// A subclass of `MessageContentCell` used to display video and audio messages.
 open class MediaMessageCell: MessageContentCell {
@@ -33,6 +34,30 @@ open class MediaMessageCell: MessageContentCell {
 //        return playButtonView
 //    }()
 
+    open lazy var progressUpload: GTProgressBar = {
+        let progressUpload = GTProgressBar()
+        progressUpload.orientation = GTProgressBarOrientation.horizontal
+        progressUpload.barBackgroundColor = .white
+        progressUpload.barFillColor = UIColor.fromHexCode("#6FBE49")
+        progressUpload.displayLabel = false
+        progressUpload.barBorderColor = .clear
+        progressUpload.layer.borderWidth = 0
+        progressUpload.barBorderWidth = 0
+        progressUpload.barFillInset = 0
+        progressUpload.progress = 0
+        progressUpload.isHidden = true
+        progressUpload.cornerType = GTProgressBarCornerType.square
+        progressUpload.translatesAutoresizingMaskIntoConstraints = false
+        messageContainerView.addSubview(progressUpload)
+        NSLayoutConstraint.activate([
+            progressUpload.leadingAnchor.constraint(equalTo: messageContainerView.leadingAnchor),
+            progressUpload.trailingAnchor.constraint(equalTo: messageContainerView.trailingAnchor),
+            progressUpload.heightAnchor.constraint(equalToConstant: 6),
+            progressUpload.bottomAnchor.constraint(equalTo: messageContainerView.bottomAnchor)
+        ])
+        return progressUpload
+    }()
+    
     public let playButtonView: UIImageView = {
         let imageView = UIImageView()
         imageView.image = UIImage(named: "play", in: Bundle.messageKitAssetBundle, compatibleWith: nil)
@@ -72,7 +97,6 @@ open class MediaMessageCell: MessageContentCell {
         guard let displayDelegate = messagesCollectionView.messagesDisplayDelegate else {
             fatalError(MessageKitError.nilMessagesDisplayDelegate)
         }
-
         switch message.kind {
         case .photo(let mediaItem):
             imageView.image = mediaItem.image ?? mediaItem.placeholderImage
