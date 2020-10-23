@@ -44,8 +44,6 @@ class BasicExampleViewController: ChatViewController {
         guard let layout = messagesCollectionView.collectionViewLayout as? MessagesCollectionViewFlowLayout else {return}
         self.configFlowLayout(layout)
         setupLongGestureOnCollectionView()
-        
-        
     }
 
     override func gestureRecognizerShouldBegin(_ gestureRecognizer: UIGestureRecognizer) -> Bool {
@@ -61,8 +59,6 @@ class BasicExampleViewController: ChatViewController {
     @objc func longPress() {
         print("longpress..............")
     }
-    
-    
     
     private func configFlowLayout(_ layout: MessagesCollectionViewFlowLayout) {
         layout.sectionInset = UIEdgeInsets(top: 1, left: 8, bottom: 1, right: 8)
@@ -225,19 +221,27 @@ extension BasicExampleViewController: MKMessagesDisplayDelegate {
 extension BasicExampleViewController: MKMessagesLayoutDelegate {
     
     func cellTopLabelHeight(for message: MKMessageType, at indexPath: IndexPath, in messagesCollectionView: MessagesCollectionView) -> CGFloat {
-        return 18
+        return 0
+    }
+    
+//    func cellBottomLabelHeight(for message: MKMessageType, at indexPath: IndexPath, in messagesCollectionView: MessagesCollectionView) -> CGFloat {
+//        return 17
+//    }
+    
+//    func messageTopLabelHeight(for message: MKMessageType, at indexPath: IndexPath, in messagesCollectionView: MessagesCollectionView) -> CGFloat {
+//        return 20
+//    }
+    
+    func messageBottomLabelHeight(for message: MKMessageType, at indexPath: IndexPath, in messagesCollectionView: MessagesCollectionView) -> CGFloat {
+        return 0
     }
     
     func cellBottomLabelHeight(for message: MKMessageType, at indexPath: IndexPath, in messagesCollectionView: MessagesCollectionView) -> CGFloat {
-        return 17
+        return 0
     }
     
     func messageTopLabelHeight(for message: MKMessageType, at indexPath: IndexPath, in messagesCollectionView: MessagesCollectionView) -> CGFloat {
-        return 20
+        return 0
+        
     }
-    
-    func messageBottomLabelHeight(for message: MKMessageType, at indexPath: IndexPath, in messagesCollectionView: MessagesCollectionView) -> CGFloat {
-        return 16
-    }
-    
 }

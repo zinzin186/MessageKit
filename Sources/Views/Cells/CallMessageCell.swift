@@ -121,7 +121,8 @@ open class CallMessageCell: MessageContentCell {
         let typeCallLabel: String?
         var callInfoString = self.showTimeActive(time: duration)
         switch status {
-        case 0:
+        case 2:
+            //outcoming - Cuộc gọi đi
             if duration < 0{
                 statusImage = MKMessageConstant.Images.Call.reject
                 typeCallLabel = "Từ chối cuộc gọi"
@@ -132,6 +133,7 @@ open class CallMessageCell: MessageContentCell {
             }
             
         case 1:
+            //incoming - Cuộc Gọi đến
             if duration < 0{
                 statusImage = MKMessageConstant.Images.Call.reject
                 typeCallLabel = "Từ chối cuộc gọi"
@@ -141,14 +143,34 @@ open class CallMessageCell: MessageContentCell {
                 typeCallLabel = "Cuộc gọi đến"
             }
             
-        case 2:
+        case 3:
+            //decline - Từ chối cuộc gọi
             statusImage = MKMessageConstant.Images.Call.reject
             typeCallLabel = "Từ chối cuộc gọi"
             callInfoString = "Nhấn để gọi lại"
-        case 3:
+        case 5:
+            //hangup - Kết thúc cuộc gọi ( có duration)
+            if isOutgoing {
+                statusImage = MKMessageConstant.Images.Call.outgoing
+                typeCallLabel = "Cuộc gọi đi"
+            } else {
+                statusImage = MKMessageConstant.Images.Call.incoming
+                typeCallLabel = "Cuộc gọi đến"
+            }
+        case 6:
             statusImage = MKMessageConstant.Images.Call.misscall
             typeCallLabel = "Cuộc gọi nhỡ"
             callInfoString = "Nhấn để gọi lại"
+        case 8:
+            if isOutgoing {
+                statusImage = MKMessageConstant.Images.Call.outgoing
+                typeCallLabel = "Cuộc gọi đi"
+                callInfoString = "Nhấn để gọi lại"
+            } else {
+                statusImage = MKMessageConstant.Images.Call.misscall
+                typeCallLabel = "Cuộc gọi nhỡ"
+                callInfoString = "Nhấn để gọi lại"
+            }
         default:
             statusImage = nil
             typeCallLabel = nil

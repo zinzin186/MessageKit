@@ -231,6 +231,8 @@ class ChatViewController: MessagesViewController, MKMessagesDataSource {
             return nil
         }
     }
+    
+    
 }
 
 // MARK: - MessageCellDelegate
