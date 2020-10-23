@@ -31,15 +31,15 @@ open class LinkPreviewMessageCell: TextMessageCell {
         view.backgroundColor = UIColor.fromHexCode("#F1F1F1")
         view.translatesAutoresizingMaskIntoConstraints = false
         messageContainerView.addSubview(view)
-
-        NSLayoutConstraint.activate([
-            view.leadingAnchor.constraint(equalTo: messageContainerView.leadingAnchor,
-                                          constant: 0),
-            view.trailingAnchor.constraint(equalTo: messageContainerView.trailingAnchor,
-                                           constant: 0),
-            view.bottomAnchor.constraint(equalTo: messageContainerView.bottomAnchor,
-                                         constant: 0)
-        ])
+        view.fillSuperview()
+//        NSLayoutConstraint.activate([
+//            view.leadingAnchor.constraint(equalTo: messageContainerView.leadingAnchor,
+//                                          constant: 0),
+//            view.trailingAnchor.constraint(equalTo: messageContainerView.trailingAnchor,
+//                                           constant: 0),
+//            view.bottomAnchor.constraint(equalTo: messageContainerView.bottomAnchor,
+//                                         constant: 0)
+//        ])
         return view
     }()
 

@@ -83,8 +83,8 @@ open class LinkPreviewMessageSizeCalculator: TextMessageSizeCalculator {
                                maxWidth: previewMaxWidth)
 
         containerSize.height = max(minHeight, containerSize.height + previewMaxheight) + LinkPreviewMessageSizeCalculator.previewPaddingTopBottom * 2 + LinkPreviewMessageSizeCalculator.previewDescPaddingTitle + 10
-
-        return containerSize
+        return CGSize(width: 200, height: 200)
+//        return containerSize
     }
 
     open override func configure(attributes: UICollectionViewLayoutAttributes) {
