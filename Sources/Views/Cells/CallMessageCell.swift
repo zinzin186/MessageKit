@@ -46,11 +46,10 @@ open class CallMessageCell: MessageContentCell {
         button.addTarget(self, action: #selector(makeACall), for: .touchUpInside)
         button.translatesAutoresizingMaskIntoConstraints = false
         button.isUserInteractionEnabled = true
-        button.backgroundColor = .systemPink
         button.isEnabled = true
         return button
     }()
-    @objc private func makeACall(){
+    @objc func makeACall(sender: UIButton){
         print("tappppppp")
         self.callBackTappCell?()
     }
@@ -63,7 +62,7 @@ open class CallMessageCell: MessageContentCell {
         self.addImageView()
         self.addTypeCallLabel()
         self.addTextLabel()
-//        self.addCallButton()
+        self.addCallButton()
     }
     
     private func addImageView(){
@@ -96,7 +95,7 @@ open class CallMessageCell: MessageContentCell {
         ])
     }
     private func addCallButton(){
-        boundView.addSubview(callButton)
+        messageContainerView.addSubview(callButton)
         callButton.fillSuperview()
     }
     
