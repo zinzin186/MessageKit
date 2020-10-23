@@ -122,7 +122,7 @@ open class CallMessageCell: MessageContentCell {
         var callInfoString = self.showTimeActive(time: duration)
         switch status {
         case 0:
-            if duration == 0{
+            if duration < 0{
                 statusImage = MKMessageConstant.Images.Call.reject
                 typeCallLabel = "Từ chối cuộc gọi"
                 callInfoString = "Nhấn để gọi lại"
@@ -132,7 +132,7 @@ open class CallMessageCell: MessageContentCell {
             }
             
         case 1:
-            if duration == 0{
+            if duration < 0{
                 statusImage = MKMessageConstant.Images.Call.reject
                 typeCallLabel = "Từ chối cuộc gọi"
                 callInfoString = "Nhấn để gọi lại"
