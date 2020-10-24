@@ -88,7 +88,7 @@ open class TextMessageSizeCalculator: MessageSizeCalculator {
             attributedString = NSMutableAttributedString(attributedString: text)
         case .linkPreview(let linkItem):
             let attributes = displayDelegate.textAttributes(for: message, at: indexPath, in: messagesLayout.messagesCollectionView)
-            attributedString = NSMutableAttributedString(string: linkItem.text ?? "", attributes: attributes)
+            attributedString = NSMutableAttributedString(string: linkItem.text, attributes: attributes)
         default:
             attributedString = NSMutableAttributedString(string: "")
         }

@@ -317,7 +317,6 @@ open class MessageSizeCalculator: CellSizeCalculator {
         actionContainerSize.height += (contentInset.top + contentInset.bottom)
         switch message.action {
         case .reply(let replyMessage):
-            
             if let medias = replyMessage.medias, medias.count > 0, !replyMessage.deleted{
                 var contentSize: CGSize = .zero
                 if let attributedString = dataSource.messageActionLabelAttributedText(for: message.action, at: indexPath) {
@@ -346,7 +345,7 @@ open class MessageSizeCalculator: CellSizeCalculator {
         let widthOfImage: CGFloat = MKMessageConstant.ActionView.ReplyView.mediaSize.width
         let padding: CGFloat = MKMessageConstant.ActionView.ReplyView.bottomPadding
         let height: CGFloat = contentOffset.top + heightOfImage + contentOffset.bottom - padding
-        return CGSize(width: contentOffset.horizontal + widthOfImage + 5 + contentSize.width, height: height)
+        return CGSize(width: contentOffset.horizontal + widthOfImage + 5 + contentSize.width, height: height + 90)
     }
     open func iconMarkReplySize(for message: MKMessageType) -> CGSize {
         switch message.action {

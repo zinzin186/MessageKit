@@ -82,7 +82,7 @@ open class LinkPreviewMessageSizeCalculator: TextMessageSizeCalculator {
                 let maxWidth = containerSize.width
     //        let labelInsets: UIEdgeInsets = UIEdgeInsets.init(top: 10, left: 13, bottom: 10, right: 13)
         let previewImageHeight = maxWidth * MKMessageConstant.Sizes.Preview.imageRatio
-        let attibutedTitleString = NSAttributedString(string: "Những địa danh 'cô độc' nhất thế giới", attributes: [.font: self.linkPreviewFonts.titleFont])
+        let attibutedTitleString = NSAttributedString(string: linkItem.text, attributes: [.font: self.linkPreviewFonts.titleFont])
         let previewTitleSize = labelSize(for: attibutedTitleString, considering: maxWidth - MKMessageConstant.Sizes.Preview.paddingLeftRight*2)
             let previewTitleHeight = previewTitleSize.height
             

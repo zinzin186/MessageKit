@@ -33,9 +33,9 @@ public protocol LinkItem {
     /// LinkItem.text has priority over LinkeItem.attributedText.
 
     /// The message text.
-    var text: String? { get }
+    var text: String { get }
 
-    /// The message attributed text.
+//    /// The message attributed text.
     var attributedText: NSAttributedString? { get }
 
     /// The URL.
@@ -54,12 +54,10 @@ public protocol LinkItem {
 public extension LinkItem {
     var textKind: MKMessageKind {
         let kind: MKMessageKind
-        if let text = self.text {
-            kind = .text(text)
-        } else if let attributedText = self.attributedText {
+        if let attributedText = self.attributedText {
             kind = .attributedText(attributedText)
         } else {
-            fatalError("LinkItem must have \"text\" or \"attributedText\"")
+            kind = .text(text)
         }
         return kind
     }
