@@ -345,7 +345,7 @@ open class MessageSizeCalculator: CellSizeCalculator {
         let widthOfImage: CGFloat = MKMessageConstant.ActionView.ReplyView.mediaSize.width
         let padding: CGFloat = MKMessageConstant.ActionView.ReplyView.bottomPadding
         let height: CGFloat = contentOffset.top + heightOfImage + contentOffset.bottom - padding
-        return CGSize(width: contentOffset.horizontal + widthOfImage + 5 + contentSize.width, height: height + 90)
+        return CGSize(width: contentOffset.horizontal + widthOfImage + 5 + contentSize.width, height: height)
     }
     open func iconMarkReplySize(for message: MKMessageType) -> CGSize {
         switch message.action {

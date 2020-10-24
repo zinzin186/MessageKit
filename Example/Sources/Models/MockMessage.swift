@@ -173,14 +173,14 @@ internal struct MockMessage: MKMessageType {
     init(text: String, user: MockUser, messageId: String, date: Date) {
         let mediaItem = ImageMediaItem(imageURL: URL(string: "https://files-5.gapo.vn/sticker/origin/0b58cc57-93f1-4427-b461-17a9c526b1b2.json")!)
         //https://files-5.gapo.vn/sticker/origin/0b58cc57-93f1-4427-b461-17a9c526b1b2.json
-        let replyMessage = ReplyMessage(user: user, messageId: messageId, date: date, content: "Sticker", medias: ["https://avatars0.githubusercontent.com/u/2911921?s=460&u=418a6180264738f33cf0ea2b6ce1c9fd79d992f2&v=4"], deleted: false)
+        let replyMessage = ReplyMessage(user: user, messageId: messageId, date: date, content: "Tin nhan da bi xoa", medias: ["https://avatars0.githubusercontent.com/u/2911921?s=460&u=418a6180264738f33cf0ea2b6ce1c9fd79d992f2&v=4"], deleted: true)
         let action = MKActionType.reply(replyMessage: replyMessage)
 //        let action = MKActionType.remove
 //        let action = MKActionType.story(urlString: "https://avatars0.githubusercontent.com/u/2911921?s=460&u=418a6180264738f33cf0ea2b6ce1c9fd79d992f2&v=4")
 //        self.init(kind: .donate(amount: "Gui tang 10.000", message: "Tang doanate"), user: user, messageId: messageId, date: date, action: .default)
 //        self.init(kind: .call(status: 1, duration: 90), user: user, messageId: messageId, date: date, action: .default)
 //        self.init(kind: .sticker(mediaItem), user: user, messageId: messageId, date: date, action: action)
-        self.init(kind: .text("Tin nhắn đã bị xoá"), user: user, messageId: messageId, date: date, action: action)
+        self.init(kind: .text(text), user: user, messageId: messageId, date: date, action: action)
         
 //        let gPLinkItem = MKLinkItem(
 //            text: "https://vnexpress.net/nhung-dia-danh-co-doc-nhat-the-gioi-2882673.html",
