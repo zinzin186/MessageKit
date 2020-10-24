@@ -113,10 +113,21 @@ public enum MKMessageConstant {
             static let callView: CGSize = CGSize(width: 195, height: 64)
             static let statusIcon: CGSize = CGSize(width: 40, height: 40)
         }
+        
+        enum Preview {
+            static let paddingTopBottom: CGFloat = 10.0
+            static let descPaddingTitle: CGFloat = 4
+            static let paddingLeftRight: CGFloat = 12
+            static let imageRatio: CGFloat = 133.0 / 237.0
+        }
     }
     
     enum ContentInsets {
         static let donate: UIEdgeInsets = UIEdgeInsets(top: 7, left: 12, bottom: 7, right: 12)
+        enum Text {
+            static let incomingMessageLabelInsets = UIEdgeInsets(top: 8, left: 12, bottom: 8, right: 12)
+            static let outgoingMessageLabelInsets = UIEdgeInsets(top: 8, left: 12, bottom: 8, right: 12)
+        }
         enum Call {
             static let statusIcon: UIEdgeInsets = UIEdgeInsets(top: 12, left: 12, bottom: 12, right: 12)
             static let callInfo: UIEdgeInsets = UIEdgeInsets(top: 12, left: 12, bottom: 12, right: 12)

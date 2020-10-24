@@ -52,7 +52,7 @@ final internal class SampleData {
     let steven = MockUser(senderId: "000002", displayName: "Steven Deutsch")
     let wu = MockUser(senderId: "000003", displayName: "Wu Zhong")
 
-    lazy var senders = [nathan, steven, wu]
+    lazy var senders = [nathan]
     
     lazy var contactsToShare = [
         MockContactItem(name: "System", initials: "S"),

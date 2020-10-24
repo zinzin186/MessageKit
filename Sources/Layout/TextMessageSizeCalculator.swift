@@ -27,13 +27,10 @@ import UIKit
 
 open class TextMessageSizeCalculator: MessageSizeCalculator {
 
-    public var incomingMessageLabelInsets = UIEdgeInsets(top: 8, left: 12, bottom: 8, right: 12)
-    public var outgoingMessageLabelInsets = UIEdgeInsets(top: 8, left: 12, bottom: 8, right: 12)
-
     internal func messageLabelInsets(for message: MKMessageType) -> UIEdgeInsets {
         let dataSource = messagesLayout.messagesDataSource
         let isFromCurrentSender = dataSource.isFromCurrentSender(message: message)
-        return isFromCurrentSender ? outgoingMessageLabelInsets : incomingMessageLabelInsets
+        return isFromCurrentSender ? MKMessageConstant.ContentInsets.Text.outgoingMessageLabelInsets : MKMessageConstant.ContentInsets.Text.incomingMessageLabelInsets
     }
 
     open override func messageContainerMaxWidth(for message: MKMessageType) -> CGFloat {
@@ -89,6 +86,9 @@ open class TextMessageSizeCalculator: MessageSizeCalculator {
             attributedString = NSMutableAttributedString(string: text ?? "", attributes: attributes)
         case .attributedText(let text):
             attributedString = NSMutableAttributedString(attributedString: text)
+        case .linkPreview(let linkItem):
+            let attributes = displayDelegate.textAttributes(for: message, at: indexPath, in: messagesLayout.messagesCollectionView)
+            attributedString = NSMutableAttributedString(string: linkItem.text ?? "", attributes: attributes)
         default:
             attributedString = NSMutableAttributedString(string: "")
         }
