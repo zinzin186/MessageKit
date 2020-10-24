@@ -75,7 +75,7 @@ class BasicExampleViewController: ChatViewController {
         layout.setMessageIncomingAvatarPosition(AvatarPosition(vertical: .messageBottom))
         let paddingRight = UIScreen.main.bounds.size.width - (MKMessageConstant.calcMaxWidthCell() + 10 + 60)
         layout.setMessageIncomingMessagePadding(UIEdgeInsets(top: 0, left: 5, bottom: 0, right: paddingRight))
-        layout.setMessageOutgoingMessagePadding(UIEdgeInsets(top: 0, left: paddingRight, bottom: 0, right: 2))
+        layout.setMessageOutgoingMessagePadding(UIEdgeInsets(top: 0, left: paddingRight + 55, bottom: 0, right: 2))
         //cellBottomLabelAttributedText
         layout.setMessageOutgoingCellBottomLabelAlignment(LabelAlignment(textAlignment: .right, textInsets: UIEdgeInsets(top: 0, left: 0, bottom: 0, right: 0)))
         layout.setMessageIncomingCellBottomLabelAlignment(LabelAlignment(textAlignment: .right, textInsets: UIEdgeInsets(top: 0, left: 0, bottom: 0, right: 0)))

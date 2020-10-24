@@ -26,74 +26,42 @@ import Foundation
 
 open class LinkPreviewMessageSizeCalculator: TextMessageSizeCalculator {
 
-    
-
-//    open override func messageContainerMaxWidth(for message: MKMessageType) -> CGFloat {
-//        switch message.kind {
-//        case .linkPreview:
-//            let maxWidth = super.messageContainerMaxWidth(for: message)
-//            return max(maxWidth, (layout?.collectionView?.bounds.width ?? 0) * 0.75)
-//        default:
-//            return super.messageContainerMaxWidth(for: message)
-//        }
-//    }
-
-//    open override func messageContainerSize(for message: MKMessageType, indexPath: IndexPath) -> CGSize {
-//        guard case MKMessageKind.linkPreview(let linkItem) = message.kind else {
-//            fatalError("messageContainerSize received unhandled MessageDataType: \(message.kind)")
-//        }
-//        let dummyMessage = ConcreteMessageType(sender: message.sender,
-//                                               messageId: message.messageId,
-//                                               sentDate: message.sentDate,
-//                                               kind: linkItem.textKind, action: message.action)
-//
-//        var containerSize = super.messageContainerSize(for: dummyMessage, indexPath: indexPath)
-//        containerSize.width = max(containerSize.width, messageContainerMaxWidth(for: message))
-//        let maxWidth = containerSize.width
-//        let labelInsets: UIEdgeInsets = messageLabelInsets(for: dummyMessage)
-//        let minHeight = containerSize.height + maxWidth * LinkPreviewMessageSizeCalculator.imageRatio
-//        let previewMaxWidth = containerSize.width// - (maxWidth + LinkPreviewMessageSizeCalculator.imageViewMargin + labelInsets.horizontal)
-//        let previewMaxheight = maxWidth * LinkPreviewMessageSizeCalculator.imageRatio
-//        calculateContainerSize(with: NSAttributedString(string: linkItem.title ?? "", attributes: [.font: titleFont]),
-//                               containerSize: &containerSize,
-//                               maxWidth: previewMaxWidth)
-//
-//        calculateContainerSize(with: NSAttributedString(string: linkItem.teaser, attributes: [.font: teaserFont]),
-//                               containerSize: &containerSize,
-//                               maxWidth: previewMaxWidth)
-//
-//        containerSize.height = max(minHeight, containerSize.height + previewMaxheight) + LinkPreviewMessageSizeCalculator.previewPaddingTopBottom * 2 + LinkPreviewMessageSizeCalculator.previewDescPaddingTitle + 10
-//        return CGSize(width: 200, height: 200)
-////        return containerSize
-//    }
-
     open override func messageContainerSize(for message: MKMessageType, indexPath: IndexPath) -> CGSize {
-                guard case MKMessageKind.linkPreview(let linkItem) = message.kind else {
-                    fatalError("messageContainerSize received unhandled MessageDataType: \(message.kind)")
-                }
-                let dummyMessage = ConcreteMessageType(sender: message.sender,
-                                                       messageId: message.messageId,
-                                                       sentDate: message.sentDate,
-                                                       kind: linkItem.textKind, action: message.action)
+        guard case MKMessageKind.linkPreview(let linkItem) = message.kind else {
+            fatalError("messageContainerSize received unhandled MessageDataType: \(message.kind)")
+        }
+        let dummyMessage = ConcreteMessageType(sender: message.sender,
+                                               messageId: message.messageId,
+                                               sentDate: message.sentDate,
+                                               kind: linkItem.textKind, action: message.action)
 
-                var containerSize = super.messageContainerSize(for: dummyMessage, indexPath: indexPath)
-                containerSize.width = max(containerSize.width, messageContainerMaxWidth(for: message))
-            //containerSize of text message body
-                let maxWidth = containerSize.width
-    //        let labelInsets: UIEdgeInsets = UIEdgeInsets.init(top: 10, left: 13, bottom: 10, right: 13)
+        var containerSize = super.messageContainerSize(for: dummyMessage, indexPath: indexPath)
+        containerSize.width = max(containerSize.width, getPreviewMessageMaxWidth(for: message))
+        //containerSize of text message body
+        let maxWidth = containerSize.width
         let previewImageHeight = maxWidth * MKMessageConstant.Sizes.Preview.imageRatio
-        let attibutedTitleString = NSAttributedString(string: linkItem.text, attributes: [.font: self.linkPreviewFonts.titleFont])
-        let previewTitleSize = labelSize(for: attibutedTitleString, considering: maxWidth - MKMessageConstant.Sizes.Preview.paddingLeftRight*2)
-            let previewTitleHeight = previewTitleSize.height
+        var previewTitleSize: CGSize = .zero
+        if let title = linkItem.title {
+            let attibutedTitleString = NSAttributedString(string: title, attributes: [.font: self.linkPreviewFonts.titleFont])
+            previewTitleSize = labelSize(for: attibutedTitleString, considering: maxWidth - MKMessageConstant.Sizes.Preview.paddingLeftRight*2)
+        }
+        let previewTitleHeight = previewTitleSize.height
             
         let attibutedTeaserString = NSAttributedString(string: linkItem.teaser, attributes: [.font: self.linkPreviewFonts.teaserFont])
-            let previewTeaserSize = labelSize(for: attibutedTeaserString, considering: maxWidth - MKMessageConstant.Sizes.Preview.paddingLeftRight*2)
-            let previewTeaserHeight = previewTeaserSize.height
-            
+        let previewTeaserSize = labelSize(for: attibutedTeaserString, considering: maxWidth - MKMessageConstant.Sizes.Preview.paddingLeftRight*2)
+        let previewTeaserHeight = previewTeaserSize.height
 
-            containerSize.height = containerSize.height + previewImageHeight + previewTitleHeight + previewTeaserHeight + MKMessageConstant.Sizes.Preview.paddingTopBottom*2 + MKMessageConstant.Sizes.Preview.descPaddingTitle
+        containerSize.height = containerSize.height + previewImageHeight + previewTitleHeight + previewTeaserHeight + MKMessageConstant.Sizes.Preview.paddingTopBottom*2 + MKMessageConstant.Sizes.Preview.descPaddingTitle
                 return containerSize
-        }
+    }
+    
+    private func getPreviewMessageMaxWidth(for message: MKMessageType) -> CGFloat {
+        let avatarWidth = avatarSize(for: message).width
+        let messagePadding = messageContainerPadding(for: message)
+        let accessoryWidth = accessoryViewSize(for: message).width
+        let accessoryPadding = accessoryViewPadding(for: message)
+        return messagesLayout.itemWidth - avatarWidth - messagePadding.horizontal - accessoryWidth - accessoryPadding.horizontal - avatarLeadingTrailingPadding
+    }
 }
 
 private extension LinkPreviewMessageSizeCalculator {
