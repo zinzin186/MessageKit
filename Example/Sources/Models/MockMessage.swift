@@ -180,7 +180,7 @@ internal struct MockMessage: MKMessageType {
 //        self.init(kind: .donate(amount: "Gui tang 10.000", message: "Tang doanate"), user: user, messageId: messageId, date: date, action: .default)
 //        self.init(kind: .call(status: 1, duration: 90), user: user, messageId: messageId, date: date, action: .default)
 //        self.init(kind: .sticker(mediaItem), user: user, messageId: messageId, date: date, action: action)
-        self.init(kind: .text(text), user: user, messageId: messageId, date: date, action: .default)
+        self.init(kind: .action(text), user: user, messageId: messageId, date: date, action: .default)
         
 //        let gPLinkItem = MKLinkItem(
 //            text: "https://vnexpress.net/nhung-dia-danh-co-doc-nhat-the-gioi-2882673.html",

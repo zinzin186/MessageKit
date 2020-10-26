@@ -214,6 +214,15 @@ extension BasicExampleViewController: MKMessagesDisplayDelegate {
         audioController.configureAudioCell(cell, message: message) // this is needed especily when the cell is reconfigure while is playing sound
     }
 
+    func configureTextForActionMessage(at indexPath: IndexPath, in messagesCollectionView: MessagesCollectionView) -> [NSAttributedString.Key : Any] {
+        let paragraph = NSMutableParagraphStyle()
+        paragraph.alignment = .center
+        return [
+            NSAttributedString.Key.foregroundColor: UIColor.lightGray,
+            NSAttributedString.Key.font: UIFont.systemFont(ofSize: 13),
+            NSAttributedString.Key.paragraphStyle: paragraph
+        ]
+    }
 }
 
 // MARK: - MessagesLayoutDelegate
