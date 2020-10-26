@@ -301,8 +301,11 @@ open class MessageContentCell: MessageCollectionViewCell, UIGestureRecognizerDel
         let touchLocation = gesture.location(in: self)
 
         switch true {
-        case messageBodyView.frame.contains(touchLocation) && !cellContentView(canHandle: convert(touchLocation, to: messageBodyView)):
-            delegate?.didTapMessage(in: self)
+        case messageBodyView.frame.contains(touchLocation):
+            if !cellContentView(canHandle: convert(touchLocation, to: messageContainerView)) {
+                delegate?.didTapMessage(in: self)
+            }
+            
         case avatarView.frame.contains(touchLocation):
             delegate?.didTapAvatar(in: self)
         case cellTopLabel.frame.contains(touchLocation):

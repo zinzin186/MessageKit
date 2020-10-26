@@ -46,14 +46,14 @@ final class AutocompleteExampleViewController: ChatViewController {
     override func viewDidAppear(_ animated: Bool) {
         super.viewDidAppear(animated)
 
-        MockSocket.shared.connect(with: [SampleData.shared.nathan, SampleData.shared.wu])
-            .onTypingStatus { [weak self] in
-                self?.setTypingIndicatorViewHidden(false)
-            }.onNewMessage { [weak self] message in
-                self?.setTypingIndicatorViewHidden(true, performUpdates: {
-                    self?.insertMessage(message)
-                })
-        }
+//        MockSocket.shared.connect(with: [SampleData.shared.nathan, SampleData.shared.wu])
+//            .onTypingStatus { [weak self] in
+//                self?.setTypingIndicatorViewHidden(false)
+//            }.onNewMessage { [weak self] message in
+//                self?.setTypingIndicatorViewHidden(true, performUpdates: {
+//                    self?.insertMessage(message)
+//                })
+//        }
     }
 
     override func viewDidLoad() {
