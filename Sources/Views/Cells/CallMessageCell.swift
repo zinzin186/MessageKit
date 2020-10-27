@@ -104,86 +104,25 @@ open class CallMessageCell: MessageContentCell {
         guard let dataSource = messagesCollectionView.messagesDataSource else {
             fatalError(MessageKitError.nilMessagesDataSource)
         }
-        let isOutgoing = dataSource.isFromCurrentSender(message: message)
         self.messageContainerView.backgroundColor = .clear
         switch message.kind {
-        case .call(let status, let duration):
-            self.updateUI(status: status, duration: duration, isOutgoing: isOutgoing)
+        case .call(let image, let statusInfo, let callInfo):
+            self.updateUI(image: image, statusInfo: statusInfo, callInfo: callInfo)
             
         default:
             break
         }
     }
     
-    private func updateUI(status: Int, duration: Int, isOutgoing: Bool) {
-        let statusImage: UIImage?
-        let typeCallLabel: String?
-        var callInfoString = self.showTimeActive(time: duration)
-        switch status {
-        case 2:
-            //outcoming - Cuộc gọi đi
-            if duration < 0{
-                statusImage = MKMessageConstant.Images.Call.reject
-                typeCallLabel = "Từ chối cuộc gọi"
-                callInfoString = "Nhấn để gọi lại"
-            } else {
-                statusImage = MKMessageConstant.Images.Call.outgoing
-                typeCallLabel = "Cuộc gọi đi"
-            }
-            
-        case 1:
-            //incoming - Cuộc Gọi đến
-            if duration < 0{
-                statusImage = MKMessageConstant.Images.Call.reject
-                typeCallLabel = "Từ chối cuộc gọi"
-                callInfoString = "Nhấn để gọi lại"
-            } else {
-                statusImage = MKMessageConstant.Images.Call.incoming
-                typeCallLabel = "Cuộc gọi đến"
-            }
-            
-        case 3:
-            //decline - Từ chối cuộc gọi
-            statusImage = MKMessageConstant.Images.Call.reject
-            typeCallLabel = "Từ chối cuộc gọi"
-            callInfoString = "Nhấn để gọi lại"
-        case 5:
-            //hangup - Kết thúc cuộc gọi ( có duration)
-            if isOutgoing {
-                statusImage = MKMessageConstant.Images.Call.outgoing
-                typeCallLabel = "Cuộc gọi đi"
-            } else {
-                statusImage = MKMessageConstant.Images.Call.incoming
-                typeCallLabel = "Cuộc gọi đến"
-            }
-        case 6:
-            statusImage = MKMessageConstant.Images.Call.misscall
-            typeCallLabel = "Cuộc gọi nhỡ"
-            callInfoString = "Nhấn để gọi lại"
-        case 8:
-            if isOutgoing {
-                statusImage = MKMessageConstant.Images.Call.outgoing
-                typeCallLabel = "Cuộc gọi đi"
-                callInfoString = "Nhấn để gọi lại"
-            } else {
-                statusImage = MKMessageConstant.Images.Call.misscall
-                typeCallLabel = "Cuộc gọi nhỡ"
-                callInfoString = "Nhấn để gọi lại"
-            }
-        default:
-            statusImage = nil
-            typeCallLabel = nil
-        }
-        self.imageView.image = statusImage
-        self.typeCallLabel.text = typeCallLabel
-        self.descriptionLabel.text = callInfoString
+    private func updateUI(image: UIImage?, statusInfo: String, callInfo: String) {
+        
+        self.imageView.image = image
+        self.typeCallLabel.text = statusInfo
+        self.descriptionLabel.text = callInfo
+        
+        
     }
     
-    private func showTimeActive(time: Int)->String{
-        if time < 60{
-            return "\(time) giây"
-        }
-        return "\((time + 30)/60) phút"
-    }
+    
     
 }

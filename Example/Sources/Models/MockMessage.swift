@@ -27,6 +27,91 @@ import CoreLocation
 import MessageKit
 import AVFoundation
 
+
+enum MKCallType: Int {
+    case audio = 0
+    case video = 1
+    var iconName: String {
+        switch self {
+        case .audio:
+            return "audiocall"
+        case .video:
+            return "videocall"
+        }
+    }
+}
+
+enum MKCallStatus: Int {
+    case call = 0
+    case incoming = 1
+    case outgoing = 2
+    case decline = 3
+    case calling = 4
+    case hangup = 5
+    case miss = 6
+    case admin_hangup = 7
+    case no_answer = 8
+    case cancel = 9
+    
+    var iconName: String {
+        switch self {
+        case .incoming:
+            return "incoming"
+        case .outgoing:
+            return "outgoing"
+        case .decline:
+            return "decline"
+        case .calling:
+            return "calling"
+        case .hangup:
+            return "hangup"
+        case .miss:
+            return "miss"
+        case .admin_hangup:
+            return "admin_hangup"
+        case .no_answer:
+            return "no_answer"
+        case .cancel:
+            return "cancel"
+        case .call:
+            return "call"
+        }
+    }
+    
+    var statusName: String {
+        switch self {
+        case .incoming:
+            return "Cuộc gọi đến"
+        case .outgoing:
+            return "Cuộc gọi đi"
+        case .decline:
+            return "Từ chối cuộc gọi"
+        case .calling:
+            return "Đang gọi"
+        case .hangup:
+            return "Kết thúc cuộc gọi"
+        case .miss:
+            return "Cuộc gọi nhỡ"
+        case .admin_hangup:
+            return "Admin kết thúc"
+        case .no_answer:
+            return "Không trả lời"
+        case .cancel:
+            return "Cuộc gọi bị huỷ"
+        case .call:
+            return "Đang gọi"
+        }
+    }
+    
+    func getImage(type: MKCallType) -> UIImage? {
+        return UIImage(named: "ic_\(type.iconName)_\(self.iconName)")
+    }
+    
+}
+
+
+
+
 private struct CoordinateItem: LocationItem {
 
     var location: CLLocation
@@ -178,9 +263,13 @@ internal struct MockMessage: MKMessageType {
 //        let action = MKActionType.remove
 //        let action = MKActionType.story(urlString: "https://avatars0.githubusercontent.com/u/2911921?s=460&u=418a6180264738f33cf0ea2b6ce1c9fd79d992f2&v=4")
 //        self.init(kind: .donate(amount: "Gui tang 10.000", message: "Tang doanate"), user: user, messageId: messageId, date: date, action: .default)
-//        self.init(kind: .call(status: 1, duration: 90), user: user, messageId: messageId, date: date, action: .default)
+        let callType = MKCallType.init(rawValue: 1)!
+        let statusType = MKCallStatus.init(rawValue: 1)!
+        let statusImage: UIImage? = statusType.getImage(type: callType)
+        let callInfoString = MockMessage.showTimeActive(time: 120)
+        self.init(kind: .call(image: statusImage, statusInfo: statusType.statusName, callInfo: callInfoString), user: user, messageId: messageId, date: date, action: .default)
 //        self.init(kind: .sticker(mediaItem), user: user, messageId: messageId, date: date, action: action)
-        self.init(kind: .action(text), user: user, messageId: messageId, date: date, action: .default)
+//        self.init(kind: .action(text), user: user, messageId: messageId, date: date, action: .default)
         
 //        let gPLinkItem = MKLinkItem(
 //            text: "https://vnexpress.net/nhung-dia-danh-co-doc-nhat-the-gioi-2882673.html",
@@ -232,5 +321,20 @@ internal struct MockMessage: MKMessageType {
 
     init(linkItem: LinkItem, user: MockUser, messageId: String, date: Date, action: MKActionType = .default) {
         self.init(kind: .linkPreview(linkItem), user: user, messageId: messageId, date: date, action: action)
+    }
+    
+    static func showTimeActive(time: Int) ->String{
+        if time == 0 {
+            return "Nhấn để gọi lại"
+        }
+        if time < 60 {
+            return "\(time) giây"
+        }
+        if time < 60*60 {
+            let seconds = time%60
+            let secondsString = seconds > 0 ? "\(seconds) giây" : ""
+            return "\(time/60) phút \(secondsString)"
+        }
+        return "\(time/3600) giờ \(MockMessage.showTimeActive(time: time%60/60))"
     }
 }

@@ -70,7 +70,7 @@ public enum MKMessageKind {
     case donate(amount: String, message: String? = nil)
     
     /// Donate in chat
-    case call(status: Int, duration: Int)
+    case call(image: UIImage?, statusInfo: String, callInfo: String)
 
     /// A custom message.
     /// - Note: Using this case requires that you implement the following methods and handle this case:

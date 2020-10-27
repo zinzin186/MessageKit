@@ -7,6 +7,7 @@
 
 import UIKit
 
+
 public enum MKMessageConstant {
     
     static let previewPaddingTopBottom: CGFloat = 10.0
@@ -77,10 +78,20 @@ public enum MKMessageConstant {
         static let replyImage: UIImage? = UIImage(named: "mk_icon_chat_reply", in: Bundle.messageKitAssetBundle, compatibleWith: nil)
         static let markReplyImage: UIImage? = UIImage(named: "mk_icon_mark_reply", in: Bundle.messageKitAssetBundle, compatibleWith: nil)
         enum Call {
-            static let incoming: UIImage? = UIImage(named: "ic_call_incoming", in: Bundle.messageKitAssetBundle, compatibleWith: nil)
-            static let outgoing: UIImage? = UIImage(named: "ic_call_outgoing", in: Bundle.messageKitAssetBundle, compatibleWith: nil)
-            static let misscall: UIImage? = UIImage(named: "ic_call_misscall", in: Bundle.messageKitAssetBundle, compatibleWith: nil)
-            static let reject: UIImage? = UIImage(named: "ic_call_reject", in: Bundle.messageKitAssetBundle, compatibleWith: nil)
+            
+            enum Video {
+                static let incoming: UIImage? = UIImage(named: "ic_videocall_incoming", in: Bundle.messageKitAssetBundle, compatibleWith: nil)
+                static let outgoing: UIImage? = UIImage(named: "ic_videocall_outgoing", in: Bundle.messageKitAssetBundle, compatibleWith: nil)
+                static let misscall: UIImage? = UIImage(named: "ic_videocall_misscall", in: Bundle.messageKitAssetBundle, compatibleWith: nil)
+                static let hangup: UIImage? = UIImage(named: "ic_videocall_hangup", in: Bundle.messageKitAssetBundle, compatibleWith: nil)
+            }
+            
+            enum Audio {
+                static let incoming: UIImage? = UIImage(named: "ic_audiocall_incoming", in: Bundle.messageKitAssetBundle, compatibleWith: nil)
+                static let outgoing: UIImage? = UIImage(named: "ic_audiocall_outgoing", in: Bundle.messageKitAssetBundle, compatibleWith: nil)
+                static let misscall: UIImage? = UIImage(named: "ic_audiocall_misscall", in: Bundle.messageKitAssetBundle, compatibleWith: nil)
+                static let hangup: UIImage? = UIImage(named: "ic_audiocall_hangup", in: Bundle.messageKitAssetBundle, compatibleWith: nil)
+            }
         }
     }
     
@@ -110,7 +121,7 @@ public enum MKMessageConstant {
         }
         
         enum Call {
-            static let callView: CGSize = CGSize(width: 195, height: 64)
+            static let callView: CGSize = CGSize(width: 210, height: 64)
             static let statusIcon: CGSize = CGSize(width: 40, height: 40)
         }
         
