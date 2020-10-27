@@ -62,7 +62,7 @@ open class CallMessageCell: MessageContentCell {
         self.addImageView()
         self.addTypeCallLabel()
         self.addTextLabel()
-        self.addCallButton()
+//        self.addCallButton()
     }
     
     private func addImageView(){
@@ -122,7 +122,4 @@ open class CallMessageCell: MessageContentCell {
         
         
     }
-    
-    
-    
 }

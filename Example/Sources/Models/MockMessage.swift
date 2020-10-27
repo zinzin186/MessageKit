@@ -267,9 +267,9 @@ internal struct MockMessage: MKMessageType {
         let statusType = MKCallStatus.init(rawValue: 1)!
         let statusImage: UIImage? = statusType.getImage(type: callType)
         let callInfoString = MockMessage.showTimeActive(time: 120)
-        self.init(kind: .call(image: statusImage, statusInfo: statusType.statusName, callInfo: callInfoString), user: user, messageId: messageId, date: date, action: .default)
+//        self.init(kind: .call(image: statusImage, statusInfo: statusType.statusName, callInfo: callInfoString), user: user, messageId: messageId, date: date, action: .default)
 //        self.init(kind: .sticker(mediaItem), user: user, messageId: messageId, date: date, action: action)
-//        self.init(kind: .action(text), user: user, messageId: messageId, date: date, action: .default)
+        self.init(kind: .action(text), user: user, messageId: messageId, date: date, action: .default)
         
 //        let gPLinkItem = MKLinkItem(
 //            text: "https://vnexpress.net/nhung-dia-danh-co-doc-nhat-the-gioi-2882673.html",

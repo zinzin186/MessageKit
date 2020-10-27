@@ -89,6 +89,10 @@ open class TextMessageCell: MessageContentCell {
                 messageLabel.attributedText = NSAttributedString(string: text ?? "", attributes: attributes)
             case .attributedText(let text):
                 messageLabel.attributedText = text
+            case .action(let text):
+                let displayDelegate = messagesCollectionView.messagesDisplayDelegate
+                let attributedText = NSAttributedString(string: text, attributes: displayDelegate?.configureTextForActionMessage(at: indexPath, in: messagesCollectionView))
+                messageLabel.attributedText = attributedText
             default:
                 break
             }
