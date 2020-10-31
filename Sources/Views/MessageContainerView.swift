@@ -27,7 +27,8 @@ import UIKit
 open class MessageContainerView: UIImageView {
 
     // MARK: - Properties
-
+    open var borderLayer: CAShapeLayer?
+    
     private let imageMask = UIImageView()
 
     open var style: MessageStyle = .none {

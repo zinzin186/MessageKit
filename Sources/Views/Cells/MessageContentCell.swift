@@ -28,8 +28,6 @@ import UIKit
 /// A subclass of `MessageCollectionViewCell` used to display text, media, and location messages.
 open class MessageContentCell: MessageCollectionViewCell, UIGestureRecognizerDelegate {
     
-    open var borderLayer: CAShapeLayer?
-
     /// The image view displaying the avatar.
     open var avatarView = AvatarView()
     
@@ -211,7 +209,6 @@ open class MessageContentCell: MessageCollectionViewCell, UIGestureRecognizerDel
         messageTopLabel.text = nil
         iconMarkReply.isHidden = true
         messageBottomLabel.text = nil
-        borderLayer?.removeFromSuperlayer()
 //        messageTimestampLabel.attributedText = nil
     }
 
