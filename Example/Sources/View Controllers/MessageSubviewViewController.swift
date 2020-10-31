@@ -27,6 +27,9 @@ import InputBarAccessoryView
 
 final class MessageSubviewViewController: BasicExampleViewController {
 
+    override var inputAccessoryView: UIView? {
+        return nil
+    }
     private var keyboardManager = KeyboardManager()
 
     private let subviewInputBar = InputBarAccessoryView()
@@ -35,6 +38,7 @@ final class MessageSubviewViewController: BasicExampleViewController {
     override func viewDidLoad() {
         super.viewDidLoad()
         subviewInputBar.delegate = self
+        self.navigationController?.setNavigationBarHidden(false, animated: false)
         // Take into account the height of the bottom input bar
         additionalBottomInset = 48
     }
@@ -42,7 +46,9 @@ final class MessageSubviewViewController: BasicExampleViewController {
     override func didMove(toParent parent: UIViewController?) {
         super.didMove(toParent: parent)
         parent?.view.addSubview(subviewInputBar)
+        
         keyboardManager.bind(inputAccessoryView: subviewInputBar)
+        keyboardManager.bind(to: self.messagesCollectionView)
     }
 
     override func inputBar(_ inputBar: InputBarAccessoryView, didPressSendButtonWith text: String) {

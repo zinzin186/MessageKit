@@ -96,7 +96,10 @@ class BasicExampleViewController: ChatViewController {
     func messageTimestampLabelAttributedText(for message: MKMessageType, at indexPath: IndexPath) -> NSAttributedString? {
         return NSAttributedString(string: "dsfdsfdsfd")
     }
-    
+    override func viewDidLoad() {
+        super.viewDidLoad()
+        self.navigationController?.setNavigationBarHidden(true, animated: false)
+    }
 }
 
 // MARK: - MessagesDisplayDelegate
@@ -132,11 +135,20 @@ extension BasicExampleViewController: MKMessagesDisplayDelegate {
     // MARK: - All Messages
     
     func backgroundColor(for message: MKMessageType, at indexPath: IndexPath, in messagesCollectionView: MessagesCollectionView) -> UIColor {
+        if case MKMessageKind.attributedText = message.kind {
+            return UIColor.clear
+        }
         return isFromCurrentSender(message: message) ? .primaryColor : UIColor(red: 230/255, green: 230/255, blue: 230/255, alpha: 1)
     }
     
     func messageStyle(for message: MKMessageType, at indexPath: IndexPath, in messagesCollectionView: MessagesCollectionView) -> MessageStyle {
-        
+        if case MKMessageKind.attributedText = message.kind {
+            return .custom { (view) in
+                view.layer.cornerRadius = 16
+                view.layer.borderColor = UIColor.darkGray.cgColor
+                view.layer.borderWidth = 1
+            }
+        }
         let tail: MessageStyle.TailCorner = isFromCurrentSender(message: message) ? .bottomRight : .bottomLeft
         return .none
     }

@@ -75,7 +75,7 @@ final internal class LaunchViewController: UITableViewController {
         let cell = cells[indexPath.row]
         switch cell {
         case "Basic Example":
-            let viewController = BasicExampleViewController()
+            let viewController = MessageSubviewViewController()
             let detailViewController = NavigationController(rootViewController: viewController)
             splitViewController?.showDetailViewController(detailViewController, sender: self)
         case "Advanced Example":
