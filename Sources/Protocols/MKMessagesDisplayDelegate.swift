@@ -178,7 +178,7 @@ public protocol MKMessagesDisplayDelegate: AnyObject {
     ///   - message: The `MessageType` that will be displayed by this cell.
     ///   - indexPath: The `IndexPath` of the cell.
     ///   - messagesCollectionView: The `MessagesCollectionView` in which this cell will be displayed.
-    func configureMediaMessageImageView(_ imageView: UIImageView, for message: MKMessageType, at indexPath: IndexPath, in messagesCollectionView: MessagesCollectionView)
+    func configureMediaMessageImageView(_ cell: MediaMessageCell, for message: MKMessageType, at indexPath: IndexPath, in messagesCollectionView: MessagesCollectionView)
     
     func configureActionMessageImageView(_ imageView: UIImageView, for action: MKActionType, at indexPath: IndexPath, in messagesCollectionView: MessagesCollectionView)
 
@@ -313,7 +313,7 @@ public extension MKMessagesDisplayDelegate {
 
     // MARK: - Media Message Defaults
 
-    func configureMediaMessageImageView(_ imageView: UIImageView, for message: MKMessageType, at indexPath: IndexPath, in messagesCollectionView: MessagesCollectionView) {
+    func configureMediaMessageImageView(_ cell: MediaMessageCell, for message: MKMessageType, at indexPath: IndexPath, in messagesCollectionView: MessagesCollectionView) {
     }
     
     func configureActionMessageImageView(_ imageView: UIImageView, for action: MKActionType, at indexPath: IndexPath, in messagesCollectionView: MessagesCollectionView){}

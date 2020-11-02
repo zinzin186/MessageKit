@@ -63,7 +63,14 @@ class ChatViewController: MessagesViewController, MKMessagesDataSource {
         configureMessageInputBar()
         loadFirstMessages()
         title = "MessageKit"
+        
+        
     }
+    
+    
+    
+    
+    
     
     override func viewDidAppear(_ animated: Bool) {
         super.viewDidAppear(animated)

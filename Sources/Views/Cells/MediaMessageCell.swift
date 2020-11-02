@@ -98,17 +98,16 @@ open class MediaMessageCell: MessageContentCell {
             fatalError(MessageKitError.nilMessagesDisplayDelegate)
         }
         switch message.kind {
-        case .photo(let mediaItem):
+        case .photo(let mediaItem), .sticker(let mediaItem):
             imageView.image = mediaItem.image ?? mediaItem.placeholderImage
             playButtonView.isHidden = true
-            displayDelegate.configureMediaMessageImageView(imageView, for: message, at: indexPath, in: messagesCollectionView)
         case .video(let mediaItem):
             imageView.image = mediaItem.image ?? mediaItem.placeholderImage
             playButtonView.isHidden = false
-            displayDelegate.configureMediaMessageImageView(imageView, for: message, at: indexPath, in: messagesCollectionView)
         default:
             break
         }
+        displayDelegate.configureMediaMessageImageView(self, for: message, at: indexPath, in: messagesCollectionView)
 
         
     }

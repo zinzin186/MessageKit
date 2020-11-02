@@ -339,7 +339,7 @@ extension AutocompleteExampleViewController: MKMessagesDisplayDelegate {
     }
     
     func configureMediaMessageImageView(_ imageView: UIImageView, for message: MKMessageType, at indexPath: IndexPath, in messagesCollectionView: MessagesCollectionView) {
-        if case MKMessageKind.photo(let media) = message.kind, let imageURL = media.url {
+        if case MKMessageKind.photo(let media) = message.kind, let urlString = media.urlString, let imageURL = URL(string: urlString) {
             imageView.pin_setImage(from: imageURL)
         } else {
             imageView.pin_cancelImageDownload()

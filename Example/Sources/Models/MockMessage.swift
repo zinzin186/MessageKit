@@ -130,6 +130,8 @@ private struct ImageMediaItem: MediaItem {
     var image: UIImage?
     var placeholderImage: UIImage
     var size: CGSize
+    var path: String?
+    var urlString: String?
 
     init(image: UIImage) {
         self.image = image
@@ -256,8 +258,13 @@ internal struct MockMessage: MKMessageType {
     }
 
     init(text: String, user: MockUser, messageId: String, date: Date) {
-        let mediaItem = ImageMediaItem(imageURL: URL(string: "https://files-5.gapo.vn/sticker/origin/0b58cc57-93f1-4427-b461-17a9c526b1b2.json")!)
+        var mediaItem = ImageMediaItem(imageURL: URL(string: "https://files-5.gapo.vn/sticker/origin/0b58cc57-93f1-4427-b461-17a9c526b1b2.json")!)
         //https://files-5.gapo.vn/sticker/origin/0b58cc57-93f1-4427-b461-17a9c526b1b2.json
+        let id: String = "https://files-5.gapo.vn/sticker/origin/0b58cc57-93f1-4427-b461-17a9c526b1b2.json"
+//        if let path = StickerLoader.pathSticker(id) {
+//            mediaItem.path = path
+//        }
+        mediaItem.urlString = id
         let replyMessage = ReplyMessage(user: user, messageId: messageId, date: date, content: "Cuộc gọi Âm thanh", medias: ["https://avatars0.githubusercontent.com/u/2911921?s=460&u=418a6180264738f33cf0ea2b6ce1c9fd79d992f2&v=4"], deleted: false)
         let action = MKActionType.reply(replyMessage: replyMessage)
 //        let action = MKActionType.remove
@@ -272,7 +279,7 @@ internal struct MockMessage: MKMessageType {
         attributedText1.append(attributedText2)
         self.init(kind: .attributedText(attributedText1), user: user, messageId: messageId, date: date, action: action)
 //        self.init(kind: .call(image: statusImage, statusInfo: statusType.statusName, callInfo: callInfoString), user: user, messageId: messageId, date: date, action: .default)
-//        self.init(kind: .sticker(mediaItem), user: user, messageId: messageId, date: date, action: action)
+        self.init(kind: .sticker(mediaItem), user: user, messageId: messageId, date: date, action: .default)
 //        self.init(kind: .action(text), user: user, messageId: messageId, date: date, action: .default)
         
 //        let gPLinkItem = MKLinkItem(

@@ -26,8 +26,10 @@ import UIKit
 import MapKit
 import MessageKit
 import PINRemoteImage
+import Lottie
 
 class BasicExampleViewController: ChatViewController {
+    var dicAnimations: [String: Animation] = [:]
     override func configureMessageCollectionView() {
 //        super.configureMessageCollectionView()
 //        guard let layout = messagesCollectionView.collectionViewLayout as? MessagesCollectionViewFlowLayout else {return}
@@ -158,14 +160,42 @@ extension BasicExampleViewController: MKMessagesDisplayDelegate {
         avatarView.set(avatar: avatar)
     }
 
-    func configureMediaMessageImageView(_ imageView: UIImageView, for message: MKMessageType, at indexPath: IndexPath, in messagesCollectionView: MessagesCollectionView) {
-        if case MKMessageKind.photo(let media) = message.kind, let imageURL = media.url {
-            imageView.pin_setImage(from: imageURL)
-        } else {
-            imageView.pin_cancelImageDownload()
+    func configureMediaMessageImageView(_ cell: MediaMessageCell, for message: MKMessageType, at indexPath: IndexPath, in messagesCollectionView: MessagesCollectionView) {
+//        if case MKMessageKind.photo(let media) = message.kind, let imageURL = media.url {
+//            imageView.pin_setImage(from: imageURL)
+//        } else {
+//            imageView.pin_cancelImageDownload()
+//        }
+        guard let stickerCell = cell as? StickerMessageCell else {return}
+        if case MKMessageKind.sticker(let media) = message.kind, let url = media.urlString {
+            StickerLoader.getPathAnimation(url: url) {[weak self] (path) in
+                guard let self = self, let path = path else {return}
+                let animationView: AnimationView = AnimationView()
+                if let animation = self.dicAnimations[path] {
+                    animationView.animation = animation
+                } else {
+                    animationView.animation = Animation.filepath(path)
+                    self.dicAnimations[path] = animationView.animation
+                }
+                
+
+                self.setupViewBodySticker(animationView: animationView, cell: stickerCell)
+            }
+            
+            
+            
+            
         }
+        
     }
-    
+    func setupViewBodySticker(animationView: AnimationView, cell: StickerMessageCell) {
+        cell.animationView?.removeFromSuperview()
+        animationView.loopMode = .loop
+        cell.imageView.addSubview(animationView)
+        cell.animationView = animationView
+        animationView.fillSuperview()
+        animationView.play()
+    }
     func configureLinkPreviewImageView(_ imageView: UIImageView, for message: MKMessageType, at indexPath: IndexPath, in messagesCollectionView: MessagesCollectionView) {
         imageView.pin_setImage(from: URL(string: "https://avatars0.githubusercontent.com/u/2911921?s=460&u=418a6180264738f33cf0ea2b6ce1c9fd79d992f2&v=4")!)
     }
@@ -266,4 +296,21 @@ extension BasicExampleViewController: MKMessagesLayoutDelegate {
         return 0
         
     }
+}
+internal extension UIView {
+
+func fillSuperview() {
+    guard let superview = self.superview else {
+        return
+    }
+    translatesAutoresizingMaskIntoConstraints = false
+
+    let constraints: [NSLayoutConstraint] = [
+        leftAnchor.constraint(equalTo: superview.leftAnchor),
+        rightAnchor.constraint(equalTo: superview.rightAnchor),
+        topAnchor.constraint(equalTo: superview.topAnchor),
+        bottomAnchor.constraint(equalTo: superview.bottomAnchor)
+        ]
+    NSLayoutConstraint.activate(constraints)
+}
 }

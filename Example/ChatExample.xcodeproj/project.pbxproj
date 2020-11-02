@@ -29,6 +29,9 @@
 		385C2947211FF38F0010B4BA /* BasicExampleViewController.swift in Sources */ = {isa = PBXBuildFile; fileRef = 385C2940211FF38F0010B4BA /* BasicExampleViewController.swift */; };
 		385C2948211FF38F0010B4BA /* ChatViewController.swift in Sources */ = {isa = PBXBuildFile; fileRef = 385C2941211FF38F0010B4BA /* ChatViewController.swift */; };
 		38CCCC592258419300DD5482 /* AutocompleteExampleViewController.swift in Sources */ = {isa = PBXBuildFile; fileRef = 38CCCC582258419300DD5482 /* AutocompleteExampleViewController.swift */; };
+		3D32C9A3255048E700E218E3 /* Dir.swift in Sources */ = {isa = PBXBuildFile; fileRef = 3D32C99A255048E700E218E3 /* Dir.swift */; };
+		3D32C9A5255048E700E218E3 /* StickerLoader.swift in Sources */ = {isa = PBXBuildFile; fileRef = 3D32C99C255048E700E218E3 /* StickerLoader.swift */; };
+		3D32C9A6255048E700E218E3 /* Data + Extension.swift in Sources */ = {isa = PBXBuildFile; fileRef = 3D32C99D255048E700E218E3 /* Data + Extension.swift */; };
 		50739F9621C5090A008CA369 /* BasicAudioController.swift in Sources */ = {isa = PBXBuildFile; fileRef = 50739F9521C5090A008CA369 /* BasicAudioController.swift */; };
 		5074EF4E2163555900D82952 /* sound2.m4a in Resources */ = {isa = PBXBuildFile; fileRef = 5074EF4C2163555900D82952 /* sound2.m4a */; };
 		5074EF4F2163555900D82952 /* sound1.m4a in Resources */ = {isa = PBXBuildFile; fileRef = 5074EF4D2163555900D82952 /* sound1.m4a */; };
@@ -40,7 +43,7 @@
 		882B5E811CF7D53600B6E160 /* AppDelegate.swift in Sources */ = {isa = PBXBuildFile; fileRef = 882B5E781CF7D53600B6E160 /* AppDelegate.swift */; };
 		882B5E901CF7D56000B6E160 /* ChatExampleUITests.swift in Sources */ = {isa = PBXBuildFile; fileRef = 882B5E8E1CF7D56000B6E160 /* ChatExampleUITests.swift */; };
 		882B5E951CF7D56E00B6E160 /* ChatExampleTests.swift in Sources */ = {isa = PBXBuildFile; fileRef = 882B5E931CF7D56E00B6E160 /* ChatExampleTests.swift */; };
-		9961327FB4F9B96CFD84A126 /* BuildFile in Frameworks */ = {isa = PBXBuildFile; };
+		9961327FB4F9B96CFD84A126 /* (null) in Frameworks */ = {isa = PBXBuildFile; };
 		D4036D91BB2480E403CDC2F1 /* Pods_ChatExampleUITests.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = 2AC6E3F5C11E39F57598DBE6 /* Pods_ChatExampleUITests.framework */; };
 		F182DD0E2148F655FC0DFF91 /* Pods_ChatExampleTests.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = 25FCE8536D329EC8856E2BA8 /* Pods_ChatExampleTests.framework */; };
 /* End PBXBuildFile section */
@@ -100,6 +103,9 @@
 		385C2940211FF38F0010B4BA /* BasicExampleViewController.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = BasicExampleViewController.swift; sourceTree = "<group>"; };
 		385C2941211FF38F0010B4BA /* ChatViewController.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = ChatViewController.swift; sourceTree = "<group>"; };
 		38CCCC582258419300DD5482 /* AutocompleteExampleViewController.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = AutocompleteExampleViewController.swift; sourceTree = "<group>"; };
+		3D32C99A255048E700E218E3 /* Dir.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = Dir.swift; sourceTree = "<group>"; };
+		3D32C99C255048E700E218E3 /* StickerLoader.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = StickerLoader.swift; sourceTree = "<group>"; };
+		3D32C99D255048E700E218E3 /* Data + Extension.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = "Data + Extension.swift"; sourceTree = "<group>"; };
 		4FA4643E9EBD7DB3FCD93B7C /* Pods-ChatExampleTests.debug.xcconfig */ = {isa = PBXFileReference; includeInIndex = 1; lastKnownFileType = text.xcconfig; name = "Pods-ChatExampleTests.debug.xcconfig"; path = "Target Support Files/Pods-ChatExampleTests/Pods-ChatExampleTests.debug.xcconfig"; sourceTree = "<group>"; };
 		50739F9521C5090A008CA369 /* BasicAudioController.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = BasicAudioController.swift; sourceTree = "<group>"; };
 		5074EF4C2163555900D82952 /* sound2.m4a */ = {isa = PBXFileReference; lastKnownFileType = file; path = sound2.m4a; sourceTree = "<group>"; };
@@ -147,7 +153,7 @@
 			isa = PBXFrameworksBuildPhase;
 			buildActionMask = 2147483647;
 			files = (
-				9961327FB4F9B96CFD84A126 /* BuildFile in Frameworks */,
+				9961327FB4F9B96CFD84A126 /* (null) in Frameworks */,
 				D4036D91BB2480E403CDC2F1 /* Pods_ChatExampleUITests.framework in Frameworks */,
 			);
 			runOnlyForDeploymentPostprocessing = 0;
@@ -228,6 +234,16 @@
 			path = "View Controllers";
 			sourceTree = "<group>";
 		};
+		3D32C994255048E700E218E3 /* Dir */ = {
+			isa = PBXGroup;
+			children = (
+				3D32C99A255048E700E218E3 /* Dir.swift */,
+				3D32C99C255048E700E218E3 /* StickerLoader.swift */,
+				3D32C99D255048E700E218E3 /* Data + Extension.swift */,
+			);
+			path = Dir;
+			sourceTree = "<group>";
+		};
 		50739F9421C5075D008CA369 /* AudioController */ = {
 			isa = PBXGroup;
 			children = (
@@ -293,6 +309,7 @@
 		882B5E771CF7D53600B6E160 /* Sources */ = {
 			isa = PBXGroup;
 			children = (
+				3D32C994255048E700E218E3 /* Dir */,
 				882B5E781CF7D53600B6E160 /* AppDelegate.swift */,
 				50739F9421C5075D008CA369 /* AudioController */,
 				385C293A211FF3800010B4BA /* Data Generation */,
@@ -590,6 +607,7 @@
 			buildActionMask = 2147483647;
 			files = (
 				385C2922211FF32E0010B4BA /* CustomCell.swift in Sources */,
+				3D32C9A5255048E700E218E3 /* StickerLoader.swift in Sources */,
 				385C2946211FF38F0010B4BA /* LaunchViewController.swift in Sources */,
 				1C5433E224C3A33600A5383B /* SwiftUIExampleView.swift in Sources */,
 				385C2939211FF37B0010B4BA /* Lorem.swift in Sources */,
@@ -602,6 +620,8 @@
 				385C2931211FF3630010B4BA /* UIColor+Extensions.swift in Sources */,
 				385C2932211FF3630010B4BA /* UIViewController+Extensions.swift in Sources */,
 				385C292B211FF3450010B4BA /* Settings+UserDefaults.swift in Sources */,
+				3D32C9A6255048E700E218E3 /* Data + Extension.swift in Sources */,
+				3D32C9A3255048E700E218E3 /* Dir.swift in Sources */,
 				385C2945211FF38F0010B4BA /* NavigationController.swift in Sources */,
 				385C2948211FF38F0010B4BA /* ChatViewController.swift in Sources */,
 				385C2944211FF38F0010B4BA /* MessageContainerController.swift in Sources */,
