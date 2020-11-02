@@ -320,7 +320,7 @@ open class MessageSizeCalculator: CellSizeCalculator {
             if let medias = replyMessage.medias, medias.count > 0, !replyMessage.deleted{
                 var contentSize: CGSize = .zero
                 if let attributedString = dataSource.messageActionLabelAttributedText(for: message.action, at: indexPath) {
-                    contentSize = self.labelSize(for: attributedString, considering: 120)
+                    contentSize = self.labelSize(for: attributedString, considering: maxWidth)
                 }
                 return self.getSizeOfReplyMedia(contentSize: contentSize)
             }

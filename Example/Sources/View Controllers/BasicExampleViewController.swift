@@ -182,6 +182,7 @@ extension BasicExampleViewController: MKMessagesDisplayDelegate {
             if let urlString = message.medias?.first, let imageURL = URL(string: urlString) {
                 imageView.pin_setImage(from: imageURL)
             }
+            imageView.backgroundColor = .red
         case .story(let urlString):
             if let imageURL = URL(string: urlString) {
                 imageView.pin_setImage(from: imageURL)
@@ -226,7 +227,7 @@ extension BasicExampleViewController: MKMessagesDisplayDelegate {
         audioController.configureAudioCell(cell, message: message) // this is needed especily when the cell is reconfigure while is playing sound
     }
 
-    func configureTextForActionMessage(at indexPath: IndexPath, in messagesCollectionView: MessagesCollectionView) -> [NSAttributedString.Key : Any] {
+    func configureTextForActionMessage(at indexPath: IndexPath, in messagesCollectionView: MessagesCollectionView) -> [NSAttributedString.Key: Any] {
         let paragraph = NSMutableParagraphStyle()
         paragraph.alignment = .center
         return [

@@ -48,7 +48,7 @@ open class ActionReplyMediaView: UIView {
         self.addSubview(messageLabel)
         NSLayoutConstraint.activate([
             messageLabel.leadingAnchor.constraint(equalTo: imageView.trailingAnchor, constant: 5),
-            messageLabel.topAnchor.constraint(equalTo: imageView.topAnchor, constant: 5),
+            messageLabel.centerYAnchor.constraint(equalTo: imageView.centerYAnchor, constant: 0),
             messageLabel.trailingAnchor.constraint(equalTo: self.trailingAnchor, constant: -contentInset.right),
         ])
 //        imageView.addSubview(animationReplyView)
