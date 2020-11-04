@@ -45,7 +45,7 @@ class ChatViewController: MessagesViewController, MKMessagesDataSource {
         control.addTarget(self, action: #selector(loadMoreMessages), for: .valueChanged)
         return control
     }()
-
+    var bottom: NSLayoutConstraint!
     // MARK: - Private properties
 
     private let formatter: DateFormatter = {
@@ -67,7 +67,21 @@ class ChatViewController: MessagesViewController, MKMessagesDataSource {
         
     }
     
-    
+//    override func setupConstraints() {
+//        messagesCollectionView.translatesAutoresizingMaskIntoConstraints = false
+//        
+//        let top = messagesCollectionView.topAnchor.constraint(equalTo: view.topAnchor)
+//        let leading = messagesCollectionView.leadingAnchor.constraint(equalTo: view.leadingAnchor)
+//        let trailing = messagesCollectionView.trailingAnchor.constraint(equalTo: view.trailingAnchor)
+//        
+//        if #available(iOS 11.0, *) {
+//            bottom = messagesCollectionView.bottomAnchor.constraint(equalTo: view.bottomAnchor)
+//        } else {
+//            bottom = messagesCollectionView.bottomAnchor.constraint(equalTo: view.topAnchor, constant: 0)
+//        }
+//        NSLayoutConstraint.activate([top, bottom, trailing, leading])
+//        
+//    }
     
     
     
@@ -371,6 +385,10 @@ extension ChatViewController: InputBarAccessoryViewDelegate {
         processInputBar(messageInputBar)
     }
 
+    @objc
+    func inputBar(_ inputBar: InputBarAccessoryView, didChangeIntrinsicContentTo size: CGSize) {
+        
+    }
     func processInputBar(_ inputBar: InputBarAccessoryView) {
         // Here we can parse for which substrings were autocompleted
         let attributedText = inputBar.inputTextView.attributedText!

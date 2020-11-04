@@ -46,12 +46,33 @@ final class MessageSubviewViewController: BasicExampleViewController {
     override func didMove(toParent parent: UIViewController?) {
         super.didMove(toParent: parent)
         parent?.view.addSubview(subviewInputBar)
-        
+//        self.setupConstraints()
         keyboardManager.bind(inputAccessoryView: subviewInputBar)
         keyboardManager.bind(to: self.messagesCollectionView)
     }
+    
+//    override func setupConstraints() {
+//        messagesCollectionView.translatesAutoresizingMaskIntoConstraints = false
+//        
+//        let top = messagesCollectionView.topAnchor.constraint(equalTo: view.topAnchor)
+//        let leading = messagesCollectionView.leadingAnchor.constraint(equalTo: view.leadingAnchor)
+//        let trailing = messagesCollectionView.trailingAnchor.constraint(equalTo: view.trailingAnchor)
+//        
+//        if #available(iOS 11.0, *) {
+//            bottom = messagesCollectionView.bottomAnchor.constraint(equalTo: subviewInputBar.topAnchor)
+//        } else {
+//            bottom = messagesCollectionView.bottomAnchor.constraint(equalTo: subviewInputBar.topAnchor, constant: 0)
+//        }
+//        NSLayoutConstraint.activate([top, bottom, trailing, leading])
+//        
+//    }
 
     override func inputBar(_ inputBar: InputBarAccessoryView, didPressSendButtonWith text: String) {
         processInputBar(subviewInputBar)
     }
+//    override func inputBar(_ inputBar: InputBarAccessoryView, didChangeIntrinsicContentTo size: CGSize) {
+//        self.bottom.constant = -size.height
+//        self.messagesCollectionView.scrollToBottom()
+//    }
+    
 }

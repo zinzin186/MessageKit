@@ -58,6 +58,9 @@ UICollectionViewDelegateFlowLayout, UICollectionViewDataSource, UIGestureRecogni
 
     /// Display the date of message by swiping left.
     /// The default value of this property is `false`.
+    
+    open var messagesCollectionViewBottomConstraint: NSLayoutConstraint?
+    
     open var showMessageTimestampOnSwipeLeft: Bool = false {
         didSet {
             messagesCollectionView.showMessageTimestampOnSwipeLeft = showMessageTimestampOnSwipeLeft
@@ -122,7 +125,7 @@ UICollectionViewDelegateFlowLayout, UICollectionViewDataSource, UIGestureRecogni
         super.viewDidLoad()
         setupDefaults()
         setupSubviews()
-        setupConstraints()
+//        setupConstraints()
         setupDelegates()
         addMenuControllerObservers()
         addObservers()
@@ -238,23 +241,23 @@ UICollectionViewDelegateFlowLayout, UICollectionViewDataSource, UIGestureRecogni
         view.addSubview(messagesCollectionView)
     }
 
-    private func setupConstraints() {
+    open func setupConstraints() {
         messagesCollectionView.translatesAutoresizingMaskIntoConstraints = false
         
         let top = messagesCollectionView.topAnchor.constraint(equalTo: view.topAnchor)
         let leading = messagesCollectionView.leadingAnchor.constraint(equalTo: view.leadingAnchor)
         let trailing = messagesCollectionView.trailingAnchor.constraint(equalTo: view.trailingAnchor)
-        let bottom: NSLayoutConstraint
+//        let bottom: NSLayoutConstraint
         if #available(iOS 11.0, *) {
             if isSubView{
-                bottom = messagesCollectionView.bottomAnchor.constraint(equalTo: view.safeAreaLayoutGuide.bottomAnchor)
+                messagesCollectionViewBottomConstraint = messagesCollectionView.bottomAnchor.constraint(equalTo: view.safeAreaLayoutGuide.bottomAnchor)
             }else{
-                bottom = messagesCollectionView.bottomAnchor.constraint(equalTo: view.bottomAnchor)
+                messagesCollectionViewBottomConstraint = messagesCollectionView.bottomAnchor.constraint(equalTo: view.bottomAnchor)
             }
         } else {
-            bottom = messagesCollectionView.bottomAnchor.constraint(equalTo: view.bottomAnchor)
+            messagesCollectionViewBottomConstraint = messagesCollectionView.bottomAnchor.constraint(equalTo: view.bottomAnchor)
         }
-        NSLayoutConstraint.activate([top, bottom, trailing, leading])
+        NSLayoutConstraint.activate([top, messagesCollectionViewBottomConstraint!, trailing, leading])
         
     }
 
