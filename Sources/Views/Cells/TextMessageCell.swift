@@ -63,6 +63,10 @@ open class TextMessageCell: MessageContentCell {
 
     open override func configure(with message: MKMessageType, at indexPath: IndexPath, and messagesCollectionView: MessagesCollectionView) {
         super.configure(with: message, at: indexPath, and: messagesCollectionView)
+        if case MKActionType.remove = message.action {
+            super.configure(with: message, at: indexPath, and: messagesCollectionView)
+            return
+        }
 
         guard let displayDelegate = messagesCollectionView.messagesDisplayDelegate else {
             fatalError(MessageKitError.nilMessagesDisplayDelegate)

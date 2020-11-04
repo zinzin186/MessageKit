@@ -53,6 +53,10 @@ open class LinkPreviewMessageCell: TextMessageCell {
     }
 
     open override func configure(with message: MKMessageType, at indexPath: IndexPath, and messagesCollectionView: MessagesCollectionView) {
+        if case MKActionType.remove = message.action {
+            super.configure(with: message, at: indexPath, and: messagesCollectionView)
+            return
+        }
         let displayDelegate = messagesCollectionView.messagesDisplayDelegate
 
 //        if let textColor: UIColor = displayDelegate?.textColor(for: message, at: indexPath, in: messagesCollectionView) {
@@ -87,12 +91,27 @@ open class LinkPreviewMessageCell: TextMessageCell {
     }
 
     open override func handleTapGesture(_ gesture: UIGestureRecognizer) {
-        let touchLocation = gesture.location(in: linkPreviewView)
-
-        guard linkPreviewView.frame.contains(touchLocation), let url = linkURL else {
-            super.handleTapGesture(gesture)
-            return
+        let touchLocation = gesture.location(in: self)
+        let messageFrameConvert = convert(messageContainerView.frame, from: messageBodyView)
+        switch true {
+        case messageFrameConvert.contains(touchLocation):
+            if !cellContentView(canHandle: convert(touchLocation, to: messageContainerView)) {
+                delegate?.didSelectURL(linkURL!)
+            }
+        case avatarView.frame.contains(touchLocation):
+            delegate?.didTapAvatar(in: self)
+        case cellTopLabel.frame.contains(touchLocation):
+            delegate?.didTapCellTopLabel(in: self)
+        case cellBottomLabel.frame.contains(touchLocation):
+            delegate?.didTapCellBottomLabel(in: self)
+        case messageTopLabel.frame.contains(touchLocation):
+            delegate?.didTapMessageTopLabel(in: self)
+        case messageBottomLabel.frame.contains(touchLocation):
+            delegate?.didTapMessageBottomLabel(in: self)
+        case accessoryView.frame.contains(touchLocation):
+            delegate?.didTapAccessoryView(in: self)
+        default:
+            delegate?.didTapBackground(in: self)
         }
-        delegate?.didSelectURL(url)
     }
 }

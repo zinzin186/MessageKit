@@ -30,6 +30,9 @@ open class LinkPreviewMessageSizeCalculator: TextMessageSizeCalculator {
         guard case MKMessageKind.linkPreview(let linkItem) = message.kind else {
             fatalError("messageContainerSize received unhandled MessageDataType: \(message.kind)")
         }
+        if case MKActionType.remove = message.action {
+            return CGSize.zero
+        }
         let dummyMessage = ConcreteMessageType(sender: message.sender,
                                                messageId: message.messageId,
                                                sentDate: message.sentDate,
