@@ -33,6 +33,7 @@ UICollectionViewDelegateFlowLayout, UICollectionViewDataSource, UIGestureRecogni
     /// The `MessagesCollectionView` managed by the messages view controller object.
     open var messagesCollectionView = MessagesCollectionView()
 
+    open var subInput: UIView?
     /// The `InputBarAccessoryView` used as the `inputAccessoryView` in the view controller.
     open lazy var messageInputBar = InputBarAccessoryView()
 
@@ -58,9 +59,9 @@ UICollectionViewDelegateFlowLayout, UICollectionViewDataSource, UIGestureRecogni
 
     /// Display the date of message by swiping left.
     /// The default value of this property is `false`.
+    open var currentOriginYInputBar: CGFloat?
     
     open var messagesCollectionViewBottomConstraint: NSLayoutConstraint?
-    
     open var showMessageTimestampOnSwipeLeft: Bool = false {
         didSet {
             messagesCollectionView.showMessageTimestampOnSwipeLeft = showMessageTimestampOnSwipeLeft
@@ -71,7 +72,6 @@ UICollectionViewDelegateFlowLayout, UICollectionViewDataSource, UIGestureRecogni
             }
         }
     }
-    
     open var isSubView: Bool {
         return false
     }
@@ -125,7 +125,7 @@ UICollectionViewDelegateFlowLayout, UICollectionViewDataSource, UIGestureRecogni
         super.viewDidLoad()
         setupDefaults()
         setupSubviews()
-        setupConstraints()
+//        setupConstraints()
         setupDelegates()
         addMenuControllerObservers()
         addObservers()

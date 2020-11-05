@@ -292,6 +292,7 @@ extension ChatViewController: MKMessageCellDelegate {
 
     func didTapBackground(in cell: MessageCollectionViewCell) {
         print("didTapBackgroundl tapped")
+        self.view.endEditing(true)
     }
     func didTapPlayButton(in cell: AudioMessageCell) {
         guard let indexPath = messagesCollectionView.indexPath(for: cell),
@@ -374,6 +375,7 @@ extension ChatViewController: MKMessageLabelDelegate {
     func didSelectCustom(_ pattern: String, match: String?) {
         print("Custom data detector patter selected: \(pattern)")
     }
+    
 }
 
 // MARK: - MessageInputBarDelegate

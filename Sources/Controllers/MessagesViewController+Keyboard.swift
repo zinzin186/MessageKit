@@ -26,12 +26,13 @@ import Foundation
 import UIKit
 import InputBarAccessoryView
 
-internal extension MessagesViewController {
+public extension MessagesViewController {
 
     // MARK: - Register / Unregister Observers
 
     func addKeyboardObservers() {
-        NotificationCenter.default.addObserver(self, selector: #selector(MessagesViewController.handleKeyboardDidChangeState(_:)), name: UIResponder.keyboardWillChangeFrameNotification, object: nil)
+        NotificationCenter.default.addObserver(self, selector: #selector(MessagesViewController.handleKeyboardWillShowState), name: UIResponder.keyboardWillShowNotification, object: nil)
+        NotificationCenter.default.addObserver(self, selector: #selector(MessagesViewController.handleKeyboardWillHideState(_:)), name: UIResponder.keyboardWillHideNotification, object: nil)
         NotificationCenter.default.addObserver(self, selector: #selector(MessagesViewController.handleTextViewDidBeginEditing(_:)), name: UITextView.textDidBeginEditingNotification, object: nil)
     }
 
@@ -58,9 +59,9 @@ internal extension MessagesViewController {
     }
 
     @objc
-    private func handleKeyboardDidChangeState(_ notification: Notification) {
+    private func handleKeyboardWillShowState(_ notification: Notification) {
         guard !isMessagesControllerBeingDismissed else { return }
-
+        
         guard let keyboardStartFrameInScreenCoords = notification.userInfo?[UIResponder.keyboardFrameBeginUserInfoKey] as? CGRect else { return }
         guard !keyboardStartFrameInScreenCoords.isEmpty || UIDevice.current.userInterfaceIdiom != .pad else {
             // WORKAROUND for what seems to be a bug in iPad's keyboard handling in iOS 11: we receive an extra spurious frame change
@@ -91,19 +92,42 @@ internal extension MessagesViewController {
 
         guard let keyboardEndFrameInScreenCoords = notification.userInfo?[UIResponder.keyboardFrameEndUserInfoKey] as? CGRect else { return }
         let keyboardEndFrame = view.convert(keyboardEndFrameInScreenCoords, from: view.window)
-
-        let newBottomInset = requiredScrollViewBottomInset(forKeyboardFrame: keyboardEndFrame)
+        if let currentOffset = self.currentOriginYInputBar, self.subInput?.frame.origin.y == currentOffset {
+            return
+        } else {
+            self.currentOriginYInputBar = self.subInput?.frame.origin.y
+        }
+        
+        let newBottomInset = keyboardEndFrame.height - 34
         let differenceOfBottomInset = newBottomInset - messageCollectionViewBottomInset
+        let contentOffset = CGPoint(x: messagesCollectionView.contentOffset.x, y: messagesCollectionView.contentOffset.y + differenceOfBottomInset)
+        messagesCollectionView.setContentOffset(contentOffset, animated: false)
+    }
+    @objc
+        private func handleKeyboardWillHideState(_ notification: Notification) {
+            guard !isMessagesControllerBeingDismissed  else { return }
+            
+            guard let keyboardStartFrameInScreenCoords = notification.userInfo?[UIResponder.keyboardFrameBeginUserInfoKey] as? CGRect else { return }
+            guard !keyboardStartFrameInScreenCoords.isEmpty || UIDevice.current.userInterfaceIdiom != .pad else {
+                // WORKAROUND for what seems to be a bug in iPad's keyboard handling in iOS 11: we receive an extra spurious frame change
+                // notification when undocking the keyboard, with a zero starting frame and an incorrect end frame. The workaround is to
+                // ignore this notification.
+                return
+            }
 
-        if maintainPositionOnKeyboardFrameChanged && differenceOfBottomInset != 0 {
-            let contentOffset = CGPoint(x: messagesCollectionView.contentOffset.x, y: messagesCollectionView.contentOffset.y + differenceOfBottomInset)
+            guard self.presentedViewController == nil else {
+                // This is important to skip notifications from child modal controllers in iOS >= 13.0
+                return
+            }
+            if let currentOffset = self.currentOriginYInputBar, self.subInput?.frame.origin.y == currentOffset {
+                return
+            } else {
+                self.currentOriginYInputBar = self.subInput?.frame.origin.y
+            }
+            let contentOffset = CGPoint(x: messagesCollectionView.contentOffset.x, y: messagesCollectionView.contentOffset.y)
             messagesCollectionView.setContentOffset(contentOffset, animated: false)
         }
-
-        UIView.performWithoutAnimation {
-            messageCollectionViewBottomInset = newBottomInset
-        }
-    }
+    
 
     // MARK: - Inset Computation
 
