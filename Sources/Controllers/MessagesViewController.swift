@@ -125,7 +125,7 @@ UICollectionViewDelegateFlowLayout, UICollectionViewDataSource, UIGestureRecogni
         super.viewDidLoad()
         setupDefaults()
         setupSubviews()
-//        setupConstraints()
+        setupConstraints()
         setupDelegates()
         addMenuControllerObservers()
         addObservers()
@@ -155,10 +155,14 @@ UICollectionViewDelegateFlowLayout, UICollectionViewDataSource, UIGestureRecogni
         }
     }
 
-//    open override func viewSafeAreaInsetsDidChange() {
-//        super.viewSafeAreaInsetsDidChange()
-//        messageCollectionViewBottomInset = requiredInitialScrollViewBottomInset()
-//    }
+    open override func viewSafeAreaInsetsDidChange() {
+        if #available(iOS 11.0, *) {
+            super.viewSafeAreaInsetsDidChange()
+        } else {
+            // Fallback on earlier versions
+        }
+        messageCollectionViewBottomInset = requiredInitialScrollViewBottomInset()
+    }
 
     // MARK: - Initializers
 
