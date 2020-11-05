@@ -273,7 +273,7 @@ extension BasicExampleViewController: MKMessagesDisplayDelegate {
 extension BasicExampleViewController: MKMessagesLayoutDelegate {
     
     func cellTopLabelHeight(for message: MKMessageType, at indexPath: IndexPath, in messagesCollectionView: MessagesCollectionView) -> CGFloat {
-        return 0
+        return 20
     }
     
 //    func cellBottomLabelHeight(for message: MKMessageType, at indexPath: IndexPath, in messagesCollectionView: MessagesCollectionView) -> CGFloat {
