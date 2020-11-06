@@ -164,6 +164,8 @@ public protocol MKMessageCellDelegate: MKMessageLabelDelegate {
     func cellShouldReplyMessage(cell: MessageCollectionViewCell)
     
     func cellDidRequestReplyMessage(cell: MessageCollectionViewCell)
+    
+    func cellDidLongPressMessage(cell: MessageCollectionViewCell)
 
 }
 
@@ -200,5 +202,7 @@ public extension MKMessageCellDelegate {
     func cellShouldReplyMessage(cell: MessageCollectionViewCell) {}
     
     func cellDidRequestReplyMessage(cell: MessageCollectionViewCell) {}
+    
+    func cellDidLongPressMessage(cell: MessageCollectionViewCell) {}
 
 }

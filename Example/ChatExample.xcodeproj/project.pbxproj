@@ -29,6 +29,8 @@
 		385C2947211FF38F0010B4BA /* BasicExampleViewController.swift in Sources */ = {isa = PBXBuildFile; fileRef = 385C2940211FF38F0010B4BA /* BasicExampleViewController.swift */; };
 		385C2948211FF38F0010B4BA /* ChatViewController.swift in Sources */ = {isa = PBXBuildFile; fileRef = 385C2941211FF38F0010B4BA /* ChatViewController.swift */; };
 		38CCCC592258419300DD5482 /* AutocompleteExampleViewController.swift in Sources */ = {isa = PBXBuildFile; fileRef = 38CCCC582258419300DD5482 /* AutocompleteExampleViewController.swift */; };
+		3D11180A2555C7400013017F /* KeyboardTracker.swift in Sources */ = {isa = PBXBuildFile; fileRef = 3D1118092555C7400013017F /* KeyboardTracker.swift */; };
+		3D11180C2555C89A0013017F /* KeyboardEventsHandling.swift in Sources */ = {isa = PBXBuildFile; fileRef = 3D11180B2555C89A0013017F /* KeyboardEventsHandling.swift */; };
 		3D32C9A3255048E700E218E3 /* Dir.swift in Sources */ = {isa = PBXBuildFile; fileRef = 3D32C99A255048E700E218E3 /* Dir.swift */; };
 		3D32C9A5255048E700E218E3 /* StickerLoader.swift in Sources */ = {isa = PBXBuildFile; fileRef = 3D32C99C255048E700E218E3 /* StickerLoader.swift */; };
 		3D32C9A6255048E700E218E3 /* Data + Extension.swift in Sources */ = {isa = PBXBuildFile; fileRef = 3D32C99D255048E700E218E3 /* Data + Extension.swift */; };
@@ -104,6 +106,8 @@
 		385C2940211FF38F0010B4BA /* BasicExampleViewController.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = BasicExampleViewController.swift; sourceTree = "<group>"; };
 		385C2941211FF38F0010B4BA /* ChatViewController.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = ChatViewController.swift; sourceTree = "<group>"; };
 		38CCCC582258419300DD5482 /* AutocompleteExampleViewController.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = AutocompleteExampleViewController.swift; sourceTree = "<group>"; };
+		3D1118092555C7400013017F /* KeyboardTracker.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = KeyboardTracker.swift; sourceTree = "<group>"; };
+		3D11180B2555C89A0013017F /* KeyboardEventsHandling.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = KeyboardEventsHandling.swift; sourceTree = "<group>"; };
 		3D32C99A255048E700E218E3 /* Dir.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = Dir.swift; sourceTree = "<group>"; };
 		3D32C99C255048E700E218E3 /* StickerLoader.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = StickerLoader.swift; sourceTree = "<group>"; };
 		3D32C99D255048E700E218E3 /* Data + Extension.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = "Data + Extension.swift"; sourceTree = "<group>"; };
@@ -233,6 +237,8 @@
 				385C293C211FF38E0010B4BA /* SettingsViewController.swift */,
 				63ECDABD24182A470016C349 /* MessageSubviewViewController.swift */,
 				63ECDAC1241889630016C349 /* MessageSubviewContainerViewController.swift */,
+				3D1118092555C7400013017F /* KeyboardTracker.swift */,
+				3D11180B2555C89A0013017F /* KeyboardEventsHandling.swift */,
 			);
 			path = "View Controllers";
 			sourceTree = "<group>";
@@ -622,6 +628,7 @@
 				50739F9621C5090A008CA369 /* BasicAudioController.swift in Sources */,
 				385C2937211FF37B0010B4BA /* SampleData.swift in Sources */,
 				385C2931211FF3630010B4BA /* UIColor+Extensions.swift in Sources */,
+				3D11180A2555C7400013017F /* KeyboardTracker.swift in Sources */,
 				385C2932211FF3630010B4BA /* UIViewController+Extensions.swift in Sources */,
 				385C292B211FF3450010B4BA /* Settings+UserDefaults.swift in Sources */,
 				3D32C9A6255048E700E218E3 /* Data + Extension.swift in Sources */,
@@ -636,6 +643,7 @@
 				1C5433DD24C389C300A5383B /* MessagesView.swift in Sources */,
 				882B5E811CF7D53600B6E160 /* AppDelegate.swift in Sources */,
 				385C292D211FF3520010B4BA /* CustomMessageFlowLayout.swift in Sources */,
+				3D11180C2555C89A0013017F /* KeyboardEventsHandling.swift in Sources */,
 				38CCCC592258419300DD5482 /* AutocompleteExampleViewController.swift in Sources */,
 				63ECDAC2241889630016C349 /* MessageSubviewContainerViewController.swift in Sources */,
 			);

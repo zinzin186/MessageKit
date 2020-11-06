@@ -93,15 +93,25 @@ public extension MessagesViewController {
         guard let keyboardEndFrameInScreenCoords = notification.userInfo?[UIResponder.keyboardFrameEndUserInfoKey] as? CGRect else { return }
         let keyboardEndFrame = view.convert(keyboardEndFrameInScreenCoords, from: view.window)
         if let currentOffset = self.currentOriginYInputBar, self.subInput?.frame.origin.y == currentOffset {
-            return
+//            return
         } else {
             self.currentOriginYInputBar = self.subInput?.frame.origin.y
         }
         
-        let newBottomInset = keyboardEndFrame.height - 34
+        let newBottomInset = keyboardEndFrame.height - bottomInset
         let differenceOfBottomInset = newBottomInset - messageCollectionViewBottomInset
         let contentOffset = CGPoint(x: messagesCollectionView.contentOffset.x, y: messagesCollectionView.contentOffset.y + differenceOfBottomInset)
-        messagesCollectionView.setContentOffset(contentOffset, animated: false)
+//        messagesCollectionView.setContentOffset(contentOffset, animated: false)
+        let currentOffset = messagesCollectionView.contentOffset.y
+        let contentSizeHeight = messagesCollectionView.contentSize.height
+        let heightCV = messagesCollectionView.frame.height
+        let offset = (contentSizeHeight - heightCV) - (currentOffset + keyboardEndFrame.height)
+        if contentOffset.y + heightCV <= contentSizeHeight - 1 {
+            messagesCollectionView.setContentOffset(contentOffset, animated: false)
+        } else {
+            messagesCollectionView.scrollToLastItem(at: .bottom, animated: false)
+        }
+                
     }
     @objc
         private func handleKeyboardWillHideState(_ notification: Notification) {
@@ -124,8 +134,8 @@ public extension MessagesViewController {
             } else {
                 self.currentOriginYInputBar = self.subInput?.frame.origin.y
             }
-            let contentOffset = CGPoint(x: messagesCollectionView.contentOffset.x, y: messagesCollectionView.contentOffset.y)
-            messagesCollectionView.setContentOffset(contentOffset, animated: false)
+//            let contentOffset = CGPoint(x: messagesCollectionView.contentOffset.x, y: messagesCollectionView.contentOffset.y)
+//            messagesCollectionView.setContentOffset(contentOffset, animated: false)
         }
     
 
@@ -158,6 +168,14 @@ public extension MessagesViewController {
         if #available(iOS 11.0, *) {
             let paddingBottom = messagesCollectionView.adjustedContentInset.bottom < 100 ? self.view.safeAreaInsets.bottom : 0
             return messagesCollectionView.adjustedContentInset.bottom - messagesCollectionView.contentInset.bottom
+        } else {
+           return 0
+        }
+    }
+    
+    private var bottomInset: CGFloat {
+        if #available(iOS 11.0, *) {
+            return self.view.safeAreaInsets.bottom
         } else {
            return 0
         }

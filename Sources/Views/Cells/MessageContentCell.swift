@@ -115,6 +115,29 @@ open class MessageContentCell: MessageCollectionViewCell, UIGestureRecognizerDel
     /// The `MessageCellDelegate` for the cell.
     open weak var delegate: MKMessageCellDelegate?
     var panGesture = UIPanGestureRecognizer()
+    
+    public private (set) lazy var longPressGestureRecognizer: UILongPressGestureRecognizer = {
+        let longpressGestureRecognizer = UILongPressGestureRecognizer(target: self, action: #selector(MessageContentCell.messageLongPress(_:)))
+        longpressGestureRecognizer.cancelsTouchesInView = true
+        longpressGestureRecognizer.delegate = self
+        longpressGestureRecognizer.minimumPressDuration = 0.5
+        return longpressGestureRecognizer
+    }()
+    
+    
+    @objc
+    private func messageLongPress(_ longPressGestureRecognizer: UILongPressGestureRecognizer) {
+        switch longPressGestureRecognizer.state {
+        case .began:
+            self.delegate?.cellDidLongPressMessage(cell: self)
+//        case .ended, .cancelled:
+//            self.onBubbleLongPressEnded?(self)
+        default:
+            break
+        }
+    }
+    
+    
     var shouldReply: Bool = false
     
 
@@ -157,6 +180,7 @@ open class MessageContentCell: MessageCollectionViewCell, UIGestureRecognizerDel
     private func setupBodyMessageView(){
         messageBodyView.addSubview(actionBodyView)
         messageBodyView.addSubview(messageContainerView)
+        messageBodyView.addGestureRecognizer(self.longPressGestureRecognizer)
     }
     
     @objc func actionDrag(_ sender:UIPanGestureRecognizer) {

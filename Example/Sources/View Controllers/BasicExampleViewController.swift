@@ -52,10 +52,10 @@ class BasicExampleViewController: ChatViewController {
         return true
     }
     func setupLongGestureOnCollectionView() {
-        let longPressedGesture = UILongPressGestureRecognizer(target: self, action: #selector(longPress))
-        longPressedGesture.minimumPressDuration = 0.3
-        longPressedGesture.delegate = self
-        messagesCollectionView.addGestureRecognizer(longPressedGesture)
+//        let longPressedGesture = UILongPressGestureRecognizer(target: self, action: #selector(longPress))
+//        longPressedGesture.minimumPressDuration = 0.3
+//        longPressedGesture.delegate = self
+//        messagesCollectionView.addGestureRecognizer(longPressedGesture)
     }
     
     @objc func longPress() {

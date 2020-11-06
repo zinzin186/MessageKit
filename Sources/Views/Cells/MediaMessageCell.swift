@@ -89,6 +89,8 @@ open class MediaMessageCell: MessageContentCell {
     open override func prepareForReuse() {
         super.prepareForReuse()
         self.imageView.image = nil
+        self.progressUpload.isHidden = true
+        self.progressUpload.progress = 0
     }
 
     open override func configure(with message: MKMessageType, at indexPath: IndexPath, and messagesCollectionView: MessagesCollectionView) {

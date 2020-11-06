@@ -293,6 +293,8 @@ extension ChatViewController: MKMessageCellDelegate {
     func didTapBackground(in cell: MessageCollectionViewCell) {
         print("didTapBackgroundl tapped")
         self.view.endEditing(true)
+        print(self.messagesCollectionView.frame)
+        print(self.messagesCollectionView.contentOffset)
     }
     func didTapPlayButton(in cell: AudioMessageCell) {
         guard let indexPath = messagesCollectionView.indexPath(for: cell),

@@ -277,10 +277,10 @@ internal struct MockMessage: MKMessageType {
         let attributedText1 = NSMutableAttributedString(string: "Nội dung được gửi không hỗ trợ trên phiên bản này, vui lòng cập nhật phiên bản mới nhất ", attributes: [.font: UIFont.systemFont(ofSize: 16), .foregroundColor: UIColor.lightGray])
         let attributedText2 = NSAttributedString(string: "tại đây", attributes: [.font: UIFont.systemFont(ofSize: 16), .foregroundColor: UIColor.green])
         attributedText1.append(attributedText2)
-//        self.init(kind: .attributedText(attributedText1), user: user, messageId: messageId, date: date, action: action)
+        self.init(kind: .text(text), user: user, messageId: messageId, date: date, action: action)
 //        self.init(kind: .call(image: statusImage, statusInfo: statusType.statusName, callInfo: callInfoString), user: user, messageId: messageId, date: date, action: .default)
 //        self.init(kind: .sticker(mediaItem), user: user, messageId: messageId, date: date, action: .default)
-        self.init(kind: .action(text), user: user, messageId: messageId, date: date, action: .default)
+//        self.init(kind: .action(text), user: user, messageId: messageId, date: date, action: .default)
 //        let urlEndcode = "https://vi.wikipedia.org/wiki/Wikipedia:Sách_hướng_dẫn".addingPercentEncoding(withAllowedCharacters: .urlHostAllowed)
 //        let gPLinkItem = MKLinkItem(
 //            text: "https://vnexpress.net/nhung-dia-danh-co-doc-nhat-the-gioi-2882673.html",

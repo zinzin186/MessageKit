@@ -27,11 +27,6 @@ import InputBarAccessoryView
 
 final class MessageSubviewViewController: BasicExampleViewController {
 
-    var notificationCenter = NotificationCenter.default
-    var keyboardTracker: KeyboardTracker!
-    weak var keyboardEventsHandler: KeyboardEventsHandling?
-    //////////
-    
     override var inputAccessoryView: UIView? {
         return nil
     }
@@ -58,7 +53,7 @@ final class MessageSubviewViewController: BasicExampleViewController {
     func setupConstraintsCV() {
             messagesCollectionView.translatesAutoresizingMaskIntoConstraints = false
             
-            let top = messagesCollectionView.topAnchor.constraint(equalTo: view.topAnchor, constant: 84)
+            let top = messagesCollectionView.topAnchor.constraint(equalTo: view.topAnchor)
             let leading = messagesCollectionView.leadingAnchor.constraint(equalTo: view.leadingAnchor)
             let trailing = messagesCollectionView.trailingAnchor.constraint(equalTo: view.trailingAnchor)
     //        let bottom: NSLayoutConstraint
@@ -75,7 +70,34 @@ final class MessageSubviewViewController: BasicExampleViewController {
             NSLayoutConstraint.activate([top, messagesCollectionViewBottomConstraint!, trailing, leading])
             
         }
-
+    override func didMove(toParent parent: UIViewController?) {
+        super.didMove(toParent: parent)
+//        parent?.view.addSubview(subviewInputBar)
+////        self.setupConstraints()
+//        keyboardManager.bind(inputAccessoryView: subviewInputBar)
+//        keyboardManager.bind(to: self.messagesCollectionView)
+//        keyboardManager.on(event: .willShow) { (notification) in
+////            let bottomInset = UIScreen.main.bounds.height - self.subviewInputBar.frame.origin.y
+////            self.updateBottom(change: notification.endFrame.height - 34)
+//            self.messagesCollectionView.scrollToBottom(animated: true)
+//        }
+    }
+    
+//    override func setupConstraints() {
+//        messagesCollectionView.translatesAutoresizingMaskIntoConstraints = false
+//        
+//        let top = messagesCollectionView.topAnchor.constraint(equalTo: view.topAnchor)
+//        let leading = messagesCollectionView.leadingAnchor.constraint(equalTo: view.leadingAnchor)
+//        let trailing = messagesCollectionView.trailingAnchor.constraint(equalTo: view.trailingAnchor)
+//        
+//        if #available(iOS 11.0, *) {
+//            bottom = messagesCollectionView.bottomAnchor.constraint(equalTo: subviewInputBar.topAnchor)
+//        } else {
+//            bottom = messagesCollectionView.bottomAnchor.constraint(equalTo: subviewInputBar.topAnchor, constant: 0)
+//        }
+//        NSLayoutConstraint.activate([top, bottom, trailing, leading])
+//        
+//    }
 
     override func inputBar(_ inputBar: InputBarAccessoryView, didPressSendButtonWith text: String) {
         processInputBar(subviewInputBar)
@@ -96,27 +118,4 @@ final class MessageSubviewViewController: BasicExampleViewController {
         self.keyboardManager.isWillDisAppear = false
     }
     
-}
-
-extension MessageSubviewViewController {
-    func setupKeyboardTracker() {
-        let heightBlock = { [weak self] (bottomMargin: CGFloat, keyboardStatus: KeyboardStatus) in
-            guard let sSelf = self else { return }
-            if let keyboardObservingDelegate = sSelf.keyboardEventsHandler {
-                keyboardObservingDelegate.onKeyboardStateDidChange(bottomMargin, keyboardStatus)
-            } else {
-                sSelf.changeInputContentBottomMarginTo(bottomMargin)
-            }
-        }
-        self.keyboardTracker = KeyboardTracker(viewController: self, inputBarContainer: self.subviewInputBar, heightBlock: heightBlock, notificationCenter: self.notificationCenter)
-
-        (self.view as? BaseChatViewControllerViewProtocol)?.bmaInputAccessoryView = self.keyboardTracker?.trackingView
-    }
-    
-    func changeInputContentBottomMarginTo(_ newValue: CGFloat, animated: Bool = false, callback: (() -> Void)? = nil) {
-        self.changeInputContentBottomMarginTo(newValue, animated: animated, callback: callback)
-    }
-}
-public protocol BaseChatViewControllerViewProtocol: class {
-    var bmaInputAccessoryView: UIView? { get set }
 }
