@@ -4,7 +4,7 @@ PODS:
     - InputBarAccessoryView/Core (= 4.3.2)
   - InputBarAccessoryView/Core (4.3.2)
   - lottie-ios (3.1.8)
-  - MessageKit (3.3.0):
+  - MessageKit (3.4.0):
     - GTProgressBar
     - InputBarAccessoryView (~> 4.3.2)
     - lottie-ios
@@ -56,7 +56,7 @@ SPEC CHECKSUMS:
   GTProgressBar: a480283ecb0ada50de16c71e634892826928f640
   InputBarAccessoryView: 7985d418040a05fe894bd4b8328dd43ab35517c3
   lottie-ios: 48fac6be217c76937e36e340e2d09cf7b10b7f5f
-  MessageKit: 8b8e19ca58ea65b3700cc0b4a1508c2cb3ed0b6a
+  MessageKit: f16afa79077a1b6b417b50fc176f14d7b82a39dc
   PINCache: 534fd41d358d828dfdf227a0d327f3673a65e20b
   PINOperation: 24b774353ca248fcf87d67b2d61eef42087c125a
   PINRemoteImage: e2b89e19fb6e77ffc099f9d9f3b3fe1745e3f9f9
@@ -64,4 +64,4 @@ SPEC CHECKSUMS:
 
 PODFILE CHECKSUM: 9d3c353f530c35e6ce07c18f1ac8bf03de25c1ee
 
-COCOAPODS: 1.9.1
+COCOAPODS: 1.10.0

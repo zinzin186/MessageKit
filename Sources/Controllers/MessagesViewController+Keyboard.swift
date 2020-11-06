@@ -101,7 +101,10 @@ public extension MessagesViewController {
         let newBottomInset = keyboardEndFrame.height - 34
         let differenceOfBottomInset = newBottomInset - messageCollectionViewBottomInset
         let contentOffset = CGPoint(x: messagesCollectionView.contentOffset.x, y: messagesCollectionView.contentOffset.y + differenceOfBottomInset)
-        messagesCollectionView.setContentOffset(contentOffset, animated: false)
+        if contentOffset.y > messagesCollectionView.contentSize.height - messagesCollectionView.bounds.height {
+            messagesCollectionView.setContentOffset(contentOffset, animated: false)
+        }
+        
     }
     @objc
         private func handleKeyboardWillHideState(_ notification: Notification) {
@@ -125,7 +128,9 @@ public extension MessagesViewController {
                 self.currentOriginYInputBar = self.subInput?.frame.origin.y
             }
             let contentOffset = CGPoint(x: messagesCollectionView.contentOffset.x, y: messagesCollectionView.contentOffset.y)
-            messagesCollectionView.setContentOffset(contentOffset, animated: false)
+            if contentOffset.y > messagesCollectionView.contentSize.height - messagesCollectionView.bounds.height {
+                messagesCollectionView.setContentOffset(contentOffset, animated: false)
+            }
         }
     
 
