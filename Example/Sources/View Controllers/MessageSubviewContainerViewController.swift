@@ -39,6 +39,7 @@ final class MessageSubviewContainerViewController: UIViewController {
         messageSubviewViewController.willMove(toParent: self)
         addChild(messageSubviewViewController)
         view.addSubview(messageSubviewViewController.view)
+        messageSubviewViewController.view.frame = self.view.bounds
         messageSubviewViewController.didMove(toParent: self)
     }
 

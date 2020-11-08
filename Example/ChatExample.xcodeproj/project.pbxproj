@@ -34,6 +34,10 @@
 		3D32C9A3255048E700E218E3 /* Dir.swift in Sources */ = {isa = PBXBuildFile; fileRef = 3D32C99A255048E700E218E3 /* Dir.swift */; };
 		3D32C9A5255048E700E218E3 /* StickerLoader.swift in Sources */ = {isa = PBXBuildFile; fileRef = 3D32C99C255048E700E218E3 /* StickerLoader.swift */; };
 		3D32C9A6255048E700E218E3 /* Data + Extension.swift in Sources */ = {isa = PBXBuildFile; fileRef = 3D32C99D255048E700E218E3 /* Data + Extension.swift */; };
+		3DC3053925586DA900D28B06 /* ChatLayoutConfiguration.swift in Sources */ = {isa = PBXBuildFile; fileRef = 3DC3053825586DA900D28B06 /* ChatLayoutConfiguration.swift */; };
+		3DC3053B25586E4800D28B06 /* BaseChatViewControllerView.swift in Sources */ = {isa = PBXBuildFile; fileRef = 3DC3053A25586E4800D28B06 /* BaseChatViewControllerView.swift */; };
+		3DC3053D255874CF00D28B06 /* InputPositionControlling.swift in Sources */ = {isa = PBXBuildFile; fileRef = 3DC3053C255874CF00D28B06 /* InputPositionControlling.swift */; };
+		3DC3053F2558898800D28B06 /* ExpandableChatInputBarPresenter.swift in Sources */ = {isa = PBXBuildFile; fileRef = 3DC3053E2558898800D28B06 /* ExpandableChatInputBarPresenter.swift */; };
 		50739F9621C5090A008CA369 /* BasicAudioController.swift in Sources */ = {isa = PBXBuildFile; fileRef = 50739F9521C5090A008CA369 /* BasicAudioController.swift */; };
 		5074EF4E2163555900D82952 /* sound2.m4a in Resources */ = {isa = PBXBuildFile; fileRef = 5074EF4C2163555900D82952 /* sound2.m4a */; };
 		5074EF4F2163555900D82952 /* sound1.m4a in Resources */ = {isa = PBXBuildFile; fileRef = 5074EF4D2163555900D82952 /* sound1.m4a */; };
@@ -111,6 +115,10 @@
 		3D32C99A255048E700E218E3 /* Dir.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = Dir.swift; sourceTree = "<group>"; };
 		3D32C99C255048E700E218E3 /* StickerLoader.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = StickerLoader.swift; sourceTree = "<group>"; };
 		3D32C99D255048E700E218E3 /* Data + Extension.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = "Data + Extension.swift"; sourceTree = "<group>"; };
+		3DC3053825586DA900D28B06 /* ChatLayoutConfiguration.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = ChatLayoutConfiguration.swift; sourceTree = "<group>"; };
+		3DC3053A25586E4800D28B06 /* BaseChatViewControllerView.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = BaseChatViewControllerView.swift; sourceTree = "<group>"; };
+		3DC3053C255874CF00D28B06 /* InputPositionControlling.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = InputPositionControlling.swift; sourceTree = "<group>"; };
+		3DC3053E2558898800D28B06 /* ExpandableChatInputBarPresenter.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = ExpandableChatInputBarPresenter.swift; sourceTree = "<group>"; };
 		4FA4643E9EBD7DB3FCD93B7C /* Pods-ChatExampleTests.debug.xcconfig */ = {isa = PBXFileReference; includeInIndex = 1; lastKnownFileType = text.xcconfig; name = "Pods-ChatExampleTests.debug.xcconfig"; path = "Target Support Files/Pods-ChatExampleTests/Pods-ChatExampleTests.debug.xcconfig"; sourceTree = "<group>"; };
 		50739F9521C5090A008CA369 /* BasicAudioController.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = BasicAudioController.swift; sourceTree = "<group>"; };
 		5074EF4C2163555900D82952 /* sound2.m4a */ = {isa = PBXFileReference; lastKnownFileType = file; path = sound2.m4a; sourceTree = "<group>"; };
@@ -239,6 +247,10 @@
 				63ECDAC1241889630016C349 /* MessageSubviewContainerViewController.swift */,
 				3D1118092555C7400013017F /* KeyboardTracker.swift */,
 				3D11180B2555C89A0013017F /* KeyboardEventsHandling.swift */,
+				3DC3053825586DA900D28B06 /* ChatLayoutConfiguration.swift */,
+				3DC3053A25586E4800D28B06 /* BaseChatViewControllerView.swift */,
+				3DC3053C255874CF00D28B06 /* InputPositionControlling.swift */,
+				3DC3053E2558898800D28B06 /* ExpandableChatInputBarPresenter.swift */,
 			);
 			path = "View Controllers";
 			sourceTree = "<group>";
@@ -620,15 +632,18 @@
 				96475668255437D40095418E /* GPKeyboardManager.swift in Sources */,
 				385C2946211FF38F0010B4BA /* LaunchViewController.swift in Sources */,
 				1C5433E224C3A33600A5383B /* SwiftUIExampleView.swift in Sources */,
+				3DC3053B25586E4800D28B06 /* BaseChatViewControllerView.swift in Sources */,
 				385C2939211FF37B0010B4BA /* Lorem.swift in Sources */,
 				385C2928211FF33B0010B4BA /* MockMessage.swift in Sources */,
 				63ECDABE24182A470016C349 /* MessageSubviewViewController.swift in Sources */,
 				385C2923211FF32E0010B4BA /* TableViewCells.swift in Sources */,
 				385C2942211FF38F0010B4BA /* AdvancedExampleViewController.swift in Sources */,
 				50739F9621C5090A008CA369 /* BasicAudioController.swift in Sources */,
+				3DC3053F2558898800D28B06 /* ExpandableChatInputBarPresenter.swift in Sources */,
 				385C2937211FF37B0010B4BA /* SampleData.swift in Sources */,
 				385C2931211FF3630010B4BA /* UIColor+Extensions.swift in Sources */,
 				3D11180A2555C7400013017F /* KeyboardTracker.swift in Sources */,
+				3DC3053925586DA900D28B06 /* ChatLayoutConfiguration.swift in Sources */,
 				385C2932211FF3630010B4BA /* UIViewController+Extensions.swift in Sources */,
 				385C292B211FF3450010B4BA /* Settings+UserDefaults.swift in Sources */,
 				3D32C9A6255048E700E218E3 /* Data + Extension.swift in Sources */,
@@ -644,6 +659,7 @@
 				882B5E811CF7D53600B6E160 /* AppDelegate.swift in Sources */,
 				385C292D211FF3520010B4BA /* CustomMessageFlowLayout.swift in Sources */,
 				3D11180C2555C89A0013017F /* KeyboardEventsHandling.swift in Sources */,
+				3DC3053D255874CF00D28B06 /* InputPositionControlling.swift in Sources */,
 				38CCCC592258419300DD5482 /* AutocompleteExampleViewController.swift in Sources */,
 				63ECDAC2241889630016C349 /* MessageSubviewContainerViewController.swift in Sources */,
 			);

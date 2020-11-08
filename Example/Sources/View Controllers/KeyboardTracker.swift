@@ -266,3 +266,38 @@ infix operator >=~
 func >=~ (lhs: CGFloat, rhs: CGFloat) -> Bool {
     return round(lhs * scale) >= round(rhs * scale)
 }
+extension UIScrollView {
+    func chatto_setContentInsetAdjustment(enabled: Bool, in viewController: UIViewController) {
+        #if swift(>=3.2)
+            if #available(iOS 11.0, *) {
+                self.contentInsetAdjustmentBehavior = enabled ? .always : .never
+            } else {
+                viewController.automaticallyAdjustsScrollViewInsets = enabled
+            }
+        #else
+            viewController.automaticallyAdjustsScrollViewInsets = enabled
+        #endif
+    }
+
+    func chatto_setAutomaticallyAdjustsScrollIndicatorInsets(_ adjusts: Bool) {
+        if #available(iOS 13.0, *) {
+            self.automaticallyAdjustsScrollIndicatorInsets = adjusts
+        }
+    }
+
+    func chatto_setVerticalScrollIndicatorInsets(_ insets: UIEdgeInsets) {
+        if #available(iOS 11.1, *) {
+            self.verticalScrollIndicatorInsets = insets
+        } else {
+            self.scrollIndicatorInsets = insets
+        }
+    }
+}
+
+extension UICollectionView {
+    func chatto_setIsPrefetchingEnabled(_ isPrefetchingEnabled: Bool) {
+        if #available(iOS 10.0, *) {
+            self.isPrefetchingEnabled = isPrefetchingEnabled
+        }
+    }
+}
