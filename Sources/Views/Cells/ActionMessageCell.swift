@@ -96,7 +96,7 @@ open class ActionMessageCell: MessageCollectionViewCell, UIGestureRecognizerDele
         // Call this before other laying out other subviews
         
         layoutCellTopLabel(with: attributes)
-        layoutMessageTopLabel(with: attributes)
+        layoutMessageActionLabel(with: attributes)
         
     }
     
@@ -106,12 +106,12 @@ open class ActionMessageCell: MessageCollectionViewCell, UIGestureRecognizerDele
         cellTopLabel.frame = CGRect(origin: .zero, size: CGSize(width: self.contentView.frame.width, height: attributes.cellTopLabelSize.height))
     }
     
-    open func layoutMessageTopLabel(with attributes: MessagesCollectionViewLayoutAttributes) {
+    open func layoutMessageActionLabel(with attributes: MessagesCollectionViewLayoutAttributes) {
         messageActionLabel.textAlignment = .center
-        let y = cellTopLabel.frame.maxY
-        let height = self.contentView.frame.height - cellTopLabel.frame.height
-        let width = self.contentView.frame.width
-        messageActionLabel.frame = CGRect(0, y, width, height)
+        let messageActionSize = attributes.messageContainerSize
+        let y = cellTopLabel.frame.height
+        let origin = CGPoint(x: 0, y: y)
+        messageActionLabel.frame = CGRect(origin: origin, size: messageActionSize)
         
     }
     
