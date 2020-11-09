@@ -251,11 +251,12 @@ private class KeyboardTrackingView: UIView {
         guard let object = object as? UIView, let superview = self.superview else { return }
         if object === superview {
             guard let sChange = change else { return }
-//            let oldCenter = (sChange[NSKeyValueChangeKey.oldKey] as! NSValue).cgPointValue
-//            let newCenter = (sChange[NSKeyValueChangeKey.newKey] as! NSValue).cgPointValue
-//            if oldCenter != newCenter {
-//                self.positionChangedCallback?()
-//            }
+            guard let oldCenter = (sChange[NSKeyValueChangeKey.oldKey] as? NSValue), let newCenter = (sChange[NSKeyValueChangeKey.newKey] as? NSValue) else {
+                return
+            }
+            if oldCenter.cgPointValue != newCenter.cgPointValue {
+                self.positionChangedCallback?()
+            }
         }
     }
 }

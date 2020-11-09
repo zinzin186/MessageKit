@@ -103,6 +103,7 @@ final class MessageSubviewViewController: BasicExampleViewController, InputPosit
     
     private func addCollectionView() {
         messagesCollectionView.translatesAutoresizingMaskIntoConstraints = false
+        messagesCollectionView.keyboardDismissMode = .interactive
         let collectionView = messagesCollectionView
         self.view.addConstraint(NSLayoutConstraint(item: self.view, attribute: .top, relatedBy: .equal, toItem: collectionView, attribute: .top, multiplier: 1, constant: 0))
         self.view.addConstraint(NSLayoutConstraint(item: self.view, attribute: .bottom, relatedBy: .equal, toItem: collectionView, attribute: .bottom, multiplier: 1, constant: 0))
@@ -255,7 +256,7 @@ final class MessageSubviewViewController: BasicExampleViewController, InputPosit
 //        assert(false, "Override in subclass")
 //        return UIView()
         let inputBarView = InputBarAccessoryView()
-        self.scrollViewEventsHandler = inputBarView as! ScrollViewEventsHandling
+//        self.scrollViewEventsHandler = inputBarView as! ScrollViewEventsHandling
         inputBarView.translatesAutoresizingMaskIntoConstraints = false
         return inputBarView
     }
