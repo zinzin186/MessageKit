@@ -31,9 +31,9 @@ public extension MessagesViewController {
     // MARK: - Register / Unregister Observers
 
     func addKeyboardObservers() {
-//        NotificationCenter.default.addObserver(self, selector: #selector(MessagesViewController.handleKeyboardWillShowState), name: UIResponder.keyboardWillShowNotification, object: nil)
-//        NotificationCenter.default.addObserver(self, selector: #selector(MessagesViewController.handleKeyboardWillHideState(_:)), name: UIResponder.keyboardWillHideNotification, object: nil)
-//        NotificationCenter.default.addObserver(self, selector: #selector(MessagesViewController.handleTextViewDidBeginEditing(_:)), name: UITextView.textDidBeginEditingNotification, object: nil)
+        NotificationCenter.default.addObserver(self, selector: #selector(MessagesViewController.handleKeyboardWillShowState), name: UIResponder.keyboardWillShowNotification, object: nil)
+        NotificationCenter.default.addObserver(self, selector: #selector(MessagesViewController.handleKeyboardWillHideState(_:)), name: UIResponder.keyboardWillHideNotification, object: nil)
+        NotificationCenter.default.addObserver(self, selector: #selector(MessagesViewController.handleTextViewDidBeginEditing(_:)), name: UITextView.textDidBeginEditingNotification, object: nil)
     }
 
     func removeKeyboardObservers() {
