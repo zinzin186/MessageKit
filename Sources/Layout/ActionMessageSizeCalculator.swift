@@ -26,10 +26,10 @@ open class ActionMessageSizeCalculator: MessageSizeCalculator {
             let displayDelegate = messagesLayout.messagesCollectionView.messagesDisplayDelegate
             let attributedText = NSAttributedString(string: text, attributes: displayDelegate?.configureTextForActionMessage(at: indexPath, in: messagesLayout.messagesCollectionView))
             let contentInset = MKMessageConstant.ActionNote.contentInset
-            var messageContainerHeight = labelSize(for: attributedText, considering: maxWidth).height + contentInset.top + contentInset.bottom
-            if messageContainerHeight < MKMessageConstant.Limit.minContainerBodyHeight {
-                messageContainerHeight = MKMessageConstant.Limit.minContainerBodyHeight
-            }
+            let messageContainerHeight = labelSize(for: attributedText, considering: maxWidth).height + contentInset.top + contentInset.bottom
+//            if messageContainerHeight < MKMessageConstant.Limit.minContainerBodyHeight {
+//                messageContainerHeight = MKMessageConstant.Limit.minContainerBodyHeight
+//            }
             return CGSize(width: maxWidth, height: messageContainerHeight)
         default:
             fatalError("messageContainerSize received unhandled MessageDataType: \(message.kind)")

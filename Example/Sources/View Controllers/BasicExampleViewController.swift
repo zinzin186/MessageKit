@@ -67,12 +67,12 @@ class BasicExampleViewController: ChatViewController {
         
         // Hide the outgoing avatar and adjust the label alignment to line up with the messages
         layout.setMessageOutgoingAvatarSize(.zero)
-        layout.setMessageOutgoingMessageTopLabelAlignment(LabelAlignment(textAlignment: .right, textInsets: UIEdgeInsets(top: 0, left: 0, bottom: 0, right: 17)))
+        layout.setMessageOutgoingMessageTopLabelAlignment(LabelAlignment(textAlignment: .right, textInsets: UIEdgeInsets(top: 10, left: 0, bottom: 0, right: 17)))
         layout.setMessageOutgoingMessageBottomLabelAlignment(LabelAlignment(textAlignment: .right, textInsets: UIEdgeInsets(top: 0, left: 0, bottom: 0, right: 0)))
         layout.setMessageIncomingMessageBottomLabelAlignment(LabelAlignment(textAlignment: .left, textInsets: UIEdgeInsets(top: 0, left: 40, bottom: 0, right: 0)))
 
         // Set outgoing avatar to overlap with the message bubble
-        layout.setMessageIncomingMessageTopLabelAlignment(LabelAlignment(textAlignment: .left, textInsets: UIEdgeInsets(top: 0, left: 40, bottom: 0, right: 0)))
+        layout.setMessageIncomingMessageTopLabelAlignment(LabelAlignment(textAlignment: .left, textInsets: UIEdgeInsets(top: 10, left: 40, bottom: 0, right: 0)))
         layout.setMessageIncomingAvatarSize(CGSize(width: 30, height: 30))
         layout.setMessageIncomingAvatarPosition(AvatarPosition(vertical: .messageBottom))
         let paddingRight = UIScreen.main.bounds.size.width - (MKMessageConstant.calcMaxWidthCell() + 10 + 60)
@@ -293,7 +293,7 @@ extension BasicExampleViewController: MKMessagesLayoutDelegate {
     }
     
     func messageTopLabelHeight(for message: MKMessageType, at indexPath: IndexPath, in messagesCollectionView: MessagesCollectionView) -> CGFloat {
-        return 0
+        return 30
         
     }
 }

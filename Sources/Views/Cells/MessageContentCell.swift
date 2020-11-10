@@ -546,7 +546,8 @@ open class MessageContentCell: MessageCollectionViewCell, UIGestureRecognizerDel
         }else{
             iconX = self.frame.width - attributes.messageTopLabelAlignment.textInsets.right - attributes.messageTopLabelSize.width - paddingIcon
         }
-        iconMarkReply.frame = CGRect(x: iconX, y: y + (attributes.messageTopLabelSize.height - iconMarkReplySize.height)/2, width: iconMarkReplySize.width, height: iconMarkReplySize.height)
+        let paddingY = messageTopLabel.textInsets.bottom - messageTopLabel.textInsets.top
+        iconMarkReply.frame = CGRect(x: iconX, y: y + messageTopLabel.textInsets.top/2 + (attributes.messageTopLabelSize.height - iconMarkReplySize.height)/2, width: iconMarkReplySize.width, height: iconMarkReplySize.height)
         messageTopLabel.frame = CGRect(origin: origin, size: CGSize(width: self.frame.width, height: attributes.messageTopLabelSize.height))
     }
 
