@@ -89,6 +89,14 @@ open class TextMessageSizeCalculator: MessageSizeCalculator {
         case .linkPreview(let linkItem):
             let attributes = displayDelegate.textAttributes(for: message, at: indexPath, in: messagesLayout.messagesCollectionView)
             attributedString = NSMutableAttributedString(string: linkItem.text, attributes: attributes)
+        case .photo(let media), .video(let media):
+            if let content = media.content {
+                let attributes = displayDelegate.textAttributes(for: message, at: indexPath, in: messagesLayout.messagesCollectionView)
+                attributedString = NSMutableAttributedString(string: content, attributes: attributes)
+            } else {
+                attributedString = NSMutableAttributedString(string: "")
+            }
+            
         default:
             attributedString = NSMutableAttributedString(string: "")
         }

@@ -25,7 +25,7 @@
 import Foundation
 import UIKit
 
-open class MediaMessageSizeCalculator: MessageSizeCalculator {
+open class MediaMessageSizeCalculator: TextMessageSizeCalculator {
 
     open override func messageContainerSize(for message: MKMessageType, indexPath: IndexPath) -> CGSize {
         let maxWidth = messageContainerMaxWidth(for: message)
@@ -39,9 +39,28 @@ open class MediaMessageSizeCalculator: MessageSizeCalculator {
         }
         switch message.kind {
         case .photo(let item), .video(let item), .sticker(let item):
-            return sizeForMediaItem(maxWidth, item)
+            let mediaSize = sizeForMediaItem(maxWidth, item)
+            if (item.content) != nil {
+                let messageInsets = messageLabelInsets(for: message)
+                let maxWidth = mediaSize.width - messageInsets.horizontal
+                var messageContainerSize: CGSize
+                let attributedText = self.genAttributeMessage(with: message, at: indexPath)
+                if attributedText.string.isEmpty {
+                    messageContainerSize = CGSize.zero
+                } else {
+                    messageContainerSize = labelSize(for: attributedText, considering: maxWidth)
+                    messageContainerSize.width += messageInsets.horizontal
+                    messageContainerSize.height += messageInsets.vertical
+                    if messageContainerSize.height < MKMessageConstant.Limit.minContainerBodyHeight{
+                        messageContainerSize.height = MKMessageConstant.Limit.minContainerBodyHeight
+                    }
+                }
+                return CGSize(width: mediaSize.width, height: messageContainerSize.height + mediaSize.height)
+            }
+            return mediaSize
         default:
             fatalError("messageContainerSize received unhandled MessageDataType: \(message.kind)")
         }
     }
+    
 }

@@ -26,7 +26,7 @@ import UIKit
 import GTProgressBar
 
 /// A subclass of `MessageContentCell` used to display video and audio messages.
-open class MediaMessageCell: MessageContentCell {
+open class MediaMessageCell: TextMessageCell {
 
     /// The play button view to display on video messages.
 //    open lazy var playButtonView: PlayButtonView = {
@@ -34,6 +34,8 @@ open class MediaMessageCell: MessageContentCell {
 //        return playButtonView
 //    }()
 
+    private var heightOfImageContraints: NSLayoutConstraint?
+    
     open lazy var progressUpload: GTProgressBar = {
         let progressUpload = GTProgressBar()
         progressUpload.orientation = GTProgressBarOrientation.horizontal
@@ -74,8 +76,13 @@ open class MediaMessageCell: MessageContentCell {
 
     /// Responsible for setting up the constraints of the cell's subviews.
     open func setupConstraints() {
-        imageView.fillSuperview()
-        playButtonView.centerInSuperview()
+        imageView.translatesAutoresizingMaskIntoConstraints = false
+        playButtonView.translatesAutoresizingMaskIntoConstraints = false
+        let constraints: [NSLayoutConstraint] = [
+            playButtonView.centerXAnchor.constraint(equalTo: imageView.centerXAnchor),
+            playButtonView.centerYAnchor.constraint(equalTo: imageView.centerYAnchor)
+        ]
+        NSLayoutConstraint.activate(constraints)
         playButtonView.constraint(equalTo: CGSize(width: 48, height: 48))
     }
 
@@ -99,16 +106,36 @@ open class MediaMessageCell: MessageContentCell {
         guard let displayDelegate = messagesCollectionView.messagesDisplayDelegate else {
             fatalError(MessageKitError.nilMessagesDisplayDelegate)
         }
+        let sizeForMediaItem = { (maxWidth: CGFloat, item: MediaItem) -> CGSize in
+            if maxWidth < item.size.width {
+                // Maintain the ratio if width is too great
+                let height = maxWidth * item.size.height / item.size.width
+                return CGSize(width: maxWidth, height: height)
+            }
+            return item.size
+        }
+        let maxWidth = self.messageContainerView.frame.width
+        var sizeItem: CGSize = .zero
         switch message.kind {
         case .photo(let mediaItem), .sticker(let mediaItem):
             imageView.image = mediaItem.image ?? mediaItem.placeholderImage
             playButtonView.isHidden = true
+            sizeItem = sizeForMediaItem(maxWidth, mediaItem)
         case .video(let mediaItem):
             imageView.image = mediaItem.image ?? mediaItem.placeholderImage
             playButtonView.isHidden = false
+            sizeItem = sizeForMediaItem(maxWidth, mediaItem)
         default:
             break
         }
+        
+       let constraints: [NSLayoutConstraint] = [
+            imageView.rightAnchor.constraint(equalTo: messageContainerView.rightAnchor),
+            imageView.bottomAnchor.constraint(equalTo: messageContainerView.bottomAnchor),
+            imageView.leadingAnchor.constraint(equalTo: messageContainerView.leadingAnchor),
+            imageView.heightAnchor.constraint(equalToConstant: sizeItem.height)
+            ]
+        NSLayoutConstraint.activate(constraints)
         displayDelegate.configureMediaMessageImageView(self, for: message, at: indexPath, in: messagesCollectionView)
 
         

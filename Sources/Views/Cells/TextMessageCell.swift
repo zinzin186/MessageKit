@@ -93,6 +93,12 @@ open class TextMessageCell: MessageContentCell {
                 let displayDelegate = messagesCollectionView.messagesDisplayDelegate
                 let attributedText = NSAttributedString(string: text, attributes: displayDelegate?.configureTextForActionMessage(at: indexPath, in: messagesCollectionView))
                 messageLabel.attributedText = attributedText
+            case .photo(let media), .video(let media):
+                if let content = media.content {
+                    let attributes = displayDelegate.textAttributes(for: message, at: indexPath, in: messagesCollectionView)
+                    messageLabel.attributedText = NSAttributedString(string: content, attributes: attributes)
+                }
+                break
             default:
                 break
             }
