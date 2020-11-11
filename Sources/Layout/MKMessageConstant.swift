@@ -98,7 +98,7 @@ public enum MKMessageConstant {
     
     enum Limit {
         static let minContainerBodyHeight: CGFloat = abs(MKMessageConstant.ActionView.ReplyView.bottomPadding) * 2
-        static let maxActionReplyTextHeight: CGFloat = 40
+        static let maxActionReplyTextHeight: CGFloat = 36
     }
     
     enum Fonts {

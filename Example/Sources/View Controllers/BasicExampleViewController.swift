@@ -67,18 +67,20 @@ class BasicExampleViewController: ChatViewController {
         
         // Hide the outgoing avatar and adjust the label alignment to line up with the messages
         layout.setMessageOutgoingAvatarSize(.zero)
-        layout.setMessageOutgoingMessageTopLabelAlignment(LabelAlignment(textAlignment: .right, textInsets: UIEdgeInsets(top: 10, left: 0, bottom: 0, right: 17)))
+        layout.setMessageIncomingCellTopLabelAlignment(LabelAlignment(textAlignment: .center, textInsets: UIEdgeInsets(top: 12, left: 0, bottom: 0, right: 0)))
+        layout.setMessageOutgoingMessageTopLabelAlignment(LabelAlignment(textAlignment: .right, textInsets: UIEdgeInsets(top: 5, left: 0, bottom: 0, right: 17)))
         layout.setMessageOutgoingMessageBottomLabelAlignment(LabelAlignment(textAlignment: .right, textInsets: UIEdgeInsets(top: 0, left: 0, bottom: 0, right: 0)))
         layout.setMessageIncomingMessageBottomLabelAlignment(LabelAlignment(textAlignment: .left, textInsets: UIEdgeInsets(top: 0, left: 40, bottom: 0, right: 0)))
 
         // Set outgoing avatar to overlap with the message bubble
-        layout.setMessageIncomingMessageTopLabelAlignment(LabelAlignment(textAlignment: .left, textInsets: UIEdgeInsets(top: 10, left: 40, bottom: 0, right: 0)))
+        layout.setMessageIncomingMessageTopLabelAlignment(LabelAlignment(textAlignment: .left, textInsets: UIEdgeInsets(top: 5, left: 40, bottom: 0, right: 0)))
         layout.setMessageIncomingAvatarSize(CGSize(width: 30, height: 30))
         layout.setMessageIncomingAvatarPosition(AvatarPosition(vertical: .messageBottom))
-        let paddingRight = UIScreen.main.bounds.size.width - (MKMessageConstant.calcMaxWidthCell() + 10 + 60)
+        let paddingRight = UIScreen.main.bounds.size.width - (ChatUtils.calcMaxWidthCell() + 10 + 60)
         layout.setMessageIncomingMessagePadding(UIEdgeInsets(top: 0, left: 5, bottom: 0, right: paddingRight))
         layout.setMessageOutgoingMessagePadding(UIEdgeInsets(top: 0, left: paddingRight + 55, bottom: 0, right: 2))
         //cellBottomLabelAttributedText
+        layout.setMessageOutgoingCellTopLabelAlignment(LabelAlignment(textAlignment: .center, textInsets: UIEdgeInsets(top: 12, left: 0, bottom: 0, right: 0)))
         layout.setMessageOutgoingCellBottomLabelAlignment(LabelAlignment(textAlignment: .right, textInsets: UIEdgeInsets(top: 0, left: 0, bottom: 0, right: 0)))
         layout.setMessageIncomingCellBottomLabelAlignment(LabelAlignment(textAlignment: .right, textInsets: UIEdgeInsets(top: 0, left: 0, bottom: 0, right: 0)))
         layout.setMessageIncomingAccessoryViewSize(CGSize(width: 30, height: 30))
@@ -87,11 +89,12 @@ class BasicExampleViewController: ChatViewController {
         layout.setMessageOutgoingAccessoryViewSize(CGSize(width: 10, height: 10))
         layout.setMessageOutgoingAccessoryViewPadding(HorizontalEdgeInsets(left: 0, right: 8))
         layout.setMessageOutgoingAccessoryViewPosition(.messageBottom)
-//        let linkPreviewFonts = LinkPreviewFonts(titleFont: ChatUtils.previewTitleFont,
-//                                   teaserFont: ChatUtils.previewDescFont,
-//                                   domainFont: ChatUtils.previewTitleFont)
-//        layout.setLinkPreviewFonts(linkPreviewFonts)
+        let linkPreviewFonts = LinkPreviewFonts(titleFont: ChatUtils.previewTitleFont,
+                                   teaserFont: ChatUtils.previewDescFont,
+                                   domainFont: ChatUtils.previewTitleFont)
+        layout.setLinkPreviewFonts(linkPreviewFonts)
     }
+
 //    override func messageTimestampLabelAttributedText(for message: MKMessageType, at indexPath: IndexPath) -> NSAttributedString? {
 //        return NSAttributedString(string: "dsfdsfdsfd")
 //    }
@@ -110,19 +113,25 @@ extension BasicExampleViewController: MKMessagesDisplayDelegate {
     
     // MARK: - Text Messages
     
-    func textColor(for message: MKMessageType, at indexPath: IndexPath, in messagesCollectionView: MessagesCollectionView) -> UIColor {
+    func textAttributes(for message: MKMessageType, at indexPath: IndexPath, in messagesCollectionView: MessagesCollectionView) -> [NSAttributedString.Key: Any] {
+        let paragraphStyle = NSMutableParagraphStyle()
+        paragraphStyle.lineSpacing = MessageConstant.Sizes.Message.lineSpacing
+        var textFont: UIFont = Font.SFProText.regular.with(size: MessageConstant.Sizes.Message.fontSize)
+//        if let gpMessage = self.getMessageAtIndexPath(indexPath), ChatUtils.checkMessageIsEmoji(message: gpMessage){
+//            textFont = Font.SFProText.regular.with(size: MessageConstant.Sizes.Message.fontSizeEmoji)
+//        }
         if case MKMessageKind.donate = message.kind {
-            return UIColor.yellow
+            return [NSAttributedString.Key.font: textFont, NSAttributedString.Key.foregroundColor: UIColor.white, .paragraphStyle: paragraphStyle]
         }
-        return isFromCurrentSender(message: message) ? .white : .darkText
+        let isMe = isFromCurrentSender(message: message)
+        let textColor = isMe ? UIColor.white: UIColor.fromHex("#1A1A1A")
+        return [NSAttributedString.Key.font: textFont, NSAttributedString.Key.foregroundColor: textColor, .paragraphStyle: paragraphStyle]
     }
     
-    func textFont(for message: MKMessageType, at indexPath: IndexPath, in messagesCollectionView: MessagesCollectionView) -> UIFont {
-        if case MKMessageKind.donate = message.kind {
-            return UIFont.boldSystemFont(ofSize: 20)
-        }
-        return UIFont.systemFont(ofSize: 15)
+    func donateTextAttributes(at indexPath: IndexPath, in messagesCollectionView: MessagesCollectionView) -> [NSAttributedString.Key: Any] {
+        return [NSAttributedString.Key.font: Font.SFProText.semibold.with(size: 16), NSAttributedString.Key.foregroundColor: MessageConstant.Colors.Donate.text]
     }
+    
     func detectorAttributes(for detector: DetectorType, and message: MKMessageType, at indexPath: IndexPath) -> [NSAttributedString.Key: Any] {
         switch detector {
         case .hashtag, .mentionRange: return [.foregroundColor: UIColor.blue, NSAttributedString.Key.font: UIFont.systemFont(ofSize: 22.0)]
@@ -144,15 +153,58 @@ extension BasicExampleViewController: MKMessagesDisplayDelegate {
     }
     
     func messageStyle(for message: MKMessageType, at indexPath: IndexPath, in messagesCollectionView: MessagesCollectionView) -> MessageStyle {
-        if case MKMessageKind.attributedText = message.kind {
-            return .custom { (view) in
-                view.layer.cornerRadius = 16
-                view.layer.borderColor = UIColor.darkGray.cgColor
+        if case .sticker = message.kind {
+            return MessageStyle.none
+        }
+        
+        var corners: UIRectCorner = []
+        if case .default = message.action {
+            if isFromCurrentSender(message: message) {
+                corners.formUnion(.topLeft)
+                corners.formUnion(.bottomLeft)
+                corners.formUnion(.topRight)
+                corners.formUnion(.bottomRight)
+            } else {
+                corners.formUnion(.topRight)
+                corners.formUnion(.bottomRight)
+                corners.formUnion(.topLeft)
+                corners.formUnion(.bottomLeft)
+            }
+        } else {
+            corners.formUnion(.topLeft)
+            corners.formUnion(.bottomLeft)
+            corners.formUnion(.topRight)
+            corners.formUnion(.bottomRight)
+        }
+       
+        return .custom { view in
+            let radius: CGFloat = 16
+            let smallCorner: CGFloat = 4
+            view.layer.cornerRadius = smallCorner
+            let path = UIBezierPath(roundedRect: view.bounds, byRoundingCorners: corners, cornerRadii: CGSize(width: radius, height: radius))
+            let mask = CAShapeLayer()
+            mask.path = path.cgPath
+            view.layer.mask = mask
+            switch message.kind {
+            case .video, .attributedText:
+                let borderLayer = CAShapeLayer()
+                let borderPath = path
+                borderLayer.fillColor = UIColor.clear.cgColor
+                borderLayer.strokeColor = UIColor.fromHex("#EDEDED").cgColor
+                borderLayer.path = borderPath.cgPath
+                borderLayer.frame = view.bounds
+                borderLayer.lineWidth = 1.5
+                view.borderLayer?.removeFromSuperlayer()
+                view.layer.addSublayer(borderLayer)
+                view.layer.borderColor = UIColor.fromHex("#EDEDED").cgColor
                 view.layer.borderWidth = 1
+                view.borderLayer = borderLayer
+            default:
+                view.borderLayer?.removeFromSuperlayer()
+                view.layer.borderColor = UIColor.clear.cgColor
+                view.layer.borderWidth = 0
             }
         }
-        let tail: MessageStyle.TailCorner = isFromCurrentSender(message: message) ? .bottomRight : .bottomLeft
-        return .none
     }
     
     func configureAvatarView(_ avatarView: AvatarView, for message: MKMessageType, at indexPath: IndexPath, in messagesCollectionView: MessagesCollectionView) {
@@ -161,33 +213,13 @@ extension BasicExampleViewController: MKMessagesDisplayDelegate {
     }
 
     func configureMediaMessageImageView(_ cell: MediaMessageCell, for message: MKMessageType, at indexPath: IndexPath, in messagesCollectionView: MessagesCollectionView) {
-//        if case MKMessageKind.photo(let media) = message.kind, let imageURL = media.url {
-//            imageView.pin_setImage(from: imageURL)
-//        } else {
-//            imageView.pin_cancelImageDownload()
-//        }
-        guard let stickerCell = cell as? StickerMessageCell else {return}
-        if case MKMessageKind.sticker(let media) = message.kind, let url = media.urlString {
-            StickerLoader.getPathAnimation(url: url) {[weak self] (path) in
-                guard let self = self, let path = path else {return}
-                let animationView: AnimationView = AnimationView()
-                if let animation = self.dicAnimations[path] {
-                    animationView.animation = animation
-                } else {
-                    animationView.animation = Animation.filepath(path)
-                    self.dicAnimations[path] = animationView.animation
-                }
-                
-
-                self.setupViewBodySticker(animationView: animationView, cell: stickerCell)
-            }
-            
-            
-            
-            
+        if case MKMessageKind.photo(let media) = message.kind, let urlString = media.urlString, let imageURL = URL(string: urlString) {
+            cell.imageView.pin_setImage(from: imageURL)
+        } else {
+            cell.imageView.pin_cancelImageDownload()
         }
-        
     }
+    
     func setupViewBodySticker(animationView: AnimationView, cell: StickerMessageCell) {
         cell.animationView?.removeFromSuperview()
         animationView.loopMode = .loop

@@ -253,8 +253,8 @@ internal struct MockMessage: MKMessageType {
     }
     
     init(custom: Any?, user: MockUser, messageId: String, date: Date, action: MKActionType = .default) {
-//        self.init(kind: .custom(custom), user: user, messageId: messageId, date: date, action: action)
-        self.init(kind: .action("Someone left the conversation"), user: user, messageId: messageId, date: date, action: action)
+        self.init(kind: .custom(custom), user: user, messageId: messageId, date: date, action: action)
+//        self.init(kind: .action("Someone left the conversation"), user: user, messageId: messageId, date: date, action: action)
     }
 
     init(text: String, user: MockUser, messageId: String, date: Date) {
@@ -277,7 +277,7 @@ internal struct MockMessage: MKMessageType {
         let attributedText1 = NSMutableAttributedString(string: "Nội dung được gửi không hỗ trợ trên phiên bản này, vui lòng cập nhật phiên bản mới nhất ", attributes: [.font: UIFont.systemFont(ofSize: 16), .foregroundColor: UIColor.lightGray])
         let attributedText2 = NSAttributedString(string: "tại đây", attributes: [.font: UIFont.systemFont(ofSize: 16), .foregroundColor: UIColor.green])
         attributedText1.append(attributedText2)
-        self.init(kind: .text(text), user: user, messageId: messageId, date: date, action: action)
+        self.init(kind: .text("nc tính em thì để bụng thù dai nhất cái XH này luôn"), user: user, messageId: messageId, date: date, action: .default)
 //        self.init(kind: .call(image: statusImage, statusInfo: statusType.statusName, callInfo: callInfoString), user: user, messageId: messageId, date: date, action: .default)
 //        self.init(kind: .sticker(mediaItem), user: user, messageId: messageId, date: date, action: .default)
 //        self.init(kind: .action(text), user: user, messageId: messageId, date: date, action: .default)
@@ -334,7 +334,7 @@ internal struct MockMessage: MKMessageType {
         self.init(kind: .linkPreview(linkItem), user: user, messageId: messageId, date: date, action: action)
     }
     
-    static func showTimeActive(time: Int) ->String{
+    static func showTimeActive(time: Int) -> String {
         if time == 0 {
             return "Nhấn để gọi lại"
         }

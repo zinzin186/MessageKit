@@ -84,10 +84,6 @@ open class TextMessageCell: MessageContentCell {
             case .text(let text), .emoji(let text):
                 let attributes = displayDelegate.textAttributes(for: message, at: indexPath, in: messagesCollectionView)
                 messageLabel.attributedText = NSAttributedString(string: text, attributes: attributes)
-                
-//                if let font = messageLabel.messageLabelFont {
-//                    messageLabel.font = font
-//                }
             case .donate( _, let text):
                 let attributes = displayDelegate.donateTextAttributes(at: indexPath, in: messagesCollectionView)
                 messageLabel.attributedText = NSAttributedString(string: text ?? "", attributes: attributes)

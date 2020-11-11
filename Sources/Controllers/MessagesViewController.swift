@@ -268,6 +268,100 @@ UICollectionViewDelegateFlowLayout, UICollectionViewDataSource, UIGestureRecogni
         NSLayoutConstraint.activate([top, messagesCollectionViewBottomConstraint!, trailing, leading])
         
     }
+    
+    @objc
+        open func handleTextViewDidBeginEditing(_ notification: Notification) {
+            if scrollsToLastItemOnKeyboardBeginsEditing || scrollsToBottomOnKeyboardBeginsEditing {
+                guard let inputTextView = notification.object as? InputTextView,
+                    inputTextView === messageInputBar.inputTextView else { return }
+
+                if scrollsToLastItemOnKeyboardBeginsEditing {
+                    messagesCollectionView.scrollToLastItem()
+                } else {
+                    messagesCollectionView.scrollToBottom(animated: true)
+                }
+            }
+        }
+
+        @objc
+        open func handleKeyboardWillShowState(_ notification: Notification) {
+            guard !isMessagesControllerBeingDismissed else { return }
+            
+            guard let keyboardStartFrameInScreenCoords = notification.userInfo?[UIResponder.keyboardFrameBeginUserInfoKey] as? CGRect else { return }
+            guard !keyboardStartFrameInScreenCoords.isEmpty || UIDevice.current.userInterfaceIdiom != .pad else {
+                // WORKAROUND for what seems to be a bug in iPad's keyboard handling in iOS 11: we receive an extra spurious frame change
+                // notification when undocking the keyboard, with a zero starting frame and an incorrect end frame. The workaround is to
+                // ignore this notification.
+                return
+            }
+
+            guard self.presentedViewController == nil else {
+                // This is important to skip notifications from child modal controllers in iOS >= 13.0
+                return
+            }
+
+            // Note that the check above does not exclude all notifications from an undocked keyboard, only the weird ones.
+            //
+            // We've tried following Apple's recommended approach of tracking UIKeyboardWillShow / UIKeyboardDidHide and ignoring frame
+            // change notifications while the keyboard is hidden or undocked (undocked keyboard is considered hidden by those events).
+            // Unfortunately, we do care about the difference between hidden and undocked, because we have an input bar which is at the
+            // bottom when the keyboard is hidden, and is tied to the keyboard when it's undocked.
+            //
+            // If we follow what Apple recommends and ignore notifications while the keyboard is hidden/undocked, we get an extra inset
+            // at the bottom when the undocked keyboard is visible (the inset that tries to compensate for the missing input bar).
+            // (Alternatives like setting newBottomInset to 0 or to the height of the input bar don't work either.)
+            //
+            // We could make it work by adding extra checks for the state of the keyboard and compensating accordingly, but it seems easier
+            // to simply check whether the current keyboard frame, whatever it is (even when undocked), covers the bottom of the collection
+            // view.
+
+            guard let keyboardEndFrameInScreenCoords = notification.userInfo?[UIResponder.keyboardFrameEndUserInfoKey] as? CGRect else { return }
+            let keyboardEndFrame = view.convert(keyboardEndFrameInScreenCoords, from: view.window)
+            if let currentOffset = self.currentOriginYInputBar, self.subInput?.frame.origin.y == currentOffset {
+    //            return
+            } else {
+                self.currentOriginYInputBar = self.subInput?.frame.origin.y
+            }
+            
+            let newBottomInset = keyboardEndFrame.height - bottomInset
+            let differenceOfBottomInset = newBottomInset - messageCollectionViewBottomInset
+            let contentOffset = CGPoint(x: messagesCollectionView.contentOffset.x, y: messagesCollectionView.contentOffset.y + differenceOfBottomInset)
+    //        messagesCollectionView.setContentOffset(contentOffset, animated: false)
+            let currentOffset = messagesCollectionView.contentOffset.y
+            let contentSizeHeight = messagesCollectionView.contentSize.height
+            let heightCV = messagesCollectionView.frame.height
+            let offset = (contentSizeHeight - heightCV) - (currentOffset + keyboardEndFrame.height)
+            if contentOffset.y + heightCV <= contentSizeHeight - 1 {
+                messagesCollectionView.setContentOffset(contentOffset, animated: false)
+            } else {
+                messagesCollectionView.scrollToLastItem(at: .bottom, animated: false)
+            }
+                    
+        }
+        @objc
+            open func handleKeyboardWillHideState(_ notification: Notification) {
+                guard !isMessagesControllerBeingDismissed  else { return }
+                
+                guard let keyboardStartFrameInScreenCoords = notification.userInfo?[UIResponder.keyboardFrameBeginUserInfoKey] as? CGRect else { return }
+                guard !keyboardStartFrameInScreenCoords.isEmpty || UIDevice.current.userInterfaceIdiom != .pad else {
+                    // WORKAROUND for what seems to be a bug in iPad's keyboard handling in iOS 11: we receive an extra spurious frame change
+                    // notification when undocking the keyboard, with a zero starting frame and an incorrect end frame. The workaround is to
+                    // ignore this notification.
+                    return
+                }
+
+                guard self.presentedViewController == nil else {
+                    // This is important to skip notifications from child modal controllers in iOS >= 13.0
+                    return
+                }
+                if let currentOffset = self.currentOriginYInputBar, self.subInput?.frame.origin.y == currentOffset {
+                    return
+                } else {
+                    self.currentOriginYInputBar = self.subInput?.frame.origin.y
+                }
+    //            let contentOffset = CGPoint(x: messagesCollectionView.contentOffset.x, y: messagesCollectionView.contentOffset.y)
+    //            messagesCollectionView.setContentOffset(contentOffset, animated: false)
+            }
 
     // MARK: - Typing Indicator API
 
