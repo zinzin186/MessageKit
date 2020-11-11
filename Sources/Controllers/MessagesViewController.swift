@@ -59,7 +59,11 @@ UICollectionViewDelegateFlowLayout, UICollectionViewDataSource, UIGestureRecogni
 
     /// Display the date of message by swiping left.
     /// The default value of this property is `false`.
+    
+    //To check keyboard show hide
     open var currentOriginYInputBar: CGFloat?
+    
+    open var currentKeyboardHeight: CGFloat = 0.0
     
     open var messagesCollectionViewBottomConstraint: NSLayoutConstraint?
     open var showMessageTimestampOnSwipeLeft: Bool = false {

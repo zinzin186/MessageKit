@@ -27,23 +27,23 @@
 
 import UIKit
 import InputBarAccessoryView
+import MessageKit
 
 /// An object that observes keyboard notifications such that event callbacks can be set for each notification
-open class GPKeyboardManager: NSObject, UIGestureRecognizerDelegate {
+ class GPKeyboardManager: NSObject, UIGestureRecognizerDelegate {
     
-    open var currentKeyboardHeight: CGFloat = 0
     /// A callback that passes a `KeyboardNotification` as an input
-    public typealias EventCallback = (KeyboardNotification)->Void
+    public typealias EventCallback = (KeyboardNotification) -> Void
     
     // MARK: - Properties [Public]
     
     /// A weak reference to a view bounded to the top of the keyboard to act as an `InputAccessoryView`
     /// but kept within the bounds of the `UIViewController`s view
-    open weak var inputAccessoryView: UIView?
-    open var isWillDisAppear: Bool = false
+    weak var inputAccessoryView: UIView?
+    var isWillDisAppear: Bool = false
     /// A flag that indicates if a portion of the keyboard is visible on the screen
     private(set) public var isKeyboardHidden: Bool = true
-    
+    weak var baseChatViewController: MessagesViewController?
     // MARK: - Properties [Private]
     
     /// The `NSLayoutConstraintSet` that holds the `inputAccessoryView` to the bottom if its superview
@@ -127,7 +127,7 @@ open class GPKeyboardManager: NSObject, UIGestureRecognizerDelegate {
     ///   - callback: EventCallback
     /// - Returns: Self
     @discardableResult
-    open func on(event: KeyboardEvent, do callback: EventCallback?) -> Self {
+    func on(event: KeyboardEvent, do callback: EventCallback?) -> Self {
         callbacks[event] = callback
         return self
     }
@@ -138,8 +138,11 @@ open class GPKeyboardManager: NSObject, UIGestureRecognizerDelegate {
     ///
     /// - Parameter inputAccessoryView: The view to bind to the top of the keyboard but within its superview
     /// - Returns: Self
+    func hideBottom() {
+        self.constraints?.bottom?.constant = 0
+    }
     @discardableResult
-    open func bind(inputAccessoryView: UIView) -> Self {
+    func bind(inputAccessoryView: UIView) -> Self {
         
         guard let superview = inputAccessoryView.superview else {
             fatalError("`inputAccessoryView` must have a superview")
@@ -168,7 +171,7 @@ open class GPKeyboardManager: NSObject, UIGestureRecognizerDelegate {
             let keyboardHeight = notification.endFrame.height
             guard
                 self.isKeyboardHidden == false,
-                notification.isForCurrentApp, keyboardHeight < self.currentKeyboardHeight else {
+                notification.isForCurrentApp, self.baseChatViewController?.presentedViewController == nil else {
                     return
                     
             }
@@ -186,15 +189,17 @@ open class GPKeyboardManager: NSObject, UIGestureRecognizerDelegate {
                 self?.inputAccessoryView?.superview?.layoutIfNeeded()
             }
         }
-//        callbacks[.didHide] = { [weak self] (notification) in
+        callbacks[.didHide] = { [weak self] (notification) in
+            let keyboardHeight = notification.endFrame.height
+            self?.baseChatViewController?.currentKeyboardHeight = keyboardHeight
 //            guard notification.isForCurrentApp, !self!.isWillDisAppear else { return }
 //            self?.constraints?.bottom?.constant = 0
 //            self?.currentKeyboardHeight = 0
 //            self?.inputAccessoryView?.superview?.layoutIfNeeded()
-//        }
+        }
         callbacks[.didShow] = { [weak self] (notification) in
             let keyboardHeight = notification.endFrame.height
-            self?.currentKeyboardHeight = keyboardHeight
+            self?.baseChatViewController?.currentKeyboardHeight = keyboardHeight
             guard notification.isForCurrentApp else { return }
             self?.animateAlongside(notification) { [weak self] in
                 self?.constraints?.bottom?.constant = -keyboardHeight
@@ -209,7 +214,7 @@ open class GPKeyboardManager: NSObject, UIGestureRecognizerDelegate {
     /// - Parameter scrollView: UIScrollView
     /// - Returns: Self
     @discardableResult
-    open func bind(to scrollView: UIScrollView) -> Self {
+    func bind(to scrollView: UIScrollView) -> Self {
         self.scrollView = scrollView
         self.scrollView?.keyboardDismissMode = .interactive // allows dismissing keyboard interactively
         let recognizer = UIPanGestureRecognizer(target: self, action: #selector(handlePanGestureRecognizer))
@@ -225,7 +230,7 @@ open class GPKeyboardManager: NSObject, UIGestureRecognizerDelegate {
     ///
     /// - Parameter notification: NSNotification
     @objc
-    open func keyboardDidShow(notification: NSNotification) {
+    func keyboardDidShow(notification: NSNotification) {
         guard let keyboardNotification = KeyboardNotification(from: notification) else { return }
         callbacks[.didShow]?(keyboardNotification)
     }
@@ -234,7 +239,7 @@ open class GPKeyboardManager: NSObject, UIGestureRecognizerDelegate {
     ///
     /// - Parameter notification: NSNotification
     @objc
-    open func keyboardDidHide(notification: NSNotification) {
+    func keyboardDidHide(notification: NSNotification) {
         isKeyboardHidden = true
         guard let keyboardNotification = KeyboardNotification(from: notification) else { return }
         callbacks[.didHide]?(keyboardNotification)
@@ -244,7 +249,7 @@ open class GPKeyboardManager: NSObject, UIGestureRecognizerDelegate {
     ///
     /// - Parameter notification: NSNotification
     @objc
-    open func keyboardDidChangeFrame(notification: NSNotification) {
+    func keyboardDidChangeFrame(notification: NSNotification) {
         guard let keyboardNotification = KeyboardNotification(from: notification) else { return }
         callbacks[.didChangeFrame]?(keyboardNotification)
         cachedNotification = keyboardNotification
@@ -254,7 +259,7 @@ open class GPKeyboardManager: NSObject, UIGestureRecognizerDelegate {
     ///
     /// - Parameter notification: NSNotification
     @objc
-    open func keyboardWillChangeFrame(notification: NSNotification) {
+    func keyboardWillChangeFrame(notification: NSNotification) {
         guard let keyboardNotification = KeyboardNotification(from: notification) else { return }
         callbacks[.willChangeFrame]?(keyboardNotification)
         cachedNotification = keyboardNotification
@@ -264,7 +269,7 @@ open class GPKeyboardManager: NSObject, UIGestureRecognizerDelegate {
     ///
     /// - Parameter notification: NSNotification
     @objc
-    open func keyboardWillShow(notification: NSNotification) {
+    func keyboardWillShow(notification: NSNotification) {
         isKeyboardHidden = false
         guard let keyboardNotification = KeyboardNotification(from: notification) else { return }
         callbacks[.willShow]?(keyboardNotification)
@@ -274,7 +279,7 @@ open class GPKeyboardManager: NSObject, UIGestureRecognizerDelegate {
     ///
     /// - Parameter notification: NSNotification
     @objc
-    open func keyboardWillHide(notification: NSNotification) {
+    func keyboardWillHide(notification: NSNotification) {
         guard let keyboardNotification = KeyboardNotification(from: notification) else { return }
         callbacks[.willHide]?(keyboardNotification)
     }
@@ -292,7 +297,7 @@ open class GPKeyboardManager: NSObject, UIGestureRecognizerDelegate {
     ///
     /// - Parameter recognizer: UIPanGestureRecognizer
     @objc
-    open func handlePanGestureRecognizer(recognizer: UIPanGestureRecognizer) {
+    func handlePanGestureRecognizer(recognizer: UIPanGestureRecognizer) {
         guard
             var keyboardNotification = cachedNotification,
             case .changed = recognizer.state,
@@ -311,12 +316,12 @@ open class GPKeyboardManager: NSObject, UIGestureRecognizerDelegate {
     }
     
     /// Only receive a `UITouch` event when the `scrollView`'s keyboard dismiss mode is interactive
-    open func gestureRecognizer(_ gestureRecognizer: UIGestureRecognizer, shouldReceive touch: UITouch) -> Bool {
+    func gestureRecognizer(_ gestureRecognizer: UIGestureRecognizer, shouldReceive touch: UITouch) -> Bool {
         return scrollView?.keyboardDismissMode == .interactive
     }
     
     /// Only recognice simultaneous gestures when its the `panGesture`
-    open func gestureRecognizer(_ gestureRecognizer: UIGestureRecognizer, shouldRecognizeSimultaneouslyWith otherGestureRecognizer: UIGestureRecognizer) -> Bool {
+    func gestureRecognizer(_ gestureRecognizer: UIGestureRecognizer, shouldRecognizeSimultaneouslyWith otherGestureRecognizer: UIGestureRecognizer) -> Bool {
         return gestureRecognizer === panGesture
     }
     
