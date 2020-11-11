@@ -110,13 +110,13 @@ UICollectionViewDelegateFlowLayout, UICollectionViewDataSource, UIGestureRecogni
         return messagesCollectionView.isTypingIndicatorHidden
     }
 
-    public var selectedIndexPathForMenu: IndexPath?
+    open var selectedIndexPathForMenu: IndexPath?
 
-    private var isFirstLayout: Bool = true
+    open var isFirstLayout: Bool = true
     
-    internal var isMessagesControllerBeingDismissed: Bool = false
+    open var isMessagesControllerBeingDismissed: Bool = false
 
-    internal var messageCollectionViewBottomInset: CGFloat = 0 {
+    open var messageCollectionViewBottomInset: CGFloat = 0 {
         didSet {
             messagesCollectionView.contentInset.bottom = messageCollectionViewBottomInset
             messagesCollectionView.scrollIndicatorInsets.bottom = messageCollectionViewBottomInset
