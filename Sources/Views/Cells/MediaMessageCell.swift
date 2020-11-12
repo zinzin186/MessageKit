@@ -182,11 +182,12 @@ open class MediaMessageCell: MessageContentCell {
                 messageTextView.backgroundColor = messageColor
                 imageView.frame = CGRect(origin: CGPoint(x: 0, y: messageTextView.frame.maxY + 2), size: sizeItem)
             }
+            self.cornerImageView(isOutgoing: isOutgoingMessage, hasMessageText: !(content?.isEmpty ?? true))
         } else {
             imageView.frame = messageContainerView.bounds
             messageTextView.isHidden = true
         }
-        self.cornerImageView(isOutgoing: isOutgoingMessage, hasMessageText: !(content?.isEmpty ?? true))
+        
         self.messageContainerView.backgroundColor = UIColor.clear
         
         
