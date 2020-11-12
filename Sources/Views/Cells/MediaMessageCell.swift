@@ -182,12 +182,11 @@ open class MediaMessageCell: MessageContentCell {
                 messageTextView.backgroundColor = messageColor
                 imageView.frame = CGRect(origin: CGPoint(x: 0, y: messageTextView.frame.maxY + 2), size: sizeItem)
             }
-            self.cornerImageView(isOutgoing: isOutgoingMessage, hasMessageText: !(content?.isEmpty ?? true))
         } else {
             imageView.frame = messageContainerView.bounds
             messageTextView.isHidden = true
         }
-        
+        self.cornerImageView(isOutgoing: isOutgoingMessage, hasMessageText: !(content?.isEmpty ?? true))
         self.messageContainerView.backgroundColor = UIColor.clear
         
         
@@ -234,29 +233,30 @@ open class MediaMessageCell: MessageContentCell {
     }
     
     private func cornerImageView(isOutgoing: Bool, hasMessageText: Bool) {
-        var corners: UIRectCorner = []
-        if hasMessageText {
-            corners.formUnion(.bottomLeft)
-            corners.formUnion(.bottomRight)
-             if isOutgoing {
-                 corners.formUnion(.topLeft)
-             } else {
-                 corners.formUnion(.topRight)
-             }
-        } else {
-            corners.formUnion(.topLeft)
-            corners.formUnion(.topRight)
-            corners.formUnion(.bottomLeft)
-            corners.formUnion(.bottomRight)
-        }
-        
-        let radius: CGFloat = 16
-        let smallCorner: CGFloat = 4
-        imageView.layer.cornerRadius = smallCorner
-        let path = UIBezierPath(roundedRect: imageView.bounds, byRoundingCorners: corners, cornerRadii: CGSize(width: radius, height: radius))
-        let mask = CAShapeLayer()
-        mask.path = path.cgPath
-        imageView.layer.mask = mask
+//        var corners: UIRectCorner = []
+//        if hasMessageText {
+//            corners.formUnion(.bottomLeft)
+//            corners.formUnion(.bottomRight)
+//             if isOutgoing {
+//                 corners.formUnion(.topLeft)
+//             } else {
+//                 corners.formUnion(.topRight)
+//             }
+//        } else {
+//            corners.formUnion(.topLeft)
+//            corners.formUnion(.topRight)
+//            corners.formUnion(.bottomLeft)
+//            corners.formUnion(.bottomRight)
+//        }
+//
+//        let radius: CGFloat = 16
+//        let smallCorner: CGFloat = 4
+//        imageView.layer.cornerRadius = smallCorner
+//        let path = UIBezierPath(roundedRect: imageView.bounds, byRoundingCorners: corners, cornerRadii: CGSize(width: radius, height: radius))
+//        let mask = CAShapeLayer()
+//        mask.path = path.cgPath
+//        imageView.layer.mask = mask
+        imageView.layer.cornerRadius = 16
     }
     
     open override func apply(_ layoutAttributes: UICollectionViewLayoutAttributes) {
