@@ -233,30 +233,42 @@ open class MediaMessageCell: MessageContentCell {
     }
     
     private func cornerImageView(isOutgoing: Bool, hasMessageText: Bool) {
-//        var corners: UIRectCorner = []
-//        if hasMessageText {
-//            corners.formUnion(.bottomLeft)
-//            corners.formUnion(.bottomRight)
-//             if isOutgoing {
-//                 corners.formUnion(.topLeft)
-//             } else {
-//                 corners.formUnion(.topRight)
-//             }
-//        } else {
-//            corners.formUnion(.topLeft)
-//            corners.formUnion(.topRight)
-//            corners.formUnion(.bottomLeft)
-//            corners.formUnion(.bottomRight)
-//        }
-//
-//        let radius: CGFloat = 16
-//        let smallCorner: CGFloat = 4
-//        imageView.layer.cornerRadius = smallCorner
-//        let path = UIBezierPath(roundedRect: imageView.bounds, byRoundingCorners: corners, cornerRadii: CGSize(width: radius, height: radius))
-//        let mask = CAShapeLayer()
-//        mask.path = path.cgPath
-//        imageView.layer.mask = mask
-        imageView.layer.cornerRadius = 16
+        var corners: UIRectCorner = []
+        if hasMessageText {
+            corners.formUnion(.bottomLeft)
+            corners.formUnion(.bottomRight)
+             if isOutgoing {
+                 corners.formUnion(.topLeft)
+             } else {
+                 corners.formUnion(.topRight)
+             }
+        } else {
+            corners.formUnion(.topLeft)
+            corners.formUnion(.topRight)
+            corners.formUnion(.bottomLeft)
+            corners.formUnion(.bottomRight)
+        }
+        
+        let radius: CGFloat = 16
+        let smallCorner: CGFloat = 4
+        imageView.layer.cornerRadius = smallCorner
+        let path = UIBezierPath(roundedRect: imageView.bounds, byRoundingCorners: corners, cornerRadii: CGSize(width: radius, height: radius))
+        let mask = CAShapeLayer()
+        mask.path = path.cgPath
+        imageView.layer.mask = mask
+        
+        let borderLayer = CAShapeLayer()
+        let borderPath = path
+        borderLayer.fillColor = UIColor.clear.cgColor
+        borderLayer.strokeColor = UIColor.fromHexCode("#EDEDED").cgColor
+        borderLayer.path = borderPath.cgPath
+        borderLayer.frame = imageView.bounds
+        borderLayer.lineWidth = 1.5
+        self.messageContainerView.borderLayer?.removeFromSuperlayer()
+        self.layer.addSublayer(borderLayer)
+        self.layer.borderColor = UIColor.fromHexCode("#EDEDED").cgColor
+        self.layer.borderWidth = 1
+        self.messageContainerView.borderLayer = borderLayer
     }
     
     open override func apply(_ layoutAttributes: UICollectionViewLayoutAttributes) {
