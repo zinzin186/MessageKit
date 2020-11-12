@@ -42,20 +42,22 @@ open class MediaMessageSizeCalculator: TextMessageSizeCalculator {
             let mediaSize = sizeForMediaItem(maxWidth, item)
             if (item.content) != nil {
                 let messageInsets = messageLabelInsets(for: message)
-                let maxWidth = mediaSize.width - messageInsets.horizontal
+                let maxWidthCotent = mediaSize.width - messageInsets.horizontal
+//                let maxWidth = super.messageContainerMaxWidth(for: message)
                 var messageContainerSize: CGSize
                 let attributedText = self.genAttributeMessage(with: message, at: indexPath)
                 if attributedText.string.isEmpty {
                     messageContainerSize = CGSize.zero
                 } else {
-                    messageContainerSize = labelSize(for: attributedText, considering: maxWidth)
+                    messageContainerSize = labelSize(for: attributedText, considering: maxWidthCotent)
                     messageContainerSize.width += messageInsets.horizontal
                     messageContainerSize.height += messageInsets.vertical
                     if messageContainerSize.height < MKMessageConstant.Limit.minContainerBodyHeight{
                         messageContainerSize.height = MKMessageConstant.Limit.minContainerBodyHeight
                     }
                 }
-                return CGSize(width: mediaSize.width, height: messageContainerSize.height + mediaSize.height)
+//                let messageWidth: CGFloat = max(mediaSize.width, messageContainerSize.width)
+                return CGSize(width: mediaSize.width, height: messageContainerSize.height + mediaSize.height + 2)
             }
             return mediaSize
         default:

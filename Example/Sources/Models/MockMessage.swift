@@ -266,7 +266,7 @@ internal struct MockMessage: MKMessageType {
 //            mediaItem.path = path
 //        }
         mediaItem.urlString = id
-        mediaItem.content = text
+//        mediaItem.content = text
         let replyMessage = ReplyMessage(user: user, messageId: messageId, date: date, content: text, medias: nil, deleted: false)
         let action = MKActionType.reply(replyMessage: replyMessage)
 //        let action = MKActionType.remove
@@ -279,7 +279,7 @@ internal struct MockMessage: MKMessageType {
         let attributedText1 = NSMutableAttributedString(string: "Nội dung được gửi không hỗ trợ trên phiên bản này, vui lòng cập nhật phiên bản mới nhất ", attributes: [.font: UIFont.systemFont(ofSize: 16), .foregroundColor: UIColor.lightGray])
         let attributedText2 = NSAttributedString(string: "tại đây", attributes: [.font: UIFont.systemFont(ofSize: 16), .foregroundColor: UIColor.green])
         attributedText1.append(attributedText2)
-        self.init(kind: .text(text), user: user, messageId: messageId, date: date, action: action)
+        self.init(kind: .photo(mediaItem), user: user, messageId: messageId, date: date, action: .default)
 //        self.init(kind: .call(image: statusImage, statusInfo: statusType.statusName, callInfo: callInfoString), user: user, messageId: messageId, date: date, action: .default)
 //        self.init(kind: .sticker(mediaItem), user: user, messageId: messageId, date: date, action: .default)
 //        self.init(kind: .action(text), user: user, messageId: messageId, date: date, action: .default)

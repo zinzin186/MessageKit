@@ -26,7 +26,7 @@ import UIKit
 import GTProgressBar
 
 /// A subclass of `MessageContentCell` used to display video and audio messages.
-open class MediaMessageCell: TextMessageCell {
+open class MediaMessageCell: MessageContentCell {
 
     /// The play button view to display on video messages.
 //    open lazy var playButtonView: PlayButtonView = {
@@ -34,7 +34,20 @@ open class MediaMessageCell: TextMessageCell {
 //        return playButtonView
 //    }()
 
-    private var heightOfImageContraints: NSLayoutConstraint?
+    private var messageInsets: UIEdgeInsets = .zero
+    
+    open lazy var messageLabel: MessageLabel = {
+        let label = MessageLabel()
+        messageTextView.addSubview(label)
+        label.fillSuperview()
+        return label
+    }()
+    
+    lazy var messageTextView: UIView = {
+        let view = UIView()
+        messageContainerView.addSubview(view)
+        return view
+    }()
     
     open lazy var progressUpload: GTProgressBar = {
         let progressUpload = GTProgressBar()
@@ -52,8 +65,8 @@ open class MediaMessageCell: TextMessageCell {
         progressUpload.translatesAutoresizingMaskIntoConstraints = false
         messageContainerView.addSubview(progressUpload)
         NSLayoutConstraint.activate([
-            progressUpload.leadingAnchor.constraint(equalTo: messageContainerView.leadingAnchor),
-            progressUpload.trailingAnchor.constraint(equalTo: messageContainerView.trailingAnchor),
+            progressUpload.leadingAnchor.constraint(equalTo: imageView.leadingAnchor),
+            progressUpload.trailingAnchor.constraint(equalTo: imageView.trailingAnchor),
             progressUpload.heightAnchor.constraint(equalToConstant: 6),
             progressUpload.bottomAnchor.constraint(equalTo: messageContainerView.bottomAnchor)
         ])
@@ -68,6 +81,7 @@ open class MediaMessageCell: TextMessageCell {
     /// The image view display the media content.
     open var imageView: UIImageView = {
         let imageView = UIImageView()
+        imageView.clipsToBounds = true
         imageView.contentMode = .scaleAspectFill
         return imageView
     }()
@@ -76,7 +90,7 @@ open class MediaMessageCell: TextMessageCell {
 
     /// Responsible for setting up the constraints of the cell's subviews.
     open func setupConstraints() {
-        imageView.translatesAutoresizingMaskIntoConstraints = false
+//        imageView.translatesAutoresizingMaskIntoConstraints = false
         playButtonView.translatesAutoresizingMaskIntoConstraints = false
         let constraints: [NSLayoutConstraint] = [
             playButtonView.centerXAnchor.constraint(equalTo: imageView.centerXAnchor),
@@ -103,6 +117,9 @@ open class MediaMessageCell: TextMessageCell {
     open override func configure(with message: MKMessageType, at indexPath: IndexPath, and messagesCollectionView: MessagesCollectionView) {
         super.configure(with: message, at: indexPath, and: messagesCollectionView)
 
+        guard let dataSource = messagesCollectionView.messagesDataSource else {
+            fatalError(MessageKitError.nilMessagesDataSource)
+        }
         guard let displayDelegate = messagesCollectionView.messagesDisplayDelegate else {
             fatalError(MessageKitError.nilMessagesDisplayDelegate)
         }
@@ -116,26 +133,64 @@ open class MediaMessageCell: TextMessageCell {
         }
         let maxWidth = self.messageContainerView.frame.width
         var sizeItem: CGSize = .zero
+        var content: String?
         switch message.kind {
         case .photo(let mediaItem), .sticker(let mediaItem):
             imageView.image = mediaItem.image ?? mediaItem.placeholderImage
             playButtonView.isHidden = true
             sizeItem = sizeForMediaItem(maxWidth, mediaItem)
+            content = mediaItem.content
         case .video(let mediaItem):
             imageView.image = mediaItem.image ?? mediaItem.placeholderImage
             playButtonView.isHidden = false
             sizeItem = sizeForMediaItem(maxWidth, mediaItem)
+            content = mediaItem.content
         default:
             break
         }
         
-       let constraints: [NSLayoutConstraint] = [
-            imageView.rightAnchor.constraint(equalTo: messageContainerView.rightAnchor),
-            imageView.bottomAnchor.constraint(equalTo: messageContainerView.bottomAnchor),
-            imageView.leadingAnchor.constraint(equalTo: messageContainerView.leadingAnchor),
-            imageView.heightAnchor.constraint(equalToConstant: sizeItem.height)
-            ]
-        NSLayoutConstraint.activate(constraints)
+        
+        let isOutgoingMessage = dataSource.isFromCurrentSender(message: message)
+        var messageTextSize: CGSize = CGSize.zero
+        if let text = content, !text.isEmpty {
+            let attributes = displayDelegate.textAttributes(for: message, at: indexPath, in: messagesCollectionView)
+            let attributedString = NSMutableAttributedString(string: text, attributes: attributes)
+            messageLabel.textInsets = self.messageInsets
+            messageLabel.attributedText = attributedString
+            messageTextSize = labelSize(for: attributedString, considering: messageContainerView.bounds.width - self.messageInsets.horizontal)
+            messageTextSize.width += messageInsets.horizontal
+            messageTextSize.height += messageInsets.vertical
+            if messageTextSize.height < MKMessageConstant.Limit.minContainerBodyHeight{
+                messageTextSize.height = MKMessageConstant.Limit.minContainerBodyHeight
+            }
+            guard let displayDelegate = messagesCollectionView.messagesDisplayDelegate else {
+                fatalError(MessageKitError.nilMessagesDisplayDelegate)
+            }
+
+            let messageColor = displayDelegate.backgroundColor(for: message, at: indexPath, in: messagesCollectionView)
+            if isOutgoingMessage {
+                if messageTextSize != .zero {
+                    messageTextView.frame = CGRect(origin: CGPoint(x: messageContainerView.bounds.width - messageTextSize.width, y: 0), size: messageTextSize)
+                    self.cornerTextMessageView(isOutgoing: isOutgoingMessage)
+                    messageTextView.backgroundColor = messageColor
+                    imageView.frame = CGRect(origin: CGPoint(x: messageContainerView.bounds.width - sizeItem.width, y: messageTextView.frame.maxY + 2), size: sizeItem)
+                }
+            } else {
+                
+                if messageTextSize != .zero {
+                    messageTextView.frame = CGRect(origin: CGPoint(x: 0, y: 0), size: messageTextSize)
+                    self.cornerTextMessageView(isOutgoing: isOutgoingMessage)
+                    messageTextView.backgroundColor = messageColor
+                }
+                imageView.frame = CGRect(origin: CGPoint(x: 0, y: messageTextView.frame.maxY + 2), size: sizeItem)
+            }
+        } else {
+            imageView.frame = messageContainerView.bounds
+        }
+        self.cornerImageView(isOutgoing: isOutgoingMessage, hasMessageText: !(content?.isEmpty ?? true))
+        self.messageContainerView.backgroundColor = UIColor.clear
+        
+        
         displayDelegate.configureMediaMessageImageView(self, for: message, at: indexPath, in: messagesCollectionView)
 
         
@@ -152,4 +207,62 @@ open class MediaMessageCell: TextMessageCell {
         delegate?.didTapImage(in: self)
     }
     
+    internal func labelSize(for attributedText: NSAttributedString, considering maxWidth: CGFloat) -> CGSize {
+        let constraintBox = CGSize(width: maxWidth, height: .greatestFiniteMagnitude)
+        let rect = attributedText.boundingRect(with: constraintBox, options: [.usesLineFragmentOrigin, .usesFontLeading], context: nil).integral
+
+        return rect.size
+    }
+    
+    private func cornerTextMessageView(isOutgoing: Bool) {
+        var corners: UIRectCorner = []
+        corners.formUnion(.topLeft)
+        corners.formUnion(.topRight)
+         if isOutgoing {
+             corners.formUnion(.bottomLeft)
+         } else {
+             corners.formUnion(.bottomRight)
+         }
+        let radius: CGFloat = 16
+        let smallCorner: CGFloat = 4
+        messageTextView.layer.cornerRadius = smallCorner
+        messageTextView.clipsToBounds = true
+        let path = UIBezierPath(roundedRect: messageTextView.bounds, byRoundingCorners: corners, cornerRadii: CGSize(width: radius, height: radius))
+        let mask = CAShapeLayer()
+        mask.path = path.cgPath
+        messageTextView.layer.mask = mask
+    }
+    
+    private func cornerImageView(isOutgoing: Bool, hasMessageText: Bool) {
+        var corners: UIRectCorner = []
+        if hasMessageText {
+            corners.formUnion(.bottomLeft)
+            corners.formUnion(.bottomRight)
+             if isOutgoing {
+                 corners.formUnion(.topLeft)
+             } else {
+                 corners.formUnion(.topRight)
+             }
+        } else {
+            corners.formUnion(.topLeft)
+            corners.formUnion(.topRight)
+            corners.formUnion(.bottomLeft)
+            corners.formUnion(.bottomRight)
+        }
+        
+        let radius: CGFloat = 16
+        let smallCorner: CGFloat = 4
+        imageView.layer.cornerRadius = smallCorner
+        let path = UIBezierPath(roundedRect: imageView.bounds, byRoundingCorners: corners, cornerRadii: CGSize(width: radius, height: radius))
+        let mask = CAShapeLayer()
+        mask.path = path.cgPath
+        imageView.layer.mask = mask
+    }
+    
+    open override func apply(_ layoutAttributes: UICollectionViewLayoutAttributes) {
+        super.apply(layoutAttributes)
+        if let attributes = layoutAttributes as? MessagesCollectionViewLayoutAttributes {
+            messageInsets = attributes.messageLabelInsets
+        }
+    }
 }
