@@ -11,24 +11,20 @@ import UIKit
 enum MessageConstant {
     
     enum Sizes {
-        
         enum Avatar {
             static let avatarSize: CGFloat = 32
             static let avatarPaddingLeft: CGFloat = 12
             static let avatarPaddingBottom: CGFloat = 1
         }
-        
         enum Status {
             static let statusSize: CGFloat = 14
             static let statusPaddingLeft: CGFloat = 7
         }
-
         enum Body {
             static let minHeight: CGFloat = 36
             static let paddingLeftPartnerSend: CGFloat = 56
             static let paddingRightSuperViewMeSend: CGFloat = 24
         }
-        
         enum Reply {
             static let contentPaddingTop: CGFloat = 11
             static let showHeight: CGFloat = 35
@@ -37,7 +33,6 @@ enum MessageConstant {
             static let imageSize: CGFloat = 40
             static let textHeight: CGFloat = 16
         }
-
         enum Message {
             static let paddingLeftRight: CGFloat = 12
             static let paddingTopBottom: CGFloat = 8
@@ -49,7 +44,6 @@ enum MessageConstant {
             static let minWidth: CGFloat = 24
             static let paddingActionNote: CGFloat = 2
         }
-        
         enum Story {
             static let titleFontSize: CGFloat = 13.0
             static let contentPadding: CGFloat = 4.0
@@ -57,7 +51,6 @@ enum MessageConstant {
             static let imageWidth: CGFloat = 68.0
             static let imageHeight: CGFloat = 98.0
         }
-        
         enum Donate {
             static let coinPreviewHeight: CGFloat = 36.0
             static let coinImageSize: CGFloat = 16.0
@@ -111,7 +104,6 @@ enum MessageConstant {
     }
     
     enum Colors {
-        
         enum Donate {
             static let background: UIColor = UIColor(hex: "9E57D1")
             static let text: UIColor = UIColor(hex: "#FFD600")

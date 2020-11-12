@@ -245,7 +245,7 @@ class ChatViewController: MessagesViewController, MKMessagesDataSource {
 //            let attributedText = NSAttributedString(string: replyMessage.content, attributes: [.font: UIFont.italicSystemFont(ofSize: 15)])
             let attributedText1 = NSMutableAttributedString(string: replyMessage.content, attributes: [.font: UIFont.systemFont(ofSize: 15), .foregroundColor: UIColor.black])
             let attributedText2 = NSAttributedString(string: "\n12 giây", attributes: [.font: UIFont.italicSystemFont(ofSize: 13), .foregroundColor: UIColor.lightGray])
-            attributedText1.append(attributedText2)
+//            attributedText1.append(attributedText2)
             return attributedText1
         case .remove:
             let contentText = "Tin nhắn đã bị xoá"
@@ -295,6 +295,16 @@ extension ChatViewController: MKMessageCellDelegate {
         self.view.endEditing(true)
         print(self.messagesCollectionView.frame)
         print(self.messagesCollectionView.contentOffset)
+    }
+    func cellDidLongPressMessage(cell: MessageCollectionViewCell) {
+        print("long presss")
+        guard let contentCell = cell as? MessageContentCell else {return}
+        let share = ContextMenuItemWithImage(title: "Trả lời", image: UIImage())
+        let edit = "Edit"
+        let delete = ContextMenuItemWithImage(title: "Delete", image: UIImage())
+        //        CM.nibView = UINib(nibName: "CustomCell", bundle: .main)
+        CM.items = ["Trả lời", "Sao chép", "Xoá"]
+        CM.showMenu(viewTargeted: contentCell.messageBodyView, delegate: self)
     }
     func didTapPlayButton(in cell: AudioMessageCell) {
         guard let indexPath = messagesCollectionView.indexPath(for: cell),
@@ -436,4 +446,23 @@ extension ChatViewController: InputBarAccessoryViewDelegate {
             }
         }
     }
+}
+
+extension ChatViewController : ContextMenuDelegate {
+    func contextMenuDidSelect(_ contextMenu: ContextMenu, cell: ContextMenuCell, targetedView: UIView, didSelect item: ContextMenuItem, forRowAt index: Int) -> Bool {
+        return true
+    }
+    
+    func contextMenuDidDeselect(_ contextMenu: ContextMenu, cell: ContextMenuCell, targetedView: UIView, didSelect item: ContextMenuItem, forRowAt index: Int) {
+        
+    }
+    
+    func contextMenuDidAppear(_ contextMenu: ContextMenu) {
+        print("contextMenuDidAppear")
+    }
+    
+    func contextMenuDidDisappear(_ contextMenu: ContextMenu) {
+        print("contextMenuDidDisappear")
+    }
+
 }

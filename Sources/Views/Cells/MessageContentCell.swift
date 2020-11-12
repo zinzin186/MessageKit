@@ -233,6 +233,7 @@ open class MessageContentCell: MessageCollectionViewCell, UIGestureRecognizerDel
         messageTopLabel.text = nil
         iconMarkReply.isHidden = true
         messageBottomLabel.text = nil
+        sendStatusImageView.isHidden = true
 //        messageTimestampLabel.attributedText = nil
     }
 
@@ -410,7 +411,8 @@ open class MessageContentCell: MessageCollectionViewCell, UIGestureRecognizerDel
     
     open func layoutMessageBodyView(with attributes: MessagesCollectionViewLayoutAttributes) {
         var origin: CGPoint = .zero
-        let messageBodyWidth: CGFloat = max(attributes.messageContainerSize.width + attributes.messageContainerPadding.left + attributes.messageContainerPadding.right, attributes.actionBodySize.width + attributes.actionBodyPadding.left + attributes.actionBodyPadding.right)
+        let messageBodyWidth: CGFloat = max(attributes.messageContainerSize.width, attributes.actionBodySize.width)
+//        let messageBodyWidth: CGFloat = max(attributes.messageContainerSize.width + attributes.messageContainerPadding.horizontal, attributes.actionBodySize.width + attributes.actionBodyPadding.horizontal)
         let messageBodyHeight: CGFloat = attributes.messageContainerSize.height + attributes.actionBodySize.height + attributes.paddingContainerViewWithActionBody
         switch attributes.avatarPosition.vertical {
         case .messageBottom:
@@ -480,9 +482,9 @@ open class MessageContentCell: MessageCollectionViewCell, UIGestureRecognizerDel
         origin.y = attributes.actionBodyPadding.top
         switch attributes.avatarPosition.horizontal {
         case .cellLeading:
-            origin.x = attributes.actionBodyPadding.left
+            origin.x = 0
         case .cellTrailing:
-            origin.x = self.messageBodyView.frame.width - attributes.actionBodySize.width - attributes.actionBodyPadding.right
+            origin.x = self.messageBodyView.frame.width - attributes.actionBodySize.width
         case .natural:
             fatalError(MessageKitError.avatarPositionUnresolved)
         }
@@ -496,9 +498,9 @@ open class MessageContentCell: MessageCollectionViewCell, UIGestureRecognizerDel
         origin.y = self.actionBodyView.frame.maxY + attributes.paddingContainerViewWithActionBody
         switch attributes.avatarPosition.horizontal {
         case .cellLeading:
-            origin.x = attributes.messageContainerPadding.left
+            origin.x = 0
         case .cellTrailing:
-            origin.x = self.messageBodyView.frame.width - attributes.messageContainerSize.width - attributes.messageContainerPadding.right
+            origin.x = self.messageBodyView.frame.width - attributes.messageContainerSize.width
         case .natural:
             fatalError(MessageKitError.avatarPositionUnresolved)
         }
@@ -533,8 +535,6 @@ open class MessageContentCell: MessageCollectionViewCell, UIGestureRecognizerDel
         messageTopLabel.textAlignment = attributes.messageTopLabelAlignment.textAlignment
         
         let textInsets = attributes.messageTopLabelAlignment.textInsets
-        
-        
         let iconMarkReplySize = attributes.iconMarkReplySize
         let paddingIcon = iconMarkReplySize == .zero ? 0 : iconMarkReplySize.width + 5
         let y = messageBodyView.frame.origin.y - attributes.actionBodyPadding.top - attributes.messageTopLabelSize.height
@@ -546,7 +546,6 @@ open class MessageContentCell: MessageCollectionViewCell, UIGestureRecognizerDel
         }else{
             iconX = self.frame.width - attributes.messageTopLabelAlignment.textInsets.right - attributes.messageTopLabelSize.width - paddingIcon
         }
-        let paddingY = messageTopLabel.textInsets.bottom - messageTopLabel.textInsets.top
         iconMarkReply.frame = CGRect(x: iconX, y: y + messageTopLabel.textInsets.top/2 + (attributes.messageTopLabelSize.height - iconMarkReplySize.height)/2, width: iconMarkReplySize.width, height: iconMarkReplySize.height)
         messageTopLabel.frame = CGRect(origin: origin, size: CGSize(width: self.frame.width, height: attributes.messageTopLabelSize.height))
     }
@@ -565,7 +564,6 @@ open class MessageContentCell: MessageCollectionViewCell, UIGestureRecognizerDel
         }
         
         let origin = CGPoint(x: 0, y: y)
-
         messageBottomLabel.frame = CGRect(origin: origin, size: attributes.messageBottomLabelSize)
     }
 
@@ -574,7 +572,6 @@ open class MessageContentCell: MessageCollectionViewCell, UIGestureRecognizerDel
     open func layoutAccessoryView(with attributes: MessagesCollectionViewLayoutAttributes) {
         
         var origin: CGPoint = .zero
-        
         // Accessory view is set at the side space of the messageContainerView
         switch attributes.accessoryViewPosition {
         case .messageLabelTop:
