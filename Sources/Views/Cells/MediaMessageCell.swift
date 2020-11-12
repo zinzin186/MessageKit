@@ -110,6 +110,8 @@ open class MediaMessageCell: MessageContentCell {
     open override func prepareForReuse() {
         super.prepareForReuse()
         self.imageView.image = nil
+        self.messageLabel.text = ""
+        self.messageTextView.backgroundColor = .clear
         self.progressUpload.isHidden = true
         self.progressUpload.progress = 0
     }
@@ -153,6 +155,7 @@ open class MediaMessageCell: MessageContentCell {
         let isOutgoingMessage = dataSource.isFromCurrentSender(message: message)
         var messageTextSize: CGSize = CGSize.zero
         if let text = content, !text.isEmpty {
+            messageTextView.isHidden = false
             let attributes = displayDelegate.textAttributes(for: message, at: indexPath, in: messagesCollectionView)
             let attributedString = NSMutableAttributedString(string: text, attributes: attributes)
             messageLabel.textInsets = self.messageInsets
@@ -169,23 +172,19 @@ open class MediaMessageCell: MessageContentCell {
 
             let messageColor = displayDelegate.backgroundColor(for: message, at: indexPath, in: messagesCollectionView)
             if isOutgoingMessage {
-                if messageTextSize != .zero {
-                    messageTextView.frame = CGRect(origin: CGPoint(x: messageContainerView.bounds.width - messageTextSize.width, y: 0), size: messageTextSize)
-                    self.cornerTextMessageView(isOutgoing: isOutgoingMessage)
-                    messageTextView.backgroundColor = messageColor
-                    imageView.frame = CGRect(origin: CGPoint(x: messageContainerView.bounds.width - sizeItem.width, y: messageTextView.frame.maxY + 2), size: sizeItem)
-                }
+                messageTextView.frame = CGRect(origin: CGPoint(x: messageContainerView.bounds.width - messageTextSize.width, y: 0), size: messageTextSize)
+                self.cornerTextMessageView(isOutgoing: isOutgoingMessage)
+                messageTextView.backgroundColor = messageColor
+                imageView.frame = CGRect(origin: CGPoint(x: messageContainerView.bounds.width - sizeItem.width, y: messageTextView.frame.maxY + 2), size: sizeItem)
             } else {
-                
-                if messageTextSize != .zero {
-                    messageTextView.frame = CGRect(origin: CGPoint(x: 0, y: 0), size: messageTextSize)
-                    self.cornerTextMessageView(isOutgoing: isOutgoingMessage)
-                    messageTextView.backgroundColor = messageColor
-                }
+                messageTextView.frame = CGRect(origin: CGPoint(x: 0, y: 0), size: messageTextSize)
+                self.cornerTextMessageView(isOutgoing: isOutgoingMessage)
+                messageTextView.backgroundColor = messageColor
                 imageView.frame = CGRect(origin: CGPoint(x: 0, y: messageTextView.frame.maxY + 2), size: sizeItem)
             }
         } else {
             imageView.frame = messageContainerView.bounds
+            messageTextView.isHidden = true
         }
         self.cornerImageView(isOutgoing: isOutgoingMessage, hasMessageText: !(content?.isEmpty ?? true))
         self.messageContainerView.backgroundColor = UIColor.clear
