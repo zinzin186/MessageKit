@@ -25,12 +25,12 @@ SOFTWARE.
 import UIKit
 import MessageKit
 import InputBarAccessoryView
-
+import ContextMenuSwift
 /// A base class for the example controllers
 class ChatViewController: MessagesViewController, MKMessagesDataSource {
 
     // MARK: - Public properties
-
+ var contextMenu: ContextMenu?
     /// The `BasicAudioController` controll the AVAudioPlayer state (play, pause, stop) and udpate audio cell UI accordingly.
     lazy var audioController = BasicAudioController(messageCollectionView: messagesCollectionView)
 
@@ -298,13 +298,18 @@ extension ChatViewController: MKMessageCellDelegate {
     }
     func cellDidLongPressMessage(cell: MessageCollectionViewCell) {
         print("long presss")
+        
+        contextMenu = ContextMenu()
+       
         guard let contentCell = cell as? MessageContentCell else {return}
         let share = ContextMenuItemWithImage(title: "Trả lời", image: UIImage())
         let edit = "Edit"
         let delete = ContextMenuItemWithImage(title: "Delete", image: UIImage())
         //        CM.nibView = UINib(nibName: "CustomCell", bundle: .main)
-        CM.items = ["Trả lời", "Sao chép", "Xoá"]
-        CM.showMenu(viewTargeted: contentCell.messageBodyView, delegate: self)
+        contextMenu?.items = ["Trả lời", "Sao chép", "Xoá"]
+        contentCell.messageBodyView.backgroundColor = .red
+        contextMenu?.showMenu(viewTargeted: contentCell.messageBodyView, delegate: self)
+        self.view.endEditing(true)
     }
     func didTapPlayButton(in cell: AudioMessageCell) {
         guard let indexPath = messagesCollectionView.indexPath(for: cell),
@@ -448,13 +453,14 @@ extension ChatViewController: InputBarAccessoryViewDelegate {
     }
 }
 
-extension ChatViewController : ContextMenuDelegate {
+extension ChatViewController: ContextMenuDelegate {
     func contextMenuDidSelect(_ contextMenu: ContextMenu, cell: ContextMenuCell, targetedView: UIView, didSelect item: ContextMenuItem, forRowAt index: Int) -> Bool {
+        print("contextMenuDidSelect: \(index)")
         return true
     }
     
     func contextMenuDidDeselect(_ contextMenu: ContextMenu, cell: ContextMenuCell, targetedView: UIView, didSelect item: ContextMenuItem, forRowAt index: Int) {
-        
+        print("contextMenuDidDeselect: \(index)")
     }
     
     func contextMenuDidAppear(_ contextMenu: ContextMenu) {
@@ -463,6 +469,7 @@ extension ChatViewController : ContextMenuDelegate {
     
     func contextMenuDidDisappear(_ contextMenu: ContextMenu) {
         print("contextMenuDidDisappear")
+        self.contextMenu = nil
     }
 
 }

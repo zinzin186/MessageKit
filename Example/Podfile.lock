@@ -1,10 +1,11 @@
 PODS:
+  - ContextMenuSwift (0.0.7)
   - GTProgressBar (0.3.3)
   - InputBarAccessoryView (4.3.2):
     - InputBarAccessoryView/Core (= 4.3.2)
   - InputBarAccessoryView/Core (4.3.2)
   - lottie-ios (3.1.8)
-  - MessageKit (3.4.0):
+  - MessageKit (3.6.1):
     - GTProgressBar
     - InputBarAccessoryView (~> 4.3.2)
     - lottie-ios
@@ -23,14 +24,13 @@ PODS:
   - PINRemoteImage/PINCache (3.0.0):
     - PINCache (= 3.0.1-beta.8)
     - PINRemoteImage/Core
-  - SwiftLint (0.39.2)
 
 DEPENDENCIES:
+  - ContextMenuSwift (from `../`)
   - InputBarAccessoryView (from `https://github.com/zinzin186/InputBarAccessoryView.git`)
   - MessageKit (from `../`)
   - PINRemoteImage/iOS (~> 3.0.0)
   - PINRemoteImage/PINCache (~> 3.0.0)
-  - SwiftLint (~> 0.39.1)
 
 SPEC REPOS:
   trunk:
@@ -39,9 +39,10 @@ SPEC REPOS:
     - PINCache
     - PINOperation
     - PINRemoteImage
-    - SwiftLint
 
 EXTERNAL SOURCES:
+  ContextMenuSwift:
+    :path: "../"
   InputBarAccessoryView:
     :git: https://github.com/zinzin186/InputBarAccessoryView.git
   MessageKit:
@@ -53,15 +54,15 @@ CHECKOUT OPTIONS:
     :git: https://github.com/zinzin186/InputBarAccessoryView.git
 
 SPEC CHECKSUMS:
+  ContextMenuSwift: a27f259b3c0ff8e29d7d0bf7af5a6591ef71b447
   GTProgressBar: a480283ecb0ada50de16c71e634892826928f640
   InputBarAccessoryView: 7985d418040a05fe894bd4b8328dd43ab35517c3
   lottie-ios: 48fac6be217c76937e36e340e2d09cf7b10b7f5f
-  MessageKit: f16afa79077a1b6b417b50fc176f14d7b82a39dc
+  MessageKit: d1e34dc8da0c384777ea3d2d2eb1a6efa230ede6
   PINCache: 534fd41d358d828dfdf227a0d327f3673a65e20b
   PINOperation: 24b774353ca248fcf87d67b2d61eef42087c125a
   PINRemoteImage: e2b89e19fb6e77ffc099f9d9f3b3fe1745e3f9f9
-  SwiftLint: 22ccbbe3b8008684be5955693bab135e0ed6a447
 
-PODFILE CHECKSUM: 9d3c353f530c35e6ce07c18f1ac8bf03de25c1ee
+PODFILE CHECKSUM: db787affaae4a3628aa814c67e8626065548cd56
 
 COCOAPODS: 1.10.0
