@@ -25,7 +25,7 @@ SOFTWARE.
 import UIKit
 import MessageKit
 import InputBarAccessoryView
-import ContextMenuSwift
+
 /// A base class for the example controllers
 class ChatViewController: MessagesViewController, MKMessagesDataSource {
 

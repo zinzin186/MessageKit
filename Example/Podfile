@@ -5,7 +5,7 @@ platform :ios, '11.0'
 target 'ChatExample' do
   use_frameworks!
   pod 'MessageKit', :path => '../'
-  pod 'ContextMenuSwift', :path => '../'
+#  pod 'ContextMenuSwift', :path => '../'
   pod 'PINRemoteImage', '~> 3.0.0', :subspecs => ['iOS', 'PINCache']
   pod 'InputBarAccessoryView', :git => 'https://github.com/zinzin186/InputBarAccessoryView.git'
 
