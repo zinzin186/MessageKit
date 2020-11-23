@@ -163,6 +163,9 @@ import MessageKit
                 notification.isForCurrentApp else { return }
             self?.animateAlongside(notification) {
                 self?.constraints?.bottom?.constant = -keyboardHeight
+                if keyboardHeight < 100 {
+                    self?.constraints?.bottom?.constant = 0
+                }
                 self?.inputAccessoryView?.superview?.layoutIfNeeded()
             }
         }
@@ -173,12 +176,15 @@ import MessageKit
                 self.isKeyboardHidden == false,
                 notification.isForCurrentApp, self.baseChatViewController?.presentedViewController == nil else {
                     return
-                    
+
             }
 //            self.currentKeyboardHeight = keyboardHeight
+            
             self.animateAlongside(notification) {[weak self] in
-
                 self?.constraints?.bottom?.constant = -keyboardHeight
+                if keyboardHeight < 80 {
+                    self?.constraints?.bottom?.constant = 0
+                }
                 self?.inputAccessoryView?.superview?.layoutIfNeeded()
             }
         }
@@ -192,7 +198,7 @@ import MessageKit
         callbacks[.didHide] = { [weak self] (notification) in
             let keyboardHeight = notification.endFrame.height
             self?.baseChatViewController?.currentKeyboardHeight = keyboardHeight
-//            guard notification.isForCurrentApp, !self!.isWillDisAppear else { return }
+            guard notification.isForCurrentApp, !self!.isWillDisAppear else { return }
 //            self?.constraints?.bottom?.constant = 0
 //            self?.currentKeyboardHeight = 0
 //            self?.inputAccessoryView?.superview?.layoutIfNeeded()
@@ -201,10 +207,16 @@ import MessageKit
             let keyboardHeight = notification.endFrame.height
             self?.baseChatViewController?.currentKeyboardHeight = keyboardHeight
             guard notification.isForCurrentApp else { return }
-            self?.animateAlongside(notification) { [weak self] in
-                self?.constraints?.bottom?.constant = -keyboardHeight
-                self?.inputAccessoryView?.superview?.layoutIfNeeded()
+            if keyboardHeight < 100 {
+                self?.constraints?.bottom?.constant = 0
+            } else {
+                self?.animateAlongside(notification) { [weak self] in
+                    self?.constraints?.bottom?.constant = -keyboardHeight
+                    
+                    self?.inputAccessoryView?.superview?.layoutIfNeeded()
+                }
             }
+            
         }
         return self
     }

@@ -350,7 +350,7 @@ UICollectionViewDelegateFlowLayout, UICollectionViewDataSource, UIGestureRecogni
         if let currentOffset = self.currentOriginYInputBar, self.subInput?.frame.origin.y == currentOffset {
             return
         } else {
-            self.currentOriginYInputBar = self.subInput?.frame.origin.y
+//            self.currentOriginYInputBar = self.subInput?.frame.origin.y
         }
     
     }
