@@ -8,20 +8,51 @@
 
 import UIKit
 
-public struct ContextMenuAction {
-    let title: String
-    let image: UIImage?
-    let tintColor: UIColor
-    let action: ((ContextMenuAction) -> Void)?
+public protocol ContextMenuItem {
+    var title: String {
+        get
+    }
+    var image: UIImage? {
+        get
+    }
+    var textColor: UIColor? {
+        get
+    }
+}
 
-    public init(title: String,
-                image: UIImage? = nil,
-                tintColor: UIColor = .black,
-                action: ((ContextMenuAction) -> Void)?) {
+extension ContextMenuItem {
+    public var image: UIImage? {
+        get {
+            return nil
+        }
+    }
+    
+    public var textColor: UIColor? {
+        get {
+            return UIColor.blue
+        }
+    }
+}
+
+extension String: ContextMenuItem {
+    
+    
+    public var title: String {
+        get {
+            return "\(self)"
+        }
+    }
+}
+
+
+public struct ContextMenuItemWithImage: ContextMenuItem {
+    public var title: String
+    public var image: UIImage?
+    public var textColor: UIColor?
+    public init(title: String, image: UIImage, textColor: UIColor = UIColor.black) {
         self.title = title
         self.image = image
-        self.tintColor = tintColor
-        self.action = action
+        self.textColor = textColor
     }
 }
 
@@ -53,8 +84,8 @@ public struct ContextMenuAction {
 //}
 
 public protocol ContextMenuDelegate: class {
-    func contextMenuDidSelect(_ contextMenu: ContextMenu, cell: ContextMenuCell, targetedView: UIView, didSelect item: ContextMenuAction, forRowAt index: Int) -> Bool
-    func contextMenuDidDeselect(_ contextMenu: ContextMenu, cell: ContextMenuCell, targetedView: UIView, didSelect item: ContextMenuAction, forRowAt index: Int)
+    func contextMenuDidSelect(_ contextMenu: ContextMenu, cell: ContextMenuCell, targetedView: UIView, didSelect item: ContextMenuItem, forRowAt index: Int) -> Bool
+    func contextMenuDidDeselect(_ contextMenu: ContextMenu, cell: ContextMenuCell, targetedView: UIView, didSelect item: ContextMenuItem, forRowAt index: Int)
     func contextMenuDidAppear(_ contextMenu: ContextMenu)
     func contextMenuDidDisappear(_ contextMenu: ContextMenu)
 }
@@ -100,11 +131,11 @@ open class ContextMenu: NSObject {
     open var footerView: UIView?
     open var closeAnimation = true
     
-    open var onItemTap: ((_ index: Int, _ item: ContextMenuAction) -> Bool)?
+    open var onItemTap: ((_ index: Int, _ item: ContextMenuItem) -> Bool)?
     open var onViewAppear: ((UIView) -> Void)?
     open var onViewDismiss: ((UIView) -> Void)?
     
-    open var items = [ContextMenuAction]()
+    open var items = [ContextMenuItem]()
     
     // MARK: - Private Variables
     private weak var delegate: ContextMenuDelegate?
@@ -157,9 +188,10 @@ open class ContextMenu: NSObject {
         self.mainViewRect = window.frame
     }
     
-//    deinit {
-////        removeTapInteraction()
-//    }
+    deinit {
+//        removeTapInteraction()
+        print("Deinit")
+    }
     
 //    open func addTapInteraction(){
 //        self.viewTargeted.isUserInteractionEnabled = true
@@ -437,11 +469,11 @@ open class ContextMenu: NSObject {
         
         if animated {
             UIView.animate(withDuration: 0.2) {
-                self.blurEffectView.alpha = 0.8
+                self.blurEffectView.alpha = 1
                 self.targetedImageView.layer.shadowOpacity = 0.2
             }
         } else {
-            self.blurEffectView.alpha = 0.8
+            self.blurEffectView.alpha = 1
             self.targetedImageView.layer.shadowOpacity = 0.2
         }
 //        DispatchQueue.main.asyncAfter(wallDeadline: .now() + 1) {
@@ -812,7 +844,10 @@ extension ContextMenu: UITableViewDataSource, UITableViewDelegate {
     
     open func tableView(_ tableView: UITableView, cellForRowAt indexPath: IndexPath) -> UITableViewCell {
         guard let cell = tableView.dequeueReusableCell(withIdentifier: "ContextMenuCell", for: indexPath) as? ContextMenuCell else {return UITableViewCell()}
-        cell.configure(action: self.items[indexPath.row], style: self.MenuConstants)
+        cell.contextMenu = self
+        cell.style = self.MenuConstants
+        cell.item = self.items[indexPath.row]
+        cell.setup()
         return cell
     }
     
@@ -824,8 +859,6 @@ extension ContextMenu: UITableViewDataSource, UITableViewDelegate {
         if let cell = tableView.cellForRow(at: indexPath) as? ContextMenuCell, self.delegate?.contextMenuDidSelect(self, cell: cell, targetedView: self.viewTargeted, didSelect: self.items[indexPath.row], forRowAt: indexPath.row) ?? false {
             self.closeAllViews()
         }
-        let action = items[indexPath.row]
-        action.action?(action)
     }
     
     open func tableView(_ tableView: UITableView, didDeselectRowAt indexPath: IndexPath) {

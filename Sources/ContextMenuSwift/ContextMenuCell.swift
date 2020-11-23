@@ -33,7 +33,11 @@ open class ContextMenuCell: UITableViewCell {
         stv.translatesAutoresizingMaskIntoConstraints = false
         return stv
     }()
-        
+    
+    weak var contextMenu: ContextMenu?
+    var item: ContextMenuItem!
+    var style : ContextMenuConstants? = nil
+    
     override open func awakeFromNib() {
         super.awakeFromNib()
         // Initialization code
@@ -77,22 +81,21 @@ open class ContextMenuCell: UITableViewCell {
     
     override open func prepareForReuse() {
         super.prepareForReuse()
+        
         self.titleLabel.text = nil
         self.titleLabel.textColor = UIColor.black
         self.iconImageView.image = nil
         
     }
     
-    open func configure(action: ContextMenuAction, style : ContextMenuConstants? = nil) {
-        self.titleLabel.text = action.title
-        self.titleLabel.numberOfLines = 0
-        self.titleLabel.textColor = action.tintColor
+    open func setup(){
+        self.titleLabel.text = item.title
+        self.titleLabel.textColor = item.textColor
         if let menuConstants = style {
             self.titleLabel.font = menuConstants.LabelDefaultFont
         }
-        self.iconImageView.isHidden = (action.image == nil)
-        iconImageView.image = action.image?.withRenderingMode(.alwaysTemplate)
-        iconImageView.tintColor = action.tintColor
+        self.iconImageView.image = item.image
+        self.iconImageView.isHidden = (item.image == nil)
     }
     
 }
