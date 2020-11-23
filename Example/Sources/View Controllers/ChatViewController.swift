@@ -69,18 +69,18 @@ class ChatViewController: MessagesViewController, MKMessagesDataSource {
     
 //    override func setupConstraints() {
 //        messagesCollectionView.translatesAutoresizingMaskIntoConstraints = false
-//        
+//
 //        let top = messagesCollectionView.topAnchor.constraint(equalTo: view.topAnchor)
 //        let leading = messagesCollectionView.leadingAnchor.constraint(equalTo: view.leadingAnchor)
 //        let trailing = messagesCollectionView.trailingAnchor.constraint(equalTo: view.trailingAnchor)
-//        
+//
 //        if #available(iOS 11.0, *) {
 //            bottom = messagesCollectionView.bottomAnchor.constraint(equalTo: view.bottomAnchor)
 //        } else {
 //            bottom = messagesCollectionView.bottomAnchor.constraint(equalTo: view.topAnchor, constant: 0)
 //        }
 //        NSLayoutConstraint.activate([top, bottom, trailing, leading])
-//        
+//
 //    }
     
     
@@ -300,13 +300,19 @@ extension ChatViewController: MKMessageCellDelegate {
         print("long presss")
         
         contextMenu = ContextMenu()
+        
        
         guard let contentCell = cell as? MessageContentCell else {return}
-        let share = ContextMenuItemWithImage(title: "Trả lời", image: UIImage())
+        let share = ContextMenuAction(title: "Trả lời", image: UIImage(named: "ic_audiocall_hangup"), tintColor: UIColor.black, action: {_ in
+            print("Tra loi oke 13456")
+        })
         let edit = "Edit"
-        let delete = ContextMenuItemWithImage(title: "Delete", image: UIImage())
+        let delete = ContextMenuAction(title: "Delete", image: UIImage(named: "ic_audiocall_misscall"), tintColor: UIColor.brown, action: {_ in
+            print("Delete 13456")
+        })
         //        CM.nibView = UINib(nibName: "CustomCell", bundle: .main)
-        contextMenu?.items = ["Trả lời", "Sao chép", "Xoá"]
+//        contextMenu?.items = ["Trả lời", "Sao chép", "Xoá"]
+        contextMenu?.items = [share, delete]
         contentCell.messageBodyView.backgroundColor = .red
         contextMenu?.showMenu(viewTargeted: contentCell.messageBodyView, delegate: self)
         self.view.endEditing(true)
@@ -454,12 +460,12 @@ extension ChatViewController: InputBarAccessoryViewDelegate {
 }
 
 extension ChatViewController: ContextMenuDelegate {
-    func contextMenuDidSelect(_ contextMenu: ContextMenu, cell: ContextMenuCell, targetedView: UIView, didSelect item: ContextMenuItem, forRowAt index: Int) -> Bool {
+    func contextMenuDidSelect(_ contextMenu: ContextMenu, cell: ContextMenuCell, targetedView: UIView, didSelect item: ContextMenuAction, forRowAt index: Int) -> Bool {
         print("contextMenuDidSelect: \(index)")
         return true
     }
     
-    func contextMenuDidDeselect(_ contextMenu: ContextMenu, cell: ContextMenuCell, targetedView: UIView, didSelect item: ContextMenuItem, forRowAt index: Int) {
+    func contextMenuDidDeselect(_ contextMenu: ContextMenu, cell: ContextMenuCell, targetedView: UIView, didSelect item: ContextMenuAction, forRowAt index: Int) {
         print("contextMenuDidDeselect: \(index)")
     }
     
