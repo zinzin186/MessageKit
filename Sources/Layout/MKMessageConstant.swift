@@ -52,6 +52,7 @@ public enum MKMessageConstant {
             static let contentTextInset: UIEdgeInsets = UIEdgeInsets(top: 8, left: 12, bottom: 8, right: 12)
             static let bottomPadding: CGFloat = -18
             static let contentFont: UIFont = UIFont.systemFont(ofSize: 13)
+            static let rightReplyIconPadding: CGFloat = 4
             
         }
         

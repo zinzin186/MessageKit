@@ -271,7 +271,7 @@ internal struct MockMessage: MKMessageType {
         let action = MKActionType.reply(replyMessage: replyMessage)
 //        let action = MKActionType.remove
 //        let action = MKActionType.story(urlString: "https://avatars0.githubusercontent.com/u/2911921?s=460&u=418a6180264738f33cf0ea2b6ce1c9fd79d992f2&v=4")
-//        self.init(kind: .text(text), user: user, messageId: messageId, date: date, action: action)
+        self.init(kind: .text(text), user: user, messageId: messageId, date: date, action: action)
         let callType = MKCallType.init(rawValue: 1)!
         let statusType = MKCallStatus.init(rawValue: 1)!
         let statusImage: UIImage? = statusType.getImage(type: callType)
@@ -283,16 +283,16 @@ internal struct MockMessage: MKMessageType {
 //        self.init(kind: .call(image: statusImage, statusInfo: statusType.statusName, callInfo: callInfoString), user: user, messageId: messageId, date: date, action: .default)
 //        self.init(kind: .sticker(mediaItem), user: user, messageId: messageId, date: date, action: .default)
 //        self.init(kind: .action(text), user: user, messageId: messageId, date: date, action: .default)
-        let urlEndcode = "https://vi.wikipedia.org/wiki/Wikipedia:Sách_hướng_dẫn".addingPercentEncoding(withAllowedCharacters: .urlHostAllowed)
-        let gPLinkItem = MKLinkItem(
-            text: "https://vnexpress.net/nhung-dia-danh-co-doc-nhat-the-gioi-2882673.html",
-            attributedText: nil,
-            url: URL(string: urlEndcode!)!,
-            title: "Những địa danh 'cô độc' nhất thế giới",
-            teaser: "Vì nhiều lý do, những địa điểm dưới đây luôn vắng bóng người sinh sống và trở nên “cô đơn” nhất trên trái đất.",
-            thumbnailImage: nil
-        )
-        self.init(kind: .linkPreview(gPLinkItem), user: user, messageId: messageId, date: date, action: .default)
+//        let urlEndcode = "https://vi.wikipedia.org/wiki/Wikipedia:Sách_hướng_dẫn".addingPercentEncoding(withAllowedCharacters: .urlHostAllowed)
+//        let gPLinkItem = MKLinkItem(
+//            text: "https://vnexpress.net/nhung-dia-danh-co-doc-nhat-the-gioi-2882673.html",
+//            attributedText: nil,
+//            url: URL(string: urlEndcode!)!,
+//            title: "Những địa danh 'cô độc' nhất thế giới",
+//            teaser: "Vì nhiều lý do, những địa điểm dưới đây luôn vắng bóng người sinh sống và trở nên “cô đơn” nhất trên trái đất.",
+//            thumbnailImage: nil
+//        )
+//        self.init(kind: .linkPreview(gPLinkItem), user: user, messageId: messageId, date: date, action: .default)
     }
 
     init(attributedText: NSAttributedString, user: MockUser, messageId: String, date: Date, action: MKActionType = .default) {

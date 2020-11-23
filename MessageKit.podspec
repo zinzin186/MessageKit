@@ -16,6 +16,5 @@ Pod::Spec.new do |s|
    s.ios.deployment_target = '9.0'
    s.ios.resources = ['Sources/Assets.xcassets']
    s.dependency 'InputBarAccessoryView', '~> 4.3.2'
-   s.dependency 'lottie-ios'
    s.dependency 'GTProgressBar'
 end

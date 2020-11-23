@@ -8,7 +8,7 @@ target 'ChatExample' do
 #  pod 'ContextMenuSwift', :path => '../'
   pod 'PINRemoteImage', '~> 3.0.0', :subspecs => ['iOS', 'PINCache']
   pod 'InputBarAccessoryView', :git => 'https://github.com/zinzin186/InputBarAccessoryView.git'
-
+  pod 'lottie-ios'
   target 'ChatExampleTests' do
     inherit! :search_paths
   end

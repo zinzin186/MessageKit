@@ -7,7 +7,6 @@ PODS:
   - MessageKit (3.6.1):
     - GTProgressBar
     - InputBarAccessoryView (~> 4.3.2)
-    - lottie-ios
   - PINCache (3.0.3):
     - PINCache/Arc-exception-safe (= 3.0.3)
     - PINCache/Core (= 3.0.3)
@@ -26,6 +25,7 @@ PODS:
 
 DEPENDENCIES:
   - InputBarAccessoryView (from `https://github.com/zinzin186/InputBarAccessoryView.git`)
+  - lottie-ios
   - MessageKit (from `../`)
   - PINRemoteImage/iOS (~> 3.0.0)
   - PINRemoteImage/PINCache (~> 3.0.0)
@@ -53,11 +53,11 @@ SPEC CHECKSUMS:
   GTProgressBar: a480283ecb0ada50de16c71e634892826928f640
   InputBarAccessoryView: 7985d418040a05fe894bd4b8328dd43ab35517c3
   lottie-ios: 48fac6be217c76937e36e340e2d09cf7b10b7f5f
-  MessageKit: d1e34dc8da0c384777ea3d2d2eb1a6efa230ede6
+  MessageKit: 582d5ac8f33d1a7dffbf19f4d5938d1f5c894a04
   PINCache: 7a8fc1a691173d21dbddbf86cd515de6efa55086
   PINOperation: 00c935935f1e8cf0d1e2d6b542e75b88fc3e5e20
   PINRemoteImage: f1295b29f8c5e640e25335a1b2bd9d805171bd01
 
-PODFILE CHECKSUM: 75434e9af7000960f605c22a793fa6ecce02798b
+PODFILE CHECKSUM: e5fa0e34ccaca4406706d2c169f8a59fc546c069
 
 COCOAPODS: 1.10.0

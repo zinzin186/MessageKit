@@ -536,7 +536,7 @@ open class MessageContentCell: MessageCollectionViewCell, UIGestureRecognizerDel
         
         let textInsets = attributes.messageTopLabelAlignment.textInsets
         let iconMarkReplySize = attributes.iconMarkReplySize
-        let paddingIcon = iconMarkReplySize == .zero ? 0 : iconMarkReplySize.width + 5
+        let paddingIcon: CGFloat = iconMarkReplySize == .zero ? 0 : iconMarkReplySize.width + MKMessageConstant.ActionView.ReplyView.rightReplyIconPadding
         let y = messageBodyView.frame.origin.y - attributes.actionBodyPadding.top - attributes.messageTopLabelSize.height
         let origin = CGPoint(x: 0, y: y)
         let iconX: CGFloat

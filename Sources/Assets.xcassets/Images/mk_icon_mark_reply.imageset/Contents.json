@@ -1,17 +1,17 @@
 {
   "images" : [
     {
-      "filename" : "icon_mark_reply.png",
+      "filename" : "mk_icon_mark_reply.png",
       "idiom" : "universal",
       "scale" : "1x"
     },
     {
-      "filename" : "icon_mark_reply@2x.png",
+      "filename" : "mk_icon_mark_reply@2x.png",
       "idiom" : "universal",
       "scale" : "2x"
     },
     {
-      "filename" : "icon_mark_reply@3x.png",
+      "filename" : "mk_icon_mark_reply@3x.png",
       "idiom" : "universal",
       "scale" : "3x"
     }
