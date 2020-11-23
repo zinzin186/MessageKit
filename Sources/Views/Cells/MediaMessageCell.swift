@@ -91,6 +91,7 @@ open class MediaMessageCell: MessageContentCell {
         self.messageTextView.backgroundColor = .clear
         self.progressUpload.isHidden = true
         self.progressUpload.progress = 0.0
+        playButtonView.isHidden = true
     }
 
     open override func configure(with message: MKMessageType, at indexPath: IndexPath, and messagesCollectionView: MessagesCollectionView) {
@@ -116,7 +117,7 @@ open class MediaMessageCell: MessageContentCell {
         switch message.kind {
         case .photo(let mediaItem), .sticker(let mediaItem):
             imageView.image = mediaItem.image ?? mediaItem.placeholderImage
-            playButtonView.isHidden = false
+            playButtonView.isHidden = true
             sizeItem = sizeForMediaItem(maxWidth, mediaItem)
             content = mediaItem.content
         case .video(let mediaItem):
