@@ -242,7 +242,12 @@ extension BasicExampleViewController: MKMessagesDisplayDelegate {
         switch action {
         case .reply(let message):
             if let urlString = message.medias?.first, let imageURL = URL(string: urlString) {
-                imageView.pin_setImage(from: imageURL)
+//                imageView.pin_setImage(from: imageURL)
+                if urlString.hasSuffix("json") {
+                    self.loadAnimationSticker(imageURL, imageView: imageView)
+                } else {
+                    imageView.pin_setImage(from: imageURL)
+                }
             }
             imageView.backgroundColor = .red
         case .story(let urlString):
@@ -254,7 +259,21 @@ extension BasicExampleViewController: MKMessagesDisplayDelegate {
         }
         
     }
-    
+    func loadAnimationSticker(_ url: URL, imageView: UIImageView) {
+        let animationReplyView = AnimationView()
+        animationReplyView.loopMode = .loop
+        imageView.addSubview(animationReplyView)
+        imageView.image = nil
+//        animationReplyView.fillSuperview()
+//        let contentInset = MKMessageConstant.ActionView.ReplyView.contentMediaInset
+//        let imageHeight: CGFloat = superViewFrame.height - contentInset.vertical
+        animationReplyView.frame = imageView.bounds
+        Animation.loadedFrom(url: url, closure: { [weak self] (animation) in
+            guard let self = self else {return}
+            animationReplyView.animation = animation
+            animationReplyView.play()
+            }, animationCache: LRUAnimationCache.sharedCache)
+    }
     // MARK: - Location Messages
     
     func annotationViewForLocation(message: MKMessageType, at indexPath: IndexPath, in messageCollectionView: MessagesCollectionView) -> MKAnnotationView? {

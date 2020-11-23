@@ -9,31 +9,23 @@ import Foundation
 
 open class ActionReplyTextView: UIView {
     
-lazy var contentLabel: UILabel = {[unowned self] in
-      let label: UILabel = .init()
-      label.numberOfLines = 2
-      label.font = UIFont.systemFont(ofSize: 13)
-      label.textColor = UIColor.fromHexCode("#808080")
-      label.translatesAutoresizingMaskIntoConstraints = false
+    lazy var contentLabel: UILabel = {[unowned self] in
+        let label: UILabel = .init()
+        label.numberOfLines = 2
+        label.font = UIFont.systemFont(ofSize: 13)
+        label.textColor = UIColor.fromHexCode("#808080")
       return label
-  }()
-    
+    }()
 
-    init() {
-        super.init(frame: .zero)
+    public override init(frame: CGRect) {
+        super.init(frame: frame)
         self.addSubview(contentLabel)
         let contentInset = MKMessageConstant.ActionView.ReplyView.contentTextInset
-        NSLayoutConstraint.activate([
-            contentLabel.leadingAnchor.constraint(equalTo: self.leadingAnchor, constant: contentInset.left),
-            contentLabel.topAnchor.constraint(equalTo: self.topAnchor, constant: contentInset.top),
-            contentLabel.trailingAnchor.constraint(equalTo: self.trailingAnchor, constant: -contentInset.right),
-            contentLabel.bottomAnchor.constraint(equalTo: self.bottomAnchor, constant: -contentInset.bottom)
-        ])
+        contentLabel.frame = CGRect(contentInset.left, contentInset.top, frame.width - contentInset.horizontal, frame.height - contentInset.vertical)
     }
     
     required public init?(coder: NSCoder) {
         fatalError("init(coder:) has not been implemented")
     }
     
-   
 }

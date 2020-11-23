@@ -18,22 +18,15 @@ open class ActionRemoveMessageView: UIView {
         return label
     }()
     
-
-    init() {
-        super.init(frame: .zero)
+    public override init(frame: CGRect) {
+        super.init(frame: frame)
         self.addSubview(contentLabel)
         let contentInset = MKMessageConstant.ActionView.RemoveView.contentInset
-        NSLayoutConstraint.activate([
-            contentLabel.leadingAnchor.constraint(equalTo: self.leadingAnchor, constant: contentInset.left),
-            contentLabel.topAnchor.constraint(equalTo: self.topAnchor, constant: contentInset.top),
-            contentLabel.trailingAnchor.constraint(equalTo: self.trailingAnchor, constant: -contentInset.right),
-            contentLabel.bottomAnchor.constraint(equalTo: self.bottomAnchor, constant: -contentInset.bottom)
-        ])
+        contentLabel.frame = CGRect(contentInset.left, contentInset.top, frame.width - contentInset.horizontal, frame.height - contentInset.vertical)
     }
     
     required public init?(coder: NSCoder) {
         fatalError("init(coder:) has not been implemented")
     }
-    
    
 }

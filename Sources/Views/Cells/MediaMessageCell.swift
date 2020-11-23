@@ -29,17 +29,12 @@ import GTProgressBar
 open class MediaMessageCell: MessageContentCell {
 
     /// The play button view to display on video messages.
-//    open lazy var playButtonView: PlayButtonView = {
-//        let playButtonView = PlayButtonView()
-//        return playButtonView
-//    }()
-
     private var messageInsets: UIEdgeInsets = .zero
     
     open lazy var messageLabel: MessageLabel = {
         let label = MessageLabel()
         messageTextView.addSubview(label)
-        label.fillSuperview()
+//        label.fillSuperview()
         return label
     }()
     
@@ -50,27 +45,20 @@ open class MediaMessageCell: MessageContentCell {
     }()
     
     open lazy var progressUpload: GTProgressBar = {
-        let progressUpload = GTProgressBar()
-        progressUpload.orientation = GTProgressBarOrientation.horizontal
-        progressUpload.barBackgroundColor = .white
-        progressUpload.barFillColor = UIColor.fromHexCode("#6FBE49")
-        progressUpload.displayLabel = false
-        progressUpload.barBorderColor = .clear
-        progressUpload.layer.borderWidth = 0
-        progressUpload.barBorderWidth = 0
-        progressUpload.barFillInset = 0
-        progressUpload.progress = 0
-        progressUpload.isHidden = true
-        progressUpload.cornerType = GTProgressBarCornerType.square
-        progressUpload.translatesAutoresizingMaskIntoConstraints = false
-        messageContainerView.addSubview(progressUpload)
-        NSLayoutConstraint.activate([
-            progressUpload.leadingAnchor.constraint(equalTo: imageView.leadingAnchor),
-            progressUpload.trailingAnchor.constraint(equalTo: imageView.trailingAnchor),
-            progressUpload.heightAnchor.constraint(equalToConstant: 6),
-            progressUpload.bottomAnchor.constraint(equalTo: messageContainerView.bottomAnchor)
-        ])
-        return progressUpload
+        let progressBar = GTProgressBar()
+        progressBar.orientation = GTProgressBarOrientation.horizontal
+        progressBar.barBackgroundColor = .white
+        progressBar.barFillColor = UIColor.fromHexCode("#6FBE49")
+        progressBar.displayLabel = false
+        progressBar.barBorderColor = .clear
+        progressBar.layer.borderWidth = 0
+        progressBar.barBorderWidth = 0
+        progressBar.barFillInset = 0
+        progressBar.progress = 0.0
+        progressBar.isHidden = true
+        progressBar.cornerType = GTProgressBarCornerType.square
+        messageContainerView.addSubview(progressBar)
+        return progressBar
     }()
     
     public let playButtonView: UIImageView = {
@@ -89,22 +77,11 @@ open class MediaMessageCell: MessageContentCell {
     // MARK: - Methods
 
     /// Responsible for setting up the constraints of the cell's subviews.
-    open func setupConstraints() {
-//        imageView.translatesAutoresizingMaskIntoConstraints = false
-        playButtonView.translatesAutoresizingMaskIntoConstraints = false
-        let constraints: [NSLayoutConstraint] = [
-            playButtonView.centerXAnchor.constraint(equalTo: imageView.centerXAnchor),
-            playButtonView.centerYAnchor.constraint(equalTo: imageView.centerYAnchor)
-        ]
-        NSLayoutConstraint.activate(constraints)
-        playButtonView.constraint(equalTo: CGSize(width: 48, height: 48))
-    }
-
+  
     open override func setupSubviews() {
         super.setupSubviews()
         messageContainerView.addSubview(imageView)
         messageContainerView.addSubview(playButtonView)
-        setupConstraints()
     }
     
     open override func prepareForReuse() {
@@ -113,7 +90,7 @@ open class MediaMessageCell: MessageContentCell {
         self.messageLabel.text = ""
         self.messageTextView.backgroundColor = .clear
         self.progressUpload.isHidden = true
-        self.progressUpload.progress = 0
+        self.progressUpload.progress = 0.0
     }
 
     open override func configure(with message: MKMessageType, at indexPath: IndexPath, and messagesCollectionView: MessagesCollectionView) {
@@ -139,7 +116,7 @@ open class MediaMessageCell: MessageContentCell {
         switch message.kind {
         case .photo(let mediaItem), .sticker(let mediaItem):
             imageView.image = mediaItem.image ?? mediaItem.placeholderImage
-            playButtonView.isHidden = true
+            playButtonView.isHidden = false
             sizeItem = sizeForMediaItem(maxWidth, mediaItem)
             content = mediaItem.content
         case .video(let mediaItem):
@@ -186,6 +163,9 @@ open class MediaMessageCell: MessageContentCell {
             imageView.frame = messageContainerView.bounds
             messageTextView.isHidden = true
         }
+        messageLabel.frame = messageTextView.bounds
+        playButtonView.frame = CGRect(imageView.frame.midX - 24, imageView.frame.midY - 24, 48, 48)
+        progressUpload.frame = CGRect(0, messageContainerView.bounds.height - 6, imageView.frame.width, 6)
         self.cornerImageView(isOutgoing: isOutgoingMessage, hasMessageText: !(content?.isEmpty ?? true))
         self.messageContainerView.backgroundColor = UIColor.clear
         

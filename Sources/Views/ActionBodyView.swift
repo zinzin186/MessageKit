@@ -31,7 +31,6 @@ open class ActionBodyView: UIView {
     private lazy var tapButton: UIButton = { [unowned self] in
         let button = UIButton(type: .system)
         button.addTarget(self, action: #selector(self.tapReplyMessage), for: .touchUpInside)
-        button.translatesAutoresizingMaskIntoConstraints = false
         return button
     }()
     @objc private func tapReplyMessage(){
@@ -58,60 +57,44 @@ open class ActionBodyView: UIView {
         default:
             break
         }
-        
-        
     }
+    
     func addActionRemoveMessageView(attributedText: NSAttributedString?){
-        self.actionRemoveMessageView = ActionRemoveMessageView()
+        self.actionRemoveMessageView = ActionRemoveMessageView(frame: CGRect(0, 0, self.bounds.width, self.bounds.height + MKMessageConstant.ActionView.RemoveView.bottomPadding))
         self.actionRemoveMessageView?.contentLabel.attributedText = attributedText
-        self.addActionView(view: self.actionRemoveMessageView!, bottomPadding: MKMessageConstant.ActionView.RemoveView.bottomPadding)
+        self.addActionView(view: self.actionRemoveMessageView!)
         
     }
    
     func addActionReplyTextView(attributedText: NSAttributedString?){
-        self.actionReplyTextView = ActionReplyTextView()
+        self.actionReplyTextView = ActionReplyTextView(frame: CGRect(0, 0, self.bounds.width, self.bounds.height + MKMessageConstant.ActionView.ReplyView.bottomPadding))
         self.actionReplyTextView?.contentLabel.attributedText = attributedText
-        self.addActionView(view: self.actionReplyTextView!, bottomPadding: MKMessageConstant.ActionView.ReplyView.bottomPadding)
+        self.addActionView(view: self.actionReplyTextView!)
         addButton()
         
     }
     func addActionReplyMediaView(attributedText: NSAttributedString?, medias: [String]){
-        self.actionReplyMediaView = ActionReplyMediaView()
+        self.actionReplyMediaView = ActionReplyMediaView(frame: CGRect(0, 0, self.bounds.width, self.bounds.height + MKMessageConstant.ActionView.ReplyView.bottomPadding))
         self.actionReplyMediaView?.messageLabel.attributedText = attributedText
-        if let urlString = medias.first, urlString.hasSuffix("json"), let url = URL(string: urlString) {
-            actionReplyMediaView?.loadAnimationSticker(url)
-        }
-        self.addActionView(view: self.actionReplyMediaView!, bottomPadding: MKMessageConstant.ActionView.ReplyView.bottomPadding)
+        self.addActionView(view: self.actionReplyMediaView!)
         addButton()
     }
     
     func addActionChatFromStoryView(image: UIImage?){
-        self.actionChatFromStoryView = ActionChatFromStoryView()
+        self.actionChatFromStoryView = ActionChatFromStoryView(frame: CGRect(0, 0, self.bounds.width, self.bounds.height + MKMessageConstant.ActionView.StoryView.bottomPadding))
         self.actionChatFromStoryView?.imageView.image = image
-        self.addActionView(view: self.actionChatFromStoryView!, bottomPadding: MKMessageConstant.ActionView.StoryView.bottomPadding)
+        self.addActionView(view: self.actionChatFromStoryView!)
         addButton()
     }
     
-    private func addActionView(view: UIView, bottomPadding: CGFloat = 0){
+    private func addActionView(view: UIView){
         self.subviews.forEach({$0.removeFromSuperview()})
-        view.translatesAutoresizingMaskIntoConstraints = false
         self.addSubview(view)
-        NSLayoutConstraint.activate([
-            view.leadingAnchor.constraint(equalTo: self.leadingAnchor),
-            view.topAnchor.constraint(equalTo: self.topAnchor),
-            view.trailingAnchor.constraint(equalTo: self.trailingAnchor),
-            view.bottomAnchor.constraint(equalTo: self.bottomAnchor, constant: bottomPadding)
-        ])
     }
     
     private func addButton() {
         self.addSubview(self.tapButton)
-        NSLayoutConstraint.activate([
-            tapButton.leadingAnchor.constraint(equalTo: self.leadingAnchor),
-            tapButton.topAnchor.constraint(equalTo: self.topAnchor),
-            tapButton.trailingAnchor.constraint(equalTo: self.trailingAnchor),
-            tapButton.bottomAnchor.constraint(equalTo: self.bottomAnchor)
-        ])
+        tapButton.frame = self.bounds
     }
     private func setupContent(message: MKReplyMessageType, attributedText: NSAttributedString?){
         if let medias = message.medias, !message.deleted {
