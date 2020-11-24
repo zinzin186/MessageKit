@@ -79,7 +79,7 @@ class DonateMessageCell: MessageContentCell {
             let attributes = displayDelegate.textAttributes(for: message, at: indexPath, in: messagesCollectionView)
             let attributedString = NSMutableAttributedString(string: text, attributes: attributes)
             messageLabel.attributedText = attributedString
-            messageTextSize = labelSize(for: attributedString, considering: messageContainerView.bounds.width)
+            messageTextSize = labelSize(for: attributedString, considering: messageContainerView.bounds.width - messageInsets.horizontal)
             messageTextSize.width += messageInsets.horizontal
             messageTextSize.height += messageInsets.vertical
             if messageTextSize.height < MKMessageConstant.Limit.minContainerBodyHeight{
