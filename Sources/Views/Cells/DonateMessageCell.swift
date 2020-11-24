@@ -22,12 +22,11 @@ class DonateMessageCell: MessageContentCell {
     open lazy var messageLabel: MessageLabel = {
         let label = MessageLabel()
         messageTextView.addSubview(label)
-        label.fillSuperview()
         label.textInsets = messageInsets
         return label
     }()
     
-    lazy var donateView: DonateView = {
+    var donateView: DonateView = {
         let view = DonateView()
         view.layer.cornerRadius = 4
         view.clipsToBounds = true
@@ -111,6 +110,7 @@ class DonateMessageCell: MessageContentCell {
                 self.cornerTextMessageView(isOutgoing: isOutgoingMessage)
             }
         }
+        messageLabel.frame = messageTextView.bounds
         self.cornerDonateView(isOutgoing: isOutgoingMessage, hasMessageText: !(messageText?.isEmpty ?? true))
         self.messageContainerView.backgroundColor = UIColor.clear
     }
