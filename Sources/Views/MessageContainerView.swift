@@ -28,7 +28,6 @@ open class MessageContainerView: UIImageView {
 
     // MARK: - Properties
     open var borderLayer: CAShapeLayer?
-    open var borderImagePath: UIBezierPath?
     
     private let imageMask = UIImageView()
 

@@ -30,7 +30,7 @@ open class MediaMessageCell: MessageContentCell {
 
     /// The play button view to display on video messages.
     private var messageInsets: UIEdgeInsets = .zero
-    
+    open var borderImagePath: UIBezierPath?
     open lazy var messageLabel: MessageLabel = {
         let label = MessageLabel()
         messageTextView.addSubview(label)
@@ -237,7 +237,7 @@ open class MediaMessageCell: MessageContentCell {
         let mask = CAShapeLayer()
         mask.path = path.cgPath
         imageView.layer.mask = mask
-        self.messageContainerView.borderImagePath = path
+        self.borderImagePath = path
     }
     
     open override func apply(_ layoutAttributes: UICollectionViewLayoutAttributes) {
