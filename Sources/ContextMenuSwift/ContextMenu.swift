@@ -335,6 +335,7 @@ open class ContextMenu: NSObject {
         tableView.isScrollEnabled = true
         tableView.alwaysBounceVertical = false
         tableView.allowsMultipleSelection = true
+        tableView.separatorInset = .zero
         tableView.backgroundColor = .clear
         tableView.reloadData()
         
