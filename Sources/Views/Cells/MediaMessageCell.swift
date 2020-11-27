@@ -238,6 +238,18 @@ open class MediaMessageCell: MessageContentCell {
         mask.path = path.cgPath
         imageView.layer.mask = mask
         self.borderImagePath = path
+//        let borderLayer = CAShapeLayer()
+//        let borderPath = path
+//        borderLayer.fillColor = UIColor.clear.cgColor
+//        borderLayer.strokeColor = UIColor.red.cgColor
+//        borderLayer.path = borderPath.cgPath
+//        borderLayer.frame = imageView.bounds
+//        borderLayer.lineWidth = 1.5
+//        self.messageContainerView.borderLayer?.removeFromSuperlayer()
+//        imageView.layer.addSublayer(borderLayer)
+//        imageView.layer.borderColor = UIColor.red.cgColor
+//        imageView.layer.borderWidth = 1
+//        self.messageContainerView.borderLayer = borderLayer
     }
     
     open override func apply(_ layoutAttributes: UICollectionViewLayoutAttributes) {

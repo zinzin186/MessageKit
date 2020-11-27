@@ -275,12 +275,12 @@ internal struct MockMessage: MKMessageType {
         let callType = MKCallType.init(rawValue: 1)!
         let statusType = MKCallStatus.init(rawValue: 1)!
         let statusImage: UIImage? = statusType.getImage(type: callType)
-        let callInfoString = MockMessage.showTimeActive(time: 120)
+        let callInfoString = MockMessage.showTimeActive(time: 3120)
         let attributedText1 = NSMutableAttributedString(string: "Nội dung được gửi không hỗ trợ trên phiên bản này, vui lòng cập nhật phiên bản mới nhất ", attributes: [.font: UIFont.systemFont(ofSize: 16), .foregroundColor: UIColor.lightGray])
         let attributedText2 = NSAttributedString(string: "tại đây", attributes: [.font: UIFont.systemFont(ofSize: 16), .foregroundColor: UIColor.green])
         attributedText1.append(attributedText2)
-        self.init(kind: .photo(mediaItem), user: user, messageId: messageId, date: date, action: .default)
-//        self.init(kind: .call(image: statusImage, statusInfo: statusType.statusName, callInfo: callInfoString), user: user, messageId: messageId, date: date, action: .default)
+//        self.init(kind: .photo(mediaItem), user: user, messageId: messageId, date: date, action: .default)
+        self.init(kind: .call(image: statusImage, statusInfo: statusType.statusName, callInfo: callInfoString), user: user, messageId: messageId, date: date, action: .default)
 //        self.init(kind: .sticker(mediaItem), user: user, messageId: messageId, date: date, action: .default)
 //        self.init(kind: .action(text), user: user, messageId: messageId, date: date, action: .default)
 //        let urlEndcode = "https://vi.wikipedia.org/wiki/Wikipedia:Sách_hướng_dẫn".addingPercentEncoding(withAllowedCharacters: .urlHostAllowed)
