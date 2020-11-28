@@ -34,6 +34,7 @@
 		3D32C9A3255048E700E218E3 /* Dir.swift in Sources */ = {isa = PBXBuildFile; fileRef = 3D32C99A255048E700E218E3 /* Dir.swift */; };
 		3D32C9A5255048E700E218E3 /* StickerLoader.swift in Sources */ = {isa = PBXBuildFile; fileRef = 3D32C99C255048E700E218E3 /* StickerLoader.swift */; };
 		3D32C9A6255048E700E218E3 /* Data + Extension.swift in Sources */ = {isa = PBXBuildFile; fileRef = 3D32C99D255048E700E218E3 /* Data + Extension.swift */; };
+		3D7309FF25716C390073B66D /* MKKeyboardManager.swift in Sources */ = {isa = PBXBuildFile; fileRef = 3D7309FE25716C380073B66D /* MKKeyboardManager.swift */; };
 		3DC3053925586DA900D28B06 /* ChatLayoutConfiguration.swift in Sources */ = {isa = PBXBuildFile; fileRef = 3DC3053825586DA900D28B06 /* ChatLayoutConfiguration.swift */; };
 		3DC3053B25586E4800D28B06 /* BaseChatViewControllerView.swift in Sources */ = {isa = PBXBuildFile; fileRef = 3DC3053A25586E4800D28B06 /* BaseChatViewControllerView.swift */; };
 		3DC3053D255874CF00D28B06 /* InputPositionControlling.swift in Sources */ = {isa = PBXBuildFile; fileRef = 3DC3053C255874CF00D28B06 /* InputPositionControlling.swift */; };
@@ -69,7 +70,7 @@
 		882B5E901CF7D56000B6E160 /* ChatExampleUITests.swift in Sources */ = {isa = PBXBuildFile; fileRef = 882B5E8E1CF7D56000B6E160 /* ChatExampleUITests.swift */; };
 		882B5E951CF7D56E00B6E160 /* ChatExampleTests.swift in Sources */ = {isa = PBXBuildFile; fileRef = 882B5E931CF7D56E00B6E160 /* ChatExampleTests.swift */; };
 		96475668255437D40095418E /* GPKeyboardManager.swift in Sources */ = {isa = PBXBuildFile; fileRef = 96475667255437D40095418E /* GPKeyboardManager.swift */; };
-		9961327FB4F9B96CFD84A126 /* BuildFile in Frameworks */ = {isa = PBXBuildFile; };
+		9961327FB4F9B96CFD84A126 /* (null) in Frameworks */ = {isa = PBXBuildFile; };
 		D4036D91BB2480E403CDC2F1 /* Pods_ChatExampleUITests.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = 2AC6E3F5C11E39F57598DBE6 /* Pods_ChatExampleUITests.framework */; };
 		F182DD0E2148F655FC0DFF91 /* Pods_ChatExampleTests.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = 25FCE8536D329EC8856E2BA8 /* Pods_ChatExampleTests.framework */; };
 /* End PBXBuildFile section */
@@ -134,6 +135,7 @@
 		3D32C99A255048E700E218E3 /* Dir.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = Dir.swift; sourceTree = "<group>"; };
 		3D32C99C255048E700E218E3 /* StickerLoader.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = StickerLoader.swift; sourceTree = "<group>"; };
 		3D32C99D255048E700E218E3 /* Data + Extension.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = "Data + Extension.swift"; sourceTree = "<group>"; };
+		3D7309FE25716C380073B66D /* MKKeyboardManager.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = MKKeyboardManager.swift; sourceTree = "<group>"; };
 		3DC3053825586DA900D28B06 /* ChatLayoutConfiguration.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = ChatLayoutConfiguration.swift; sourceTree = "<group>"; };
 		3DC3053A25586E4800D28B06 /* BaseChatViewControllerView.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = BaseChatViewControllerView.swift; sourceTree = "<group>"; };
 		3DC3053C255874CF00D28B06 /* InputPositionControlling.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = InputPositionControlling.swift; sourceTree = "<group>"; };
@@ -205,7 +207,7 @@
 			isa = PBXFrameworksBuildPhase;
 			buildActionMask = 2147483647;
 			files = (
-				9961327FB4F9B96CFD84A126 /* BuildFile in Frameworks */,
+				9961327FB4F9B96CFD84A126 /* (null) in Frameworks */,
 				D4036D91BB2480E403CDC2F1 /* Pods_ChatExampleUITests.framework in Frameworks */,
 			);
 			runOnlyForDeploymentPostprocessing = 0;
@@ -239,6 +241,7 @@
 				385C2925211FF33A0010B4BA /* MockSocket.swift */,
 				383B9EB22172A1C4008AB91A /* MockUser.swift */,
 				96475667255437D40095418E /* GPKeyboardManager.swift */,
+				3D7309FE25716C380073B66D /* MKKeyboardManager.swift */,
 			);
 			path = Models;
 			sourceTree = "<group>";
@@ -757,6 +760,7 @@
 				385C2947211FF38F0010B4BA /* BasicExampleViewController.swift in Sources */,
 				1C5433DD24C389C300A5383B /* MessagesView.swift in Sources */,
 				882B5E811CF7D53600B6E160 /* AppDelegate.swift in Sources */,
+				3D7309FF25716C390073B66D /* MKKeyboardManager.swift in Sources */,
 				385C292D211FF3520010B4BA /* CustomMessageFlowLayout.swift in Sources */,
 				3D11180C2555C89A0013017F /* KeyboardEventsHandling.swift in Sources */,
 				3DDE7726255BC37200EA20A6 /* Font.swift in Sources */,

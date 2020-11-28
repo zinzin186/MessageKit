@@ -285,7 +285,7 @@ UICollectionViewDelegateFlowLayout, UICollectionViewDataSource, UIGestureRecogni
 
     @objc
     open func handleKeyboardWillShowState(_ notification: Notification) {
-        self.handleKeyboardWillShow(notification)
+//        self.handleKeyboardWillShow(notification)
                 
     }
     
@@ -330,7 +330,7 @@ UICollectionViewDelegateFlowLayout, UICollectionViewDataSource, UIGestureRecogni
     }
     @objc
     open func handleKeyboardWillHideState(_ notification: Notification) {
-        self.handleKeyboardWillHide(notification)
+//        self.handleKeyboardWillHide(notification)
     }
     open func handleKeyboardWillHide(_ notification: Notification) {
         guard !isMessagesControllerBeingDismissed  else { return }

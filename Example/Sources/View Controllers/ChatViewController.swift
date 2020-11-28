@@ -67,23 +67,6 @@ class ChatViewController: MessagesViewController, MKMessagesDataSource {
         
     }
     
-//    override func setupConstraints() {
-//        messagesCollectionView.translatesAutoresizingMaskIntoConstraints = false
-//
-//        let top = messagesCollectionView.topAnchor.constraint(equalTo: view.topAnchor)
-//        let leading = messagesCollectionView.leadingAnchor.constraint(equalTo: view.leadingAnchor)
-//        let trailing = messagesCollectionView.trailingAnchor.constraint(equalTo: view.trailingAnchor)
-//
-//        if #available(iOS 11.0, *) {
-//            bottom = messagesCollectionView.bottomAnchor.constraint(equalTo: view.bottomAnchor)
-//        } else {
-//            bottom = messagesCollectionView.bottomAnchor.constraint(equalTo: view.topAnchor, constant: 0)
-//        }
-//        NSLayoutConstraint.activate([top, bottom, trailing, leading])
-//
-//    }
-    
-    
     
     
     override func viewDidAppear(_ animated: Bool) {

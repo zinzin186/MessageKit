@@ -30,54 +30,121 @@ final class MessageSubviewViewController: BasicExampleViewController {
     override var inputAccessoryView: UIView? {
         return nil
     }
-    private var keyboardManager = GPKeyboardManager()
+    private var keyboardManager = MKKeyboardManager()
+//
+    
+    lazy var subviewInputBar: InputBarAccessoryView = {
+        let inputView = InputBarAccessoryView()
+        inputView.translatesAutoresizingMaskIntoConstraints = false
+        inputView.delegate = self
+        return inputView
+    }()
+    
+   
+    public private(set) var inputContentContainer: UIView!
+    var isFocusHideKeyboard: Bool = false
+   
+    public var substitutesMainViewAutomatically = true
+    
+    override func loadView() {
+        if substitutesMainViewAutomatically {
+            self.view = BaseChatViewControllerView()
+            // http://stackoverflow.com/questions/24596031/uiviewcontroller-with-inputaccessoryview-is-not-deallocated
+            self.view.backgroundColor = UIColor.black
+        } else {
+            super.loadView()
+        }
 
-    private let subviewInputBar = InputBarAccessoryView()
-    var currentChange: CGFloat = 55
+    }
     
     override func viewDidLoad() {
         super.viewDidLoad()
-        self.subInput = subviewInputBar
-        subviewInputBar.delegate = self
-        self.view.addSubview(subviewInputBar)
-        keyboardManager.bind(inputAccessoryView: subviewInputBar)
-        keyboardManager.bind(to: self.messagesCollectionView)
-        keyboardManager.baseChatViewController = self
-        self.navigationController?.setNavigationBarHidden(false, animated: false)
-        // Take into account the height of the bottom input bar
-        additionalBottomInset = 0
-        setupConstraintsCV()
+        self.addCollectionView()
+        self.addInputBarContainer()
+        keyboardManager.bind(to: messagesCollectionView)
+        self.addInputContentContainer()
+        keyboardManager.setupKeyboardTracker()
+
     }
 
-    func setupConstraintsCV() {
-        messagesCollectionView.translatesAutoresizingMaskIntoConstraints = false
-        messagesCollectionView.backgroundColor = UIColor.white
-        let top = messagesCollectionView.topAnchor.constraint(equalTo: view.topAnchor)
-        let leading = messagesCollectionView.leadingAnchor.constraint(equalTo: view.leadingAnchor)
-        let trailing = messagesCollectionView.trailingAnchor.constraint(equalTo: view.trailingAnchor)
-        messagesCollectionViewBottomConstraint = messagesCollectionView.bottomAnchor.constraint(equalTo: subviewInputBar.topAnchor)
-            NSLayoutConstraint.activate([top, messagesCollectionViewBottomConstraint!, trailing, leading])
+    override func viewWillAppear(_ animated: Bool) {
+        super.viewWillAppear(animated)
+        keyboardManager.keyboardTracker.startTracking()
+        if self.isFocusHideKeyboard {
+            isFocusHideKeyboard = false
+        }
+    }
+    
+    override func viewWillDisappear(_ animated: Bool) {
+        super.viewDidDisappear(animated)
+        keyboardManager.keyboardTracker?.stopTracking()
+    }
+    
+    override func viewDidLayoutSubviews() {
+        super.viewDidLayoutSubviews()
+        keyboardManager.adjustCollectionViewInsets(shouldUpdateContentOffset: true)
+        keyboardManager.keyboardTracker.adjustTrackingViewSizeIfNeeded()
+
+        if self.isFirstLayout {
+            self.isFirstLayout = false
+        }
+
+        keyboardManager.updateInputContainerBottomBaseOffset()
     }
 
     override func inputBar(_ inputBar: InputBarAccessoryView, didPressSendButtonWith text: String) {
         processInputBar(subviewInputBar)
     }
+
+
+}
+
+extension MessageSubviewViewController {
     
-    override func inputBar(_ inputBar: InputBarAccessoryView, didChangeIntrinsicContentTo size: CGSize) {
-        let paddingChange = size.height - currentChange
-        let contentOffset = CGPoint(x: messagesCollectionView.contentOffset.x, y: messagesCollectionView.contentOffset.y + paddingChange)
-        messagesCollectionView.setContentOffset(contentOffset, animated: false)
-        currentChange = size.height
+    private func addCollectionView() {
+        messagesCollectionView.translatesAutoresizingMaskIntoConstraints = false
+        messagesCollectionView.keyboardDismissMode = .interactive
+        let collectionView = messagesCollectionView
+        self.view.addConstraint(NSLayoutConstraint(item: self.view, attribute: .top, relatedBy: .equal, toItem: collectionView, attribute: .top, multiplier: 1, constant: 0))
+        self.view.addConstraint(NSLayoutConstraint(item: self.view, attribute: .bottom, relatedBy: .equal, toItem: collectionView, attribute: .bottom, multiplier: 1, constant: 0))
+
+        let leadingAnchor: NSLayoutXAxisAnchor
+        let trailingAnchor: NSLayoutXAxisAnchor
+        if #available(iOS 11.0, *) {
+            let guide = self.view.safeAreaLayoutGuide
+            leadingAnchor = guide.leadingAnchor
+            trailingAnchor = guide.trailingAnchor
+        } else {
+            leadingAnchor = self.view.leadingAnchor
+            trailingAnchor = self.view.trailingAnchor
+        }
+
+        NSLayoutConstraint.activate([
+            collectionView.leadingAnchor.constraint(equalTo: leadingAnchor),
+            collectionView.trailingAnchor.constraint(equalTo: trailingAnchor),
+        ])
+        collectionView.chatto_setContentInsetAdjustment(enabled: false, in: self)
+        collectionView.chatto_setAutomaticallyAdjustsScrollIndicatorInsets(false)
+        collectionView.chatto_setIsPrefetchingEnabled(false)
+        
     }
-    
-    override func viewWillDisappear(_ animated: Bool) {
-        super.viewDidDisappear(animated)
-        self.keyboardManager.isWillDisAppear = true
+        
+    private func addInputBarContainer() {
+        self.view.addSubview(self.subviewInputBar)
+        keyboardManager.bind(inputAccessoryView: self.subviewInputBar, in: self)
     }
-    
-    override func viewWillAppear(_ animated: Bool) {
-        super.viewWillAppear(animated)
-        self.keyboardManager.isWillDisAppear = false
+
+    private func addInputContentContainer() {
+        self.inputContentContainer = UIView(frame: CGRect.zero)
+        self.inputContentContainer.autoresizingMask = UIView.AutoresizingMask()
+        self.inputContentContainer.translatesAutoresizingMaskIntoConstraints = false
+        self.view.addSubview(self.inputContentContainer)
+        self.view.addConstraint(NSLayoutConstraint(item: self.inputContentContainer, attribute: .top, relatedBy: .equal, toItem: self.subviewInputBar, attribute: .bottom, multiplier: 1, constant: 0))
+        self.view.addConstraint(NSLayoutConstraint(item: self.view, attribute: .leading, relatedBy: .equal, toItem: self.inputContentContainer, attribute: .leading, multiplier: 1, constant: 0))
+        self.view.addConstraint(NSLayoutConstraint(item: self.view, attribute: .trailing, relatedBy: .equal, toItem: self.inputContentContainer, attribute: .trailing, multiplier: 1, constant: 0))
+        self.view.addConstraint(NSLayoutConstraint(item: self.view, attribute: .bottom, relatedBy: .equal, toItem: self.inputContentContainer, attribute: .bottom, multiplier: 1, constant: 0))
     }
+
+
     
 }
