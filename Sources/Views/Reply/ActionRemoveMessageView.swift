@@ -29,4 +29,9 @@ open class ActionRemoveMessageView: UIView {
         fatalError("init(coder:) has not been implemented")
     }
    
+    open override func layoutSubviews() {
+        super.layoutSubviews()
+        let contentInset = MKMessageConstant.ActionView.RemoveView.contentInset
+        contentLabel.frame = CGRect(contentInset.left, contentInset.top, frame.width - contentInset.horizontal, frame.height - contentInset.vertical)
+    }
 }
