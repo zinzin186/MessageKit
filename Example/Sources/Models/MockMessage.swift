@@ -282,17 +282,17 @@ internal struct MockMessage: MKMessageType {
 //        self.init(kind: .photo(mediaItem), user: user, messageId: messageId, date: date, action: .default)
 //        self.init(kind: .call(image: statusImage, statusInfo: statusType.statusName, callInfo: callInfoString), user: user, messageId: messageId, date: date, action: .default)
 //        self.init(kind: .sticker(mediaItem), user: user, messageId: messageId, date: date, action: .default)
-//        self.init(kind: .action(text), user: user, messageId: messageId, date: date, action: .default)
-        let urlEndcode = "https://vi.wikipedia.org/wiki/Wikipedia:Sách_hướng_dẫn".addingPercentEncoding(withAllowedCharacters: .urlHostAllowed)
-        let gPLinkItem = MKLinkItem(
-            text: "https://vnexpress.net/nhung-dia-danh-co-doc-nhat-the-gioi-2882673.html",
-            attributedText: nil,
-            url: URL(string: urlEndcode!)!,
-            title: "Những địa danh 'cô độc' nhất thế giới",
-            teaser: "Vì nhiều lý do, Vì nhiều lý do, Vì nhiều lý doVì nhiều lý do, Vì nhiều lý do",
-            thumbnailImage: nil
-        )
-        self.init(kind: .linkPreview(gPLinkItem), user: user, messageId: messageId, date: date, action: .default)
+        self.init(kind: .text(text), user: user, messageId: messageId, date: date, action: .default)
+//        let urlEndcode = "https://vi.wikipedia.org/wiki/Wikipedia:Sách_hướng_dẫn".addingPercentEncoding(withAllowedCharacters: .urlHostAllowed)
+//        let gPLinkItem = MKLinkItem(
+//            text: "https://vnexpress.net/nhung-dia-danh-co-doc-nhat-the-gioi-2882673.html",
+//            attributedText: nil,
+//            url: URL(string: urlEndcode!)!,
+//            title: "Những địa danh 'cô độc' nhất thế giới",
+//            teaser: "Vì nhiều lý do, Vì nhiều lý do, Vì nhiều lý doVì nhiều lý do, Vì nhiều lý do",
+//            thumbnailImage: nil
+//        )
+//        self.init(kind: .linkPreview(gPLinkItem), user: user, messageId: messageId, date: date, action: .default)
     }
 
     init(attributedText: NSAttributedString, user: MockUser, messageId: String, date: Date, action: MKActionType = .default) {
