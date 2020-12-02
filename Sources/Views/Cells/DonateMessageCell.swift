@@ -78,7 +78,7 @@ class DonateMessageCell: MessageContentCell {
             let attributes = displayDelegate.textAttributes(for: message, at: indexPath, in: messagesCollectionView)
             let attributedString = NSMutableAttributedString(string: text, attributes: attributes)
             messageLabel.attributedText = attributedString
-            messageTextSize = labelSize(for: attributedString, considering: messageContainerView.bounds.width - messageInsets.horizontal)
+            messageTextSize = MessageSizeCalculator.labelSize(for: attributedString, considering: messageContainerView.bounds.width - messageInsets.horizontal)
             messageTextSize.width += messageInsets.horizontal
             messageTextSize.height += messageInsets.vertical
             if messageTextSize.height < MKMessageConstant.Limit.minContainerBodyHeight{
@@ -89,7 +89,7 @@ class DonateMessageCell: MessageContentCell {
         let donateAttributes = displayDelegate.donateTextAttributes(at: indexPath, in: messagesCollectionView)
         let attributedDonateInfoText = NSAttributedString(string: donateInfo, attributes: donateAttributes)
         donateView.lblAmountCoin.attributedText = attributedDonateInfoText
-        var donateInfoSize = labelSize(for: attributedDonateInfoText, considering: messageContainerView.bounds.width)
+        var donateInfoSize = MessageSizeCalculator.labelSize(for: attributedDonateInfoText, considering: messageContainerView.bounds.width)
         let contentInset: UIEdgeInsets = MKMessageConstant.ContentInsets.donate
         let coinIconSize: CGSize = MKMessageConstant.Sizes.Donate.iconCoin
         donateInfoSize.width += (contentInset.left + 4 + coinIconSize.width + contentInset.right)
@@ -113,13 +113,6 @@ class DonateMessageCell: MessageContentCell {
         messageLabel.frame = messageTextView.bounds
         self.cornerDonateView(isOutgoing: isOutgoingMessage, hasMessageText: !(messageText?.isEmpty ?? true))
         self.messageContainerView.backgroundColor = UIColor.clear
-    }
-
-    internal func labelSize(for attributedText: NSAttributedString, considering maxWidth: CGFloat) -> CGSize {
-        let constraintBox = CGSize(width: maxWidth, height: .greatestFiniteMagnitude)
-        let rect = attributedText.boundingRect(with: constraintBox, options: [.usesLineFragmentOrigin, .usesFontLeading], context: nil).integral
-
-        return rect.size
     }
     
     open override func cellContentView(canHandle touchPoint: CGPoint) -> Bool {

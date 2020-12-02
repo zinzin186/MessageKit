@@ -49,7 +49,7 @@ open class TextMessageSizeCalculator: MessageSizeCalculator {
         if attributedText.string.isEmpty {
             return CGSize.zero
         }
-        messageContainerSize = labelSize(for: attributedText, considering: maxWidth)
+        messageContainerSize = MessageSizeCalculator.labelSize(for: attributedText, considering: maxWidth)
 
         let messageInsets = messageLabelInsets(for: message)
         messageContainerSize.width += messageInsets.horizontal

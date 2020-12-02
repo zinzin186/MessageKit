@@ -56,7 +56,7 @@ open class ContactMessageSizeCalculator: MessageSizeCalculator {
             fatalError("messageContainerSize received unhandled MessageDataType: \(message.kind)")
         }
         
-        messageContainerSize = labelSize(for: attributedText, considering: maxWidth)
+        messageContainerSize = MessageSizeCalculator.labelSize(for: attributedText, considering: maxWidth)
         
         let messageInsets = contactLabelInsets(for: message)
         messageContainerSize.width += messageInsets.horizontal

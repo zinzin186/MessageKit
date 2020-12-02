@@ -138,7 +138,7 @@ open class MediaMessageCell: MessageContentCell {
             let attributedString = NSMutableAttributedString(string: text, attributes: attributes)
             messageLabel.textInsets = self.messageInsets
             messageLabel.attributedText = attributedString
-            messageTextSize = labelSize(for: attributedString, considering: messageContainerView.bounds.width - self.messageInsets.horizontal)
+            messageTextSize = MessageSizeCalculator.labelSize(for: attributedString, considering: messageContainerView.bounds.width - self.messageInsets.horizontal)
             messageTextSize.width += messageInsets.horizontal
             messageTextSize.height += messageInsets.vertical
             if messageTextSize.height < MKMessageConstant.Limit.minContainerBodyHeight{
@@ -185,13 +185,6 @@ open class MediaMessageCell: MessageContentCell {
             return
         }
         delegate?.didTapImage(in: self)
-    }
-    
-    internal func labelSize(for attributedText: NSAttributedString, considering maxWidth: CGFloat) -> CGSize {
-        let constraintBox = CGSize(width: maxWidth, height: .greatestFiniteMagnitude)
-        let rect = attributedText.boundingRect(with: constraintBox, options: [.usesLineFragmentOrigin, .usesFontLeading], context: nil).integral
-
-        return rect.size
     }
     
     private func cornerTextMessageView(isOutgoing: Bool) {

@@ -49,7 +49,7 @@ open class MediaMessageSizeCalculator: TextMessageSizeCalculator {
                 if attributedText.string.isEmpty {
                     messageContainerSize = CGSize.zero
                 } else {
-                    messageContainerSize = labelSize(for: attributedText, considering: maxWidthCotent)
+                    messageContainerSize = MessageSizeCalculator.labelSize(for: attributedText, considering: maxWidthCotent)
                     messageContainerSize.width += messageInsets.horizontal
                     messageContainerSize.height += messageInsets.vertical
                     if messageContainerSize.height < MKMessageConstant.Limit.minContainerBodyHeight{

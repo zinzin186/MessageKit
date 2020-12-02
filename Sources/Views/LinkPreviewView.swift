@@ -29,73 +29,47 @@ open class LinkPreviewView: UIView {
         let imageView: UIImageView = .init()
         imageView.clipsToBounds = true
         imageView.contentMode = .scaleAspectFill
-        imageView.translatesAutoresizingMaskIntoConstraints = false
-
-        addSubview(imageView)
-
-        NSLayoutConstraint.activate([
-            imageView.leadingAnchor.constraint(equalTo: leadingAnchor),
-            imageView.trailingAnchor.constraint(equalTo: trailingAnchor),
-            imageView.topAnchor.constraint(equalTo: topAnchor),
-            imageView.heightAnchor.constraint(equalTo: imageView.widthAnchor, multiplier: MKMessageConstant.Sizes.Preview.imageRatio),
-//            imageView.widthAnchor.constraint(equalToConstant: LinkPreviewMessageSizeCalculator.imageViewSize),
-//            imageView.bottomAnchor.constraint(lessThanOrEqualTo: bottomAnchor)
-        ])
-
         return imageView
     }()
     lazy var titleLabel: UILabel = {
         let label: UILabel = .init()
         label.numberOfLines = 0
         label.textColor = UIColor.fromHexCode("#1A1A1A")
-        label.translatesAutoresizingMaskIntoConstraints = false
         return label
     }()
     lazy var teaserLabel: UILabel = {
         let label: UILabel = .init()
         label.numberOfLines = 0
         label.textColor = UIColor.fromHexCode("#808080")
-        label.translatesAutoresizingMaskIntoConstraints = false
         return label
     }()
 
     private lazy var contentView: UIView = { [unowned self] in
         let view: UIView = .init(frame: .zero)
-        view.translatesAutoresizingMaskIntoConstraints = false
-
-        addSubview(view)
-
-        NSLayoutConstraint.activate([
-            view.topAnchor.constraint(equalTo: imageView.bottomAnchor),
-            view.leadingAnchor.constraint(equalTo: self.leadingAnchor),
-            view.trailingAnchor.constraint(equalTo: trailingAnchor),
-            view.bottomAnchor.constraint(equalTo: bottomAnchor)
-        ])
-
         return view
     }()
-
-    init() {
-        super.init(frame: .zero)
-
+    
+    init(frame: CGRect, tesaserHeight: CGFloat) {
+        super.init(frame: frame)
+        self.backgroundColor = UIColor.fromHexCode("#F1F1F1")
+        self.addSubview(imageView)
+        self.addSubview(contentView)
         contentView.addSubview(titleLabel)
-        let paddingLeftRight: CGFloat = MKMessageConstant.Sizes.Preview.paddingLeftRight
-        NSLayoutConstraint.activate([
-            titleLabel.leadingAnchor.constraint(equalTo: contentView.leadingAnchor, constant: paddingLeftRight),
-            titleLabel.topAnchor.constraint(equalTo: contentView.topAnchor, constant: MKMessageConstant.Sizes.Preview.paddingTopBottom),
-            titleLabel.trailingAnchor.constraint(equalTo: contentView.trailingAnchor, constant: -paddingLeftRight)
-        ])
-
         contentView.addSubview(teaserLabel)
-        NSLayoutConstraint.activate([
-            teaserLabel.leadingAnchor.constraint(equalTo: titleLabel.leadingAnchor),
-            teaserLabel.topAnchor.constraint(equalTo: titleLabel.bottomAnchor, constant: MKMessageConstant.Sizes.Preview.descPaddingTitle),
-            teaserLabel.trailingAnchor.constraint(equalTo: titleLabel.trailingAnchor),
-            teaserLabel.bottomAnchor.constraint(equalTo: contentView.bottomAnchor, constant: -MKMessageConstant.Sizes.Preview.paddingTopBottom)
-        ])
-//        teaserLabel.setContentHuggingPriority(.init(249), for: .vertical)
+        self.updateFrameSubviews(tesaserHeight: tesaserHeight)
     }
-
+    
+    func updateFrameSubviews(tesaserHeight: CGFloat) {
+        let imageWidth: CGFloat = self.bounds.width
+        let imageHeight: CGFloat = MKMessageConstant.Sizes.Preview.imageRatio * imageWidth
+        imageView.frame = CGRect(0, 0, imageWidth, imageHeight)
+        contentView.frame = CGRect(0, imageView.frame.maxY, imageWidth, self.bounds.height - imageHeight)
+        
+        let contentTextInset: UIEdgeInsets = MKMessageConstant.Sizes.Preview.contentTextInset
+        titleLabel.frame = CGRect(contentTextInset.left, contentTextInset.top, contentView.frame.width - contentTextInset.horizontal, contentView.frame.height - tesaserHeight - contentTextInset.vertical - MKMessageConstant.Sizes.Preview.descPaddingTitle)
+        teaserLabel.frame = CGRect(contentTextInset.left, titleLabel.frame.maxY + MKMessageConstant.Sizes.Preview.descPaddingTitle, contentView.frame.width - contentTextInset.horizontal, tesaserHeight)
+    }
+    
     required public init?(coder aDecoder: NSCoder) {
         fatalError("init(coder:) has not been implemented")
     }

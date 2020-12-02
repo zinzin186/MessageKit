@@ -46,15 +46,15 @@ open class LinkPreviewMessageSizeCalculator: TextMessageSizeCalculator {
         var previewTitleSize: CGSize = .zero
         if let title = linkItem.title {
             let attibutedTitleString = NSAttributedString(string: title, attributes: [.font: self.linkPreviewFonts.titleFont])
-            previewTitleSize = labelSize(for: attibutedTitleString, considering: maxWidth - MKMessageConstant.Sizes.Preview.paddingLeftRight*2)
+            previewTitleSize = MessageSizeCalculator.labelSize(for: attibutedTitleString, considering: maxWidth - MKMessageConstant.Sizes.Preview.contentTextInset.horizontal)
         }
         let previewTitleHeight = previewTitleSize.height
             
         let attibutedTeaserString = NSAttributedString(string: linkItem.teaser, attributes: [.font: self.linkPreviewFonts.teaserFont])
-        let previewTeaserSize = labelSize(for: attibutedTeaserString, considering: maxWidth - MKMessageConstant.Sizes.Preview.paddingLeftRight*2)
+        let previewTeaserSize = MessageSizeCalculator.labelSize(for: attibutedTeaserString, considering: maxWidth - MKMessageConstant.Sizes.Preview.contentTextInset.horizontal)
         let previewTeaserHeight = previewTeaserSize.height
 
-        containerSize.height = containerSize.height + previewImageHeight + previewTitleHeight + previewTeaserHeight + MKMessageConstant.Sizes.Preview.paddingTopBottom*2 + MKMessageConstant.Sizes.Preview.descPaddingTitle
+        containerSize.height = containerSize.height + previewImageHeight + previewTitleHeight + previewTeaserHeight + MKMessageConstant.Sizes.Preview.contentTextInset.vertical + MKMessageConstant.Sizes.Preview.descPaddingTitle
                 return containerSize
     }
     
@@ -70,7 +70,7 @@ open class LinkPreviewMessageSizeCalculator: TextMessageSizeCalculator {
 private extension LinkPreviewMessageSizeCalculator {
     private func calculateContainerSize(with attibutedString: NSAttributedString, containerSize: inout CGSize, maxWidth: CGFloat) {
         guard !attibutedString.string.isEmpty else { return }
-        let size = labelSize(for: attibutedString, considering: maxWidth)
+        let size = MessageSizeCalculator.labelSize(for: attibutedString, considering: maxWidth)
         containerSize.height += size.height
     }
 }

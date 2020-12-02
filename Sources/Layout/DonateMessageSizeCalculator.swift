@@ -24,7 +24,7 @@ open class DonateMessageSizeCalculator: TextMessageSizeCalculator {
             }
             let donateAttributes = displayDelegate.donateTextAttributes(at: indexPath, in: messagesLayout.messagesCollectionView)
             let attributedText = NSAttributedString(string: donateInfo, attributes: donateAttributes)
-            var donateInfoSize = labelSize(for: attributedText, considering: maxWidth)
+            var donateInfoSize = MessageSizeCalculator.labelSize(for: attributedText, considering: maxWidth)
             let contentInset: UIEdgeInsets = MKMessageConstant.ContentInsets.donate
             let coinIconSize: CGSize = MKMessageConstant.Sizes.Donate.iconCoin
             donateInfoSize.width += (contentInset.left + 4 + coinIconSize.width + contentInset.right)

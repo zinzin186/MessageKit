@@ -214,7 +214,7 @@ open class MessageSizeCalculator: CellSizeCalculator {
 //        return CGSize(width: messagesLayout.itemWidth, height: height)
         let dataSource = messagesLayout.messagesDataSource
         if let attributedText = dataSource.messageTopLabelAttributedText(for: message, at: indexPath){
-            let topLabelWidth = labelWidth(for: attributedText, considering: height)
+            let topLabelWidth = MessageSizeCalculator.labelWidth(for: attributedText, considering: height)
             return CGSize(width: topLabelWidth, height: height)
         }else{
             return CGSize.zero
@@ -308,7 +308,7 @@ open class MessageSizeCalculator: CellSizeCalculator {
         let attributedText: NSAttributedString = dataSource.messageActionLabelAttributedText(for: message.action, at: indexPath) ?? NSAttributedString(string: "")
         let maxWidth = messageContainerMaxWidth(for: message)
         var actionContainerSize: CGSize
-        actionContainerSize = labelSize(for: attributedText, considering: maxWidth)
+        actionContainerSize = MessageSizeCalculator.labelSize(for: attributedText, considering: maxWidth)
         if actionContainerSize.height > MKMessageConstant.Limit.maxActionReplyTextHeight {
             actionContainerSize.height = MKMessageConstant.Limit.maxActionReplyTextHeight
         }
@@ -320,7 +320,7 @@ open class MessageSizeCalculator: CellSizeCalculator {
             if let medias = replyMessage.medias, medias.count > 0, !replyMessage.deleted{
                 var contentSize: CGSize = .zero
                 if let attributedString = dataSource.messageActionLabelAttributedText(for: message.action, at: indexPath) {
-                    contentSize = self.labelSize(for: attributedString, considering: maxWidth)
+                    contentSize = MessageSizeCalculator.labelSize(for: attributedString, considering: maxWidth)
                 }
                 return self.getSizeOfReplyMedia(contentSize: contentSize)
             }
@@ -378,19 +378,20 @@ open class MessageSizeCalculator: CellSizeCalculator {
         return layout
     }
 
-    internal func labelSize(for attributedText: NSAttributedString, considering maxWidth: CGFloat) -> CGSize {
+    class func labelSize(for attributedText: NSAttributedString, considering maxWidth: CGFloat) -> CGSize {
         let constraintBox = CGSize(width: maxWidth, height: .greatestFiniteMagnitude)
         let rect = attributedText.boundingRect(with: constraintBox, options: [.usesLineFragmentOrigin, .usesFontLeading], context: nil).integral
 
         return rect.size
     }
     
-    internal func labelWidth(for attributedText: NSAttributedString, considering maxHeight: CGFloat) -> CGFloat {
+    class func labelWidth(for attributedText: NSAttributedString, considering maxHeight: CGFloat) -> CGFloat {
         let constraintBox = CGSize(width: .greatestFiniteMagnitude, height: maxHeight)
         let rect = attributedText.boundingRect(with: constraintBox, options: [.usesLineFragmentOrigin, .usesFontLeading], context: nil).integral
 
         return rect.size.width
     }
+    
 }
 
 fileprivate extension UIEdgeInsets {

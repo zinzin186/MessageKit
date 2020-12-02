@@ -26,31 +26,9 @@ import UIKit
 
 open class LinkPreviewMessageCell: TextMessageCell {
     
-    public lazy var linkPreviewView: LinkPreviewView = {
-        let view = LinkPreviewView()
-        view.backgroundColor = UIColor.fromHexCode("#F1F1F1")
-        view.translatesAutoresizingMaskIntoConstraints = false
-        messageContainerView.addSubview(view)
-//        view.fillSuperview()
-        NSLayoutConstraint.activate([
-            view.leadingAnchor.constraint(equalTo: messageContainerView.leadingAnchor,
-                                          constant: 0),
-            view.trailingAnchor.constraint(equalTo: messageContainerView.trailingAnchor,
-                                           constant: 0),
-            view.bottomAnchor.constraint(equalTo: messageContainerView.bottomAnchor,
-                                         constant: 0)
-        ])
-        return view
-    }()
+    var linkPreviewView: LinkPreviewView!
 
     private var linkURL: URL?
-
-    open override func apply(_ layoutAttributes: UICollectionViewLayoutAttributes) {
-        super.apply(layoutAttributes)
-        guard let attributes = layoutAttributes as? MessagesCollectionViewLayoutAttributes else { return }
-        linkPreviewView.titleLabel.font = attributes.linkPreviewFonts.titleFont
-        linkPreviewView.teaserLabel.font = attributes.linkPreviewFonts.teaserFont
-    }
 
     open override func configure(with message: MKMessageType, at indexPath: IndexPath, and messagesCollectionView: MessagesCollectionView) {
         if case MKActionType.remove = message.action {
@@ -58,12 +36,6 @@ open class LinkPreviewMessageCell: TextMessageCell {
             return
         }
         let displayDelegate = messagesCollectionView.messagesDisplayDelegate
-
-//        if let textColor: UIColor = displayDelegate?.textColor(for: message, at: indexPath, in: messagesCollectionView) {
-//            linkPreviewView.titleLabel.textColor = textColor
-//            linkPreviewView.teaserLabel.textColor = textColor
-//        }
-
         guard case MKMessageKind.linkPreview(let linkItem) = message.kind else {
             fatalError("LinkPreviewMessageCell received unhandled MessageDataType: \(message.kind)")
         }
@@ -73,20 +45,43 @@ open class LinkPreviewMessageCell: TextMessageCell {
                                                sentDate: message.sentDate,
                                                kind: linkItem.textKind, action: message.action)
         super.configure(with: dummyMessage, at: indexPath, and: messagesCollectionView)
+       
+        let maxWidth = self.messageContainerView.frame.width
+        let flowLayout = messagesCollectionView.messagesCollectionViewFlowLayout
+        let linkPreviewFonts = flowLayout.linkPreviewMessageSizeCalculator.linkPreviewFonts
+        let previewImageHeight = maxWidth * MKMessageConstant.Sizes.Preview.imageRatio
+        var previewTitleSize: CGSize = .zero
+        if let title = linkItem.title {
+            let attibutedTitleString = NSAttributedString(string: title, attributes: [.font: linkPreviewFonts.titleFont])
+            previewTitleSize = MessageSizeCalculator.labelSize(for: attibutedTitleString, considering: maxWidth - MKMessageConstant.Sizes.Preview.contentTextInset.horizontal)
+        }
+        let previewTitleHeight = previewTitleSize.height
+            
+        let attibutedTeaserString = NSAttributedString(string: linkItem.teaser, attributes: [.font: linkPreviewFonts.teaserFont])
+        let previewTeaserSize = MessageSizeCalculator.labelSize(for: attibutedTeaserString, considering: maxWidth - MKMessageConstant.Sizes.Preview.contentTextInset.horizontal)
+        let previewTeaserHeight = previewTeaserSize.height
 
+        let heightPreviewView = previewImageHeight + previewTitleHeight + previewTeaserHeight + MKMessageConstant.Sizes.Preview.contentTextInset.vertical + MKMessageConstant.Sizes.Preview.descPaddingTitle
+        let linkPreviewFrame = CGRect(0, self.messageContainerView.bounds.height - heightPreviewView, self.messageContainerView.bounds.width, heightPreviewView)
+        linkPreviewView = LinkPreviewView(frame: linkPreviewFrame, tesaserHeight: previewTeaserHeight)
+        self.messageContainerView.addSubview(linkPreviewView)
+//        linkPreviewView.updateFrameSubviews(tesaserHeight: previewTeaserHeight)
+        linkPreviewView.titleLabel.font = linkPreviewFonts.titleFont
+        linkPreviewView.teaserLabel.font = linkPreviewFonts.teaserFont
         linkPreviewView.titleLabel.text = linkItem.title
         linkPreviewView.teaserLabel.text = linkItem.teaser
         linkPreviewView.imageView.image = linkItem.thumbnailImage
         linkURL = linkItem.url
-
         displayDelegate?.configureLinkPreviewImageView(linkPreviewView.imageView, for: message, at: indexPath, in: messagesCollectionView)
     }
 
     open override func prepareForReuse() {
         super.prepareForReuse()
-        linkPreviewView.titleLabel.text = nil
-        linkPreviewView.teaserLabel.text = nil
-        linkPreviewView.imageView.image = nil
+        if linkPreviewView != nil {
+            linkPreviewView.titleLabel.text = nil
+            linkPreviewView.teaserLabel.text = nil
+            linkPreviewView.imageView.image = nil
+        }
         linkURL = nil
     }
 

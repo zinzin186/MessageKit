@@ -127,9 +127,8 @@ public enum MKMessageConstant {
         }
         
         enum Preview {
-            static let paddingTopBottom: CGFloat = 10.0
+            static let contentTextInset: UIEdgeInsets = UIEdgeInsets(top: 10, left: 12, bottom: 10, right: 12)
             static let descPaddingTitle: CGFloat = 4
-            static let paddingLeftRight: CGFloat = 12
             static let imageRatio: CGFloat = 133.0 / 237.0
         }
     }
