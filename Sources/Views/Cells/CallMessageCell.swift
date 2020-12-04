@@ -75,6 +75,7 @@ open class CallMessageCell: MessageContentCell {
             imageView.heightAnchor.constraint(equalToConstant: MKMessageConstant.Sizes.Call.statusIcon.width)
         ])
     }
+    
     private func addTypeCallLabel(){
         boundView.addSubview(typeCallLabel)
         let contentInset = MKMessageConstant.ContentInsets.Call.callInfo
@@ -85,6 +86,7 @@ open class CallMessageCell: MessageContentCell {
             typeCallLabel.trailingAnchor.constraint(equalTo: self.boundView.trailingAnchor, constant: -contentInset.left)
         ])
     }
+    
     private func addTextLabel(){
         boundView.addSubview(descriptionLabel)
         NSLayoutConstraint.activate([
@@ -94,6 +96,7 @@ open class CallMessageCell: MessageContentCell {
             descriptionLabel.trailingAnchor.constraint(equalTo: self.typeCallLabel.trailingAnchor)
         ])
     }
+    
     private func addCallButton(){
         messageContainerView.addSubview(callButton)
         callButton.fillSuperview()
