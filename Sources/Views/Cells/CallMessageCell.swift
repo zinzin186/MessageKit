@@ -72,7 +72,7 @@ open class CallMessageCell: MessageContentCell {
         imageView.frame = CGRect(imageOriginX, imageOriginY, MKMessageConstant.Sizes.Call.statusIcon.width, MKMessageConstant.Sizes.Call.statusIcon.height)
 
         let callInfoInset = MKMessageConstant.ContentInsets.Call.callInfo
-        let typeCallOriginX: CGFloat = imageView.frame.maxX + callInfoInset.left
+        let typeCallOriginX: CGFloat = imageView.frame.origin.x + imageView.frame.width + callInfoInset.left
         typeCallLabel.frame = CGRect(typeCallOriginX, imageOriginY + 1, self.boundView.bounds.width - imageView.frame.maxX - callInfoInset.horizontal, 19)
 
         descriptionLabel.frame = CGRect(typeCallOriginX, imageView.frame.origin.x + imageView.frame.width - 15 - 1, typeCallLabel.frame.width, 15)
