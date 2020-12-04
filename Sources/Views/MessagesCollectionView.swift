@@ -148,6 +148,23 @@ open class MessagesCollectionView: UICollectionView {
             y: contentOffset.y + (afterContentSize.height - beforeContentSize.height))
         setContentOffset(newOffset, animated: false)
     }
+    
+    public func updateOffsetWhenLoadPrev() {
+        // stop scrolling
+//        setContentOffset(contentOffset, animated: false)
+//
+//        // calculate the offset and reloadData
+        let beforeContentSize = contentSize
+        reloadData()
+        layoutIfNeeded()
+        let afterContentSize = contentSize
+        
+        // reset the contentOffset after data is updated
+        let newOffset = CGPoint(
+            x: contentOffset.x + (afterContentSize.width - beforeContentSize.width),
+            y: contentOffset.y - (afterContentSize.height - beforeContentSize.height))
+        setContentOffset(newOffset, animated: false)
+    }
 
     // MARK: - Typing Indicator API
 

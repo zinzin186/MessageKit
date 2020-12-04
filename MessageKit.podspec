@@ -17,4 +17,5 @@ Pod::Spec.new do |s|
    s.ios.resources = ['Sources/Assets.xcassets']
    s.dependency 'InputBarAccessoryView', '~> 4.3.2'
    s.dependency 'GTProgressBar'
+   s.dependency 'RxDataSources'
 end

@@ -43,7 +43,7 @@ class BasicExampleViewController: ChatViewController {
         messagesCollectionView.messageCellDelegate = self
         scrollsToBottomOnKeyboardBeginsEditing = true // default false
         maintainPositionOnKeyboardFrameChanged = true // default false
-        messagesCollectionView.refreshControl = refreshControl
+//        messagesCollectionView.refreshControl = refreshControl
         guard let layout = messagesCollectionView.collectionViewLayout as? MessagesCollectionViewFlowLayout else {return}
         self.configFlowLayout(layout)
         setupLongGestureOnCollectionView()

@@ -25,10 +25,24 @@ SOFTWARE.
 import UIKit
 import MessageKit
 import InputBarAccessoryView
+import RxDataSources
+import RxSwift
+import RxCocoa
+import DifferenceKit
 
 /// A base class for the example controllers
 class ChatViewController: MessagesViewController, MKMessagesDataSource {
 
+    enum SectionID: Differentiable, CaseIterable {
+        case first, second, third
+    }
+
+    typealias Section = ArraySection<SectionID, String>
+    
+    
+    
+    
+    
     // MARK: - Public properties
  var contextMenu: ContextMenu?
     /// The `BasicAudioController` controll the AVAudioPlayer state (play, pause, stop) and udpate audio cell UI accordingly.
@@ -63,8 +77,13 @@ class ChatViewController: MessagesViewController, MKMessagesDataSource {
         configureMessageInputBar()
         loadFirstMessages()
         title = "MessageKit"
-        
-        
+        self.cvAnimatedDataSource = RxCollectionViewSectionedReloadDataSourceWithReload(configureCell: self.collectionViewDataSourceUI())
+        self.dataSubject
+            .bind(to: self.messagesCollectionView.rx.items(dataSource: self.cvAnimatedDataSource))
+            .disposed(by: self.disposeBag)
+        cvAnimatedDataSource.dataReloaded.emit(onNext: {
+            print(self.messagesCollectionView.numberOfSections)
+                }).disposed(by: disposeBag)
     }
     
 //    override func setupConstraints() {
@@ -104,31 +123,58 @@ class ChatViewController: MessagesViewController, MKMessagesDataSource {
     override var preferredStatusBarStyle: UIStatusBarStyle {
         return .lightContent
     }
-    
+    let disposeBag = DisposeBag()
+    var dataSubject: BehaviorRelay<[ChatSection]> = BehaviorRelay<[ChatSection]>(value: [])
+    var cvAnimatedDataSource: RxCollectionViewSectionedReloadDataSourceWithReload<ChatSection>!
     func loadFirstMessages() {
         DispatchQueue.global(qos: .userInitiated).async {
             let count = UserDefaults.standard.mockMessagesCount()
             SampleData.shared.getMessages(count: count) { messages in
                 DispatchQueue.main.async {
                     self.messageList = messages
-                    self.messagesCollectionView.reloadData()
+                    let initialRandomizedSections = self.initialValue()
+                    
+                    self.dataSubject.accept(initialRandomizedSections)
+                    
                     self.messagesCollectionView.scrollToBottom()
                 }
             }
         }
     }
-    
+    var isLoadingMore: Bool = false
     @objc func loadMoreMessages() {
-        DispatchQueue.global(qos: .userInitiated).asyncAfter(deadline: .now() + 1) {
+        self.isLoadingMore = true
+        print("Load more.......")
+        DispatchQueue.global(qos: .userInitiated).asyncAfter(deadline: .now() + 0.5) {
             SampleData.shared.getMessages(count: 20) { messages in
                 DispatchQueue.main.async {
                     self.messageList.insert(contentsOf: messages, at: 0)
-                    self.messagesCollectionView.reloadDataAndKeepOffset()
-                    self.refreshControl.endRefreshing()
+                    let beforeContentSize = self.messagesCollectionView.contentSize.height
+                    print("beforeContentSize: \(beforeContentSize)")
+                    self.messagesCollectionView.updateOffsetWhenLoadPrev()
+//                    self.messageList.append(contentsOf: messages)
+                    let initialRandomizedSections = self.initialValue()
+                    self.dataSubject.accept(initialRandomizedSections)
+                    UIView.animate(withDuration: 0) {
+                        self.messagesCollectionView.performBatchUpdates(nil) { (_) in
+                            let afterContentSize = self.messagesCollectionView.contentSize.height
+                            print("afterContentSize: \(afterContentSize)")
+                            let newOffset = CGPoint(
+                                x: self.messagesCollectionView.contentOffset.x,
+                                y: self.messagesCollectionView.contentOffset.y + (afterContentSize - beforeContentSize))
+//                            self.messagesCollectionView.setContentOffset(newOffset, animated: false)
+                        }
+                    }
+                    
+//                    let afterContentSize = self.messagesCollectionView.contentSize.height
+                    
+                    self.isLoadingMore = false
+//                    self.refreshControl.endRefreshing()
                 }
             }
         }
     }
+    
     
     func configureMessageCollectionView() {
         
@@ -478,4 +524,124 @@ extension ChatViewController: ContextMenuDelegate {
         self.contextMenu = nil
     }
 
+}
+
+extension ChatViewController {
+
+    func collectionViewDataSourceUI() -> (
+            CollectionViewSectionedDataSource<ChatSection>.ConfigureCell
+        ) {
+        return (
+             { _, cv, indexPath, i in
+                guard let messagesCollectionView = cv as? MessagesCollectionView else {
+                    fatalError("MessageKitError.notMessagesCollectionView")
+                }
+
+                guard let messagesDataSource = messagesCollectionView.messagesDataSource else {
+                    fatalError("MessageKitError.nilMessagesDataSource")
+                }
+
+//                if isSectionReservedForTypingIndicator(indexPath.section) {
+//                    return messagesDataSource.typingIndicator(at: indexPath, in: messagesCollectionView)
+//                }
+
+                let message = messagesDataSource.messageForItem(at: indexPath, in: messagesCollectionView)
+
+                switch message.kind {
+                case .text, .attributedText, .emoji:
+                    let cell = messagesCollectionView.dequeueReusableCell(TextMessageCell.self, for: indexPath)
+                    cell.configure(with: message, at: indexPath, and: messagesCollectionView)
+                    return cell
+                case .photo, .video:
+                    let cell = messagesCollectionView.dequeueReusableCell(MediaMessageCell.self, for: indexPath)
+                    cell.configure(with: message, at: indexPath, and: messagesCollectionView)
+                    return cell
+                case .sticker:
+                    let cell = messagesCollectionView.dequeueReusableCell(StickerMessageCell.self, for: indexPath)
+                    cell.configure(with: message, at: indexPath, and: messagesCollectionView)
+                    return cell
+                case .location:
+                    let cell = messagesCollectionView.dequeueReusableCell(LocationMessageCell.self, for: indexPath)
+                    cell.configure(with: message, at: indexPath, and: messagesCollectionView)
+                    return cell
+                case .audio:
+                    let cell = messagesCollectionView.dequeueReusableCell(AudioMessageCell.self, for: indexPath)
+                    cell.configure(with: message, at: indexPath, and: messagesCollectionView)
+                    return cell
+                case .contact:
+                    let cell = messagesCollectionView.dequeueReusableCell(ContactMessageCell.self, for: indexPath)
+                    cell.configure(with: message, at: indexPath, and: messagesCollectionView)
+                    return cell
+                case .linkPreview:
+                    let cell = messagesCollectionView.dequeueReusableCell(LinkPreviewMessageCell.self, for: indexPath)
+                    cell.configure(with: message, at: indexPath, and: messagesCollectionView)
+                    return cell
+                case .action:
+                    let cell = messagesCollectionView.dequeueReusableCell(ActionMessageCell.self, for: indexPath)
+                    cell.configure(with: message, at: indexPath, and: messagesCollectionView)
+                    return cell
+                case .donate:
+                    let cell = messagesCollectionView.dequeueReusableCell(DonateMessageCell.self, for: indexPath)
+                    cell.configure(with: message, at: indexPath, and: messagesCollectionView)
+                    return cell
+                case .call:
+                    let cell = messagesCollectionView.dequeueReusableCell(CallMessageCell.self, for: indexPath)
+                    cell.configure(with: message, at: indexPath, and: messagesCollectionView)
+                    return cell
+                case .custom:
+                    return messagesDataSource.customCell(for: message, at: indexPath, in: messagesCollectionView)
+                }
+
+            }
+        )
+    }
+
+    // MARK: Initial value
+
+    func initialValue() -> [ChatSection] {
+        
+        var listChatSection = [ChatSection]()
+        for i in 0..<messageList.count {
+            let section = ChatSection(header: "Section \(i + 1)", numbers: [messageList[i]], updated: messageList[i].sentDate)
+            listChatSection.append(section)
+        }
+        return listChatSection
+    }
+
+
+}
+class NumberSectionView : UICollectionReusableView {
+    @IBOutlet private weak var value: UILabel?
+
+    func configure(value: String) {
+        self.value?.text = value
+    }
+}
+
+final class RxCollectionViewSectionedReloadDataSourceWithReload<S: AnimatableSectionModelType>: RxCollectionViewSectionedAnimatedDataSource<S> {
+    private let relay = PublishRelay<Void>()
+    var dataReloaded : Signal<Void> {
+        return relay.asSignal()
+    }
+    override func collectionView(_ collectionView: UICollectionView, observedEvent: Event<Element>) {
+        super.collectionView(collectionView, observedEvent: observedEvent)
+        print("Load xong ro day")
+        relay.accept(())
+    }
+    
+//    override func tableView(_ tableView: UITableView, observedEvent: Event<[S]>) {
+//        super.tableView(tableView, observedEvent: observedEvent)
+//        relay.accept(())
+//    }
+}
+final class RxTableViewSectionedReloadDataSourceWithReloadSignal11<S: SectionModelType>: RxTableViewSectionedReloadDataSource<S> {
+    private let relay = PublishRelay<Void>()
+    var dataReloaded : Signal<Void> {
+        return relay.asSignal()
+    }
+    
+    override func tableView(_ tableView: UITableView, observedEvent: Event<[S]>) {
+        super.tableView(tableView, observedEvent: observedEvent)
+        relay.accept(())
+    }
 }

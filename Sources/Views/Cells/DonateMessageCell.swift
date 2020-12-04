@@ -7,7 +7,7 @@
 
 import UIKit
 
-class DonateMessageCell: MessageContentCell {
+open class DonateMessageCell: MessageContentCell {
     
     // MARK: - Properties
 
@@ -57,7 +57,7 @@ class DonateMessageCell: MessageContentCell {
     }
     
     
-    override func setupSubviews() {
+    open override func setupSubviews() {
         super.setupSubviews()
         messageContainerView.addSubview(donateView)
     }

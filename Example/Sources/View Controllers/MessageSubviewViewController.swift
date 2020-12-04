@@ -52,7 +52,7 @@ final class MessageSubviewViewController: BasicExampleViewController {
     func setupConstraintsCV() {
         messagesCollectionView.translatesAutoresizingMaskIntoConstraints = false
         messagesCollectionView.backgroundColor = UIColor.white
-        let top = messagesCollectionView.topAnchor.constraint(equalTo: view.topAnchor)
+        let top = messagesCollectionView.topAnchor.constraint(equalTo: view.safeAreaLayoutGuide.topAnchor, constant: 40)
         let leading = messagesCollectionView.leadingAnchor.constraint(equalTo: view.leadingAnchor)
         let trailing = messagesCollectionView.trailingAnchor.constraint(equalTo: view.trailingAnchor)
         messagesCollectionViewBottomConstraint = messagesCollectionView.bottomAnchor.constraint(equalTo: subviewInputBar.topAnchor)
@@ -80,4 +80,20 @@ final class MessageSubviewViewController: BasicExampleViewController {
         self.keyboardManager.isWillDisAppear = false
     }
     
+}
+extension MessageSubviewViewController {
+
+    func scrollViewDidScroll(_ scrollView: UIScrollView) {
+        if scrollView == messagesCollectionView {
+            let currentContentOffset: CGFloat = scrollView.contentOffset.y
+            let validOffset: Bool = currentContentOffset < scrollView.frame.size.height
+            // scrollView.contentSize.height lúc khởi tạo sẽ là 0
+            if validOffset && scrollView.contentSize.height > 0 && isLoadingMore == false {
+                self.loadMoreMessages()
+            }
+//            if currentContentOffset > scrollView.contentSize.height - 2 * scrollView.frame.size.height && isLoadingMore == false {
+//                self.loadMoreMessages()
+//            }
+        }
+    }
 }

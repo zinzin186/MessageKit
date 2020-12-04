@@ -1,12 +1,20 @@
 PODS:
+  - DifferenceKit (1.1.5):
+    - DifferenceKit/Core (= 1.1.5)
+    - DifferenceKit/UIKitExtension (= 1.1.5)
+  - DifferenceKit/Core (1.1.5)
+  - DifferenceKit/UIKitExtension (1.1.5):
+    - DifferenceKit/Core
+  - Differentiator (4.0.1)
   - GTProgressBar (0.3.3)
   - InputBarAccessoryView (4.3.2):
     - InputBarAccessoryView/Core (= 4.3.2)
   - InputBarAccessoryView/Core (4.3.2)
-  - lottie-ios (3.1.8)
-  - MessageKit (3.6.1):
+  - lottie-ios (3.1.9)
+  - MessageKit (3.6.2):
     - GTProgressBar
     - InputBarAccessoryView (~> 4.3.2)
+    - RxDataSources
   - PINCache (3.0.3):
     - PINCache/Arc-exception-safe (= 3.0.3)
     - PINCache/Core (= 3.0.3)
@@ -22,8 +30,19 @@ PODS:
   - PINRemoteImage/PINCache (3.0.3):
     - PINCache (~> 3.0.3)
     - PINRemoteImage/Core
+  - RxCocoa (5.1.1):
+    - RxRelay (~> 5)
+    - RxSwift (~> 5)
+  - RxDataSources (4.0.1):
+    - Differentiator (~> 4.0)
+    - RxCocoa (~> 5.0)
+    - RxSwift (~> 5.0)
+  - RxRelay (5.1.1):
+    - RxSwift (~> 5)
+  - RxSwift (5.1.1)
 
 DEPENDENCIES:
+  - DifferenceKit
   - InputBarAccessoryView (from `https://github.com/zinzin186/InputBarAccessoryView.git`)
   - lottie-ios
   - MessageKit (from `../`)
@@ -32,11 +51,17 @@ DEPENDENCIES:
 
 SPEC REPOS:
   trunk:
+    - DifferenceKit
+    - Differentiator
     - GTProgressBar
     - lottie-ios
     - PINCache
     - PINOperation
     - PINRemoteImage
+    - RxCocoa
+    - RxDataSources
+    - RxRelay
+    - RxSwift
 
 EXTERNAL SOURCES:
   InputBarAccessoryView:
@@ -50,14 +75,20 @@ CHECKOUT OPTIONS:
     :git: https://github.com/zinzin186/InputBarAccessoryView.git
 
 SPEC CHECKSUMS:
+  DifferenceKit: 516f12e336ed65a3a0665847b5c3cb5cad4bd4ea
+  Differentiator: 886080237d9f87f322641dedbc5be257061b0602
   GTProgressBar: a480283ecb0ada50de16c71e634892826928f640
   InputBarAccessoryView: 7985d418040a05fe894bd4b8328dd43ab35517c3
-  lottie-ios: 48fac6be217c76937e36e340e2d09cf7b10b7f5f
-  MessageKit: 582d5ac8f33d1a7dffbf19f4d5938d1f5c894a04
+  lottie-ios: 3a3758ef5a008e762faec9c9d50a39842f26d124
+  MessageKit: c1462ba1c3e6a2eb075b072df0678545335701cb
   PINCache: 7a8fc1a691173d21dbddbf86cd515de6efa55086
   PINOperation: 00c935935f1e8cf0d1e2d6b542e75b88fc3e5e20
   PINRemoteImage: f1295b29f8c5e640e25335a1b2bd9d805171bd01
+  RxCocoa: 32065309a38d29b5b0db858819b5bf9ef038b601
+  RxDataSources: efee07fa4de48477eca0a4611e6d11e2da9c1114
+  RxRelay: d77f7d771495f43c556cbc43eebd1bb54d01e8e9
+  RxSwift: 81470a2074fa8780320ea5fe4102807cb7118178
 
-PODFILE CHECKSUM: e5fa0e34ccaca4406706d2c169f8a59fc546c069
+PODFILE CHECKSUM: 38ed1403fa4a28d378ee0528f56b3662f0311ae3
 
 COCOAPODS: 1.10.0
