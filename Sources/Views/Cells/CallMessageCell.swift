@@ -75,6 +75,9 @@ open class CallMessageCell: MessageContentCell {
         let typeCallOriginX: CGFloat = imageView.frame.maxX + callInfoInset.left
         typeCallLabel.frame = CGRect(typeCallOriginX, imageOriginY + 1, self.boundView.bounds.width - imageView.frame.maxX - callInfoInset.horizontal, 19)
 
-        descriptionLabel.frame = CGRect(typeCallOriginX, imageView.frame.maxY - 15 - 1, typeCallLabel.frame.width, 15)
+        descriptionLabel.frame = CGRect(typeCallOriginX, imageView.frame.origin.x + imageView.frame.width - 15 - 1, typeCallLabel.frame.width, 15)
     }
+    
+    
+    
 }
