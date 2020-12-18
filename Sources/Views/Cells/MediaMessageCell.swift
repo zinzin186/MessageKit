@@ -129,7 +129,6 @@ open class MediaMessageCell: MessageContentCell {
             break
         }
         
-        
         let isOutgoingMessage = dataSource.isFromCurrentSender(message: message)
         var messageTextSize: CGSize = CGSize.zero
         if let text = content, !text.isEmpty {
@@ -170,10 +169,7 @@ open class MediaMessageCell: MessageContentCell {
         self.cornerImageView(isOutgoing: isOutgoingMessage, hasMessageText: !(content?.isEmpty ?? true))
         self.messageContainerView.backgroundColor = UIColor.clear
         
-        
         displayDelegate.configureMediaMessageImageView(self, for: message, at: indexPath, in: messagesCollectionView)
-
-        
     }
     
     /// Handle tap gesture on contentView and its subviews.

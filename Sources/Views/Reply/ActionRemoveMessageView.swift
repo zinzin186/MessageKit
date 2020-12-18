@@ -7,6 +7,8 @@
 
 import UIKit
 
+import UIKit
+
 open class ActionRemoveMessageView: UIView {
     
     lazy var contentLabel: UILabel = {[unowned self] in
@@ -17,21 +19,20 @@ open class ActionRemoveMessageView: UIView {
         label.translatesAutoresizingMaskIntoConstraints = false
         return label
     }()
-    
-    public override init(frame: CGRect) {
-        super.init(frame: frame)
+
+    init() {
+        super.init(frame: .zero)
         self.addSubview(contentLabel)
         let contentInset = MKMessageConstant.ActionView.RemoveView.contentInset
-        contentLabel.frame = CGRect(contentInset.left, contentInset.top, frame.width - contentInset.horizontal, frame.height - contentInset.vertical)
+        NSLayoutConstraint.activate([
+            contentLabel.leadingAnchor.constraint(equalTo: self.leadingAnchor, constant: contentInset.left),
+            contentLabel.topAnchor.constraint(equalTo: self.topAnchor, constant: contentInset.top),
+            contentLabel.trailingAnchor.constraint(equalTo: self.trailingAnchor, constant: -contentInset.right),
+            contentLabel.bottomAnchor.constraint(equalTo: self.bottomAnchor, constant: -contentInset.bottom)
+        ])
     }
     
     required public init?(coder: NSCoder) {
         fatalError("init(coder:) has not been implemented")
-    }
-   
-    open override func layoutSubviews() {
-        super.layoutSubviews()
-        let contentInset = MKMessageConstant.ActionView.RemoveView.contentInset
-        contentLabel.frame = CGRect(contentInset.left, contentInset.top, frame.width - contentInset.horizontal, frame.height - contentInset.vertical)
     }
 }

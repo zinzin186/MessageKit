@@ -10,7 +10,7 @@ import UIKit
 open class CallMessageCell: MessageContentCell {
         
     var callBackTappCell: (()->Void)?
-    private let boundView: UIView = {
+    private let containerView: UIView = {
         let view = UIView()
         view.backgroundColor = UIColor.groupTableViewBackground
         view.layer.cornerRadius = 14
@@ -57,8 +57,8 @@ open class CallMessageCell: MessageContentCell {
     open override func setupSubviews() {
         super.setupSubviews()
         self.isUserInteractionEnabled = true
-        self.messageContainerView.addSubview(boundView)
-        boundView.fillSuperview()
+        self.messageContainerView.addSubview(containerView)
+        containerView.fillSuperview()
         self.addImageView()
         self.addTypeCallLabel()
         self.addTextLabel()
@@ -66,29 +66,29 @@ open class CallMessageCell: MessageContentCell {
     }
     
     private func addImageView(){
-        boundView.addSubview(imageView)
+        containerView.addSubview(imageView)
         let contentInset = MKMessageConstant.ContentInsets.Call.statusIcon
         NSLayoutConstraint.activate([
-            imageView.leadingAnchor.constraint(equalTo: self.boundView.leadingAnchor, constant: contentInset.left),
-            imageView.centerYAnchor.constraint(equalTo: self.boundView.centerYAnchor),
+            imageView.leadingAnchor.constraint(equalTo: self.containerView.leadingAnchor, constant: contentInset.left),
+            imageView.centerYAnchor.constraint(equalTo: self.containerView.centerYAnchor),
             imageView.widthAnchor.constraint(equalToConstant: MKMessageConstant.Sizes.Call.statusIcon.width),
             imageView.heightAnchor.constraint(equalToConstant: MKMessageConstant.Sizes.Call.statusIcon.width)
         ])
     }
     
     private func addTypeCallLabel(){
-        boundView.addSubview(typeCallLabel)
+        containerView.addSubview(typeCallLabel)
         let contentInset = MKMessageConstant.ContentInsets.Call.callInfo
         NSLayoutConstraint.activate([
             typeCallLabel.leadingAnchor.constraint(equalTo: self.imageView.trailingAnchor, constant: contentInset.left),
             typeCallLabel.topAnchor.constraint(equalTo: self.imageView.topAnchor, constant: 1),
             typeCallLabel.heightAnchor.constraint(equalToConstant: 19),
-            typeCallLabel.trailingAnchor.constraint(equalTo: self.boundView.trailingAnchor, constant: -contentInset.left)
+            typeCallLabel.trailingAnchor.constraint(equalTo: self.containerView.trailingAnchor, constant: -contentInset.left)
         ])
     }
     
     private func addTextLabel(){
-        boundView.addSubview(descriptionLabel)
+        containerView.addSubview(descriptionLabel)
         NSLayoutConstraint.activate([
             descriptionLabel.leadingAnchor.constraint(equalTo: self.typeCallLabel.leadingAnchor),
             descriptionLabel.bottomAnchor.constraint(equalTo: self.imageView.bottomAnchor, constant: -1),

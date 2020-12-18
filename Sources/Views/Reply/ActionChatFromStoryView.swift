@@ -18,13 +18,20 @@ open class ActionChatFromStoryView: UIView {
         return imageView
     }()
 
-    public override init(frame: CGRect) {
-        super.init(frame: frame)
+    init() {
+        super.init(frame: .zero)
         self.addSubview(imageView)
-        imageView.frame = frame
+        NSLayoutConstraint.activate([
+            imageView.leadingAnchor.constraint(equalTo: self.leadingAnchor),
+            imageView.topAnchor.constraint(equalTo: self.topAnchor),
+            imageView.trailingAnchor.constraint(equalTo: self.trailingAnchor),
+            imageView.bottomAnchor.constraint(equalTo: self.bottomAnchor)
+        ])
+
     }
     
     required public init?(coder: NSCoder) {
         fatalError("init(coder:) has not been implemented")
     }
+   
 }

@@ -1,5 +1,5 @@
 //
-//  ReplyTextView.swift
+//  ActionReplyMediaView.swift
 //  MessageKit
 //
 //  Created by Gapo on 10/9/20.
@@ -12,7 +12,7 @@ open class ActionReplyMediaView: UIView {
         imageView.clipsToBounds = true
         imageView.layer.cornerRadius = MKMessageConstant.ActionView.ReplyView.mediaRadius
         imageView.contentMode = .scaleAspectFill
-//        imageView.translatesAutoresizingMaskIntoConstraints = false
+        imageView.translatesAutoresizingMaskIntoConstraints = false
         return imageView
     }()
     
@@ -21,24 +21,32 @@ open class ActionReplyMediaView: UIView {
         label.numberOfLines = 2
         label.font = UIFont.systemFont(ofSize: 13)
         label.textColor = UIColor.fromHexCode("#808080")
-//        label.translatesAutoresizingMaskIntoConstraints = false
+        label.translatesAutoresizingMaskIntoConstraints = false
         return label
     }()
     
-    public override init(frame: CGRect) {
-        super.init(frame: frame)
+    init() {
+        super.init(frame: .zero)
         self.addSubview(imageView)
-        self.addSubview(messageLabel)
         let contentInset = MKMessageConstant.ActionView.ReplyView.contentMediaInset
-        let imageHeight: CGFloat = frame.height - contentInset.vertical
-        imageView.frame = CGRect(contentInset.left, contentInset.top, imageHeight, imageHeight)
-        let originX: CGFloat = imageView.frame.maxX + 5
-        messageLabel.frame = CGRect(originX, imageView.frame.origin.y, frame.width - originX, imageView.frame.height)
+        imageView.frame = CGRect(contentInset.left, contentInset.top, MKMessageConstant.ActionView.ReplyView.mediaSize.width, MKMessageConstant.ActionView.ReplyView.mediaSize.height)
+        NSLayoutConstraint.activate([
+            imageView.leadingAnchor.constraint(equalTo: self.leadingAnchor, constant: contentInset.left),
+            imageView.topAnchor.constraint(equalTo: self.topAnchor, constant: contentInset.top),
+            imageView.widthAnchor.constraint(equalTo: imageView.heightAnchor),
+            imageView.bottomAnchor.constraint(equalTo: self.bottomAnchor, constant: -contentInset.bottom)
+        ])
+        self.addSubview(messageLabel)
+        NSLayoutConstraint.activate([
+            messageLabel.leadingAnchor.constraint(equalTo: imageView.trailingAnchor, constant: 5),
+            messageLabel.centerYAnchor.constraint(equalTo: imageView.centerYAnchor, constant: 0),
+            messageLabel.trailingAnchor.constraint(equalTo: self.trailingAnchor, constant: -contentInset.right),
+        ])
+
     }
-   
+    
     required public init?(coder: NSCoder) {
         fatalError("init(coder:) has not been implemented")
     }
-    
    
 }

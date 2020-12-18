@@ -32,6 +32,12 @@ open class MessageContentCell: MessageCollectionViewCell, UIGestureRecognizerDel
     open var avatarView = AvatarView()
     
     open var sendStatusImageView = UIImageView()
+    
+    /// Ios 14 bi loi hieu ung swipe to reply do su dung contentView nen add boundView de fix.
+    public let boundView: UIView = {
+        let view = UIView()
+        return view
+    }()
 
     /// The container used for styling and holding the message's content view.
     open lazy var actionBodyView: ActionBodyView = {
@@ -129,7 +135,16 @@ open class MessageContentCell: MessageCollectionViewCell, UIGestureRecognizerDel
     private func messageLongPress(_ longPressGestureRecognizer: UILongPressGestureRecognizer) {
         switch longPressGestureRecognizer.state {
         case .began:
-            self.delegate?.cellDidLongPressMessage(cell: self)
+            let touchLocation = longPressGestureRecognizer.location(in: self)
+            let messageFrameConvert = convert(messageBodyView.frame, from: boundView)
+            switch true {
+            case messageFrameConvert.contains(touchLocation):
+                self.delegate?.cellDidLongPressMessage(cell: self)
+//            case avatarView.frame.contains(touchLocation):
+//                self.delegate?.cellDidLongPressAvatar(cell: self)
+            default:
+                break
+            }
 //        case .ended, .cancelled:
 //            self.onBubbleLongPressEnded?(self)
         default:
@@ -154,51 +169,50 @@ open class MessageContentCell: MessageCollectionViewCell, UIGestureRecognizerDel
     }
     
     open func setupSubviews() {
-        contentView.addSubview(accessoryView)
-        contentView.addSubview(cellTopLabel)
-        contentView.addSubview(messageTopLabel)
-        contentView.addSubview(iconMarkReply)
-        contentView.addSubview(messageBottomLabel)
-        contentView.addSubview(cellBottomLabel)
-        contentView.addSubview(actionBodyView)
-        contentView.addSubview(messageBodyView)
-        contentView.addSubview(avatarView)
-        contentView.addSubview(sendStatusImageView)
+        contentView.addSubview(boundView)
+        boundView.addSubview(accessoryView)
+        boundView.addSubview(cellTopLabel)
+        boundView.addSubview(messageTopLabel)
+        boundView.addSubview(iconMarkReply)
+        boundView.addSubview(messageBottomLabel)
+        boundView.addSubview(cellBottomLabel)
+        boundView.addSubview(actionBodyView)
+        boundView.addSubview(messageBodyView)
+        boundView.addSubview(avatarView)
+        boundView.addSubview(sendStatusImageView)
         setupViewContainter()
         setupBodyMessageView()
     }
     
     private func setupViewContainter() {
-        contentView.addSubview(iconReply)
-        contentView.backgroundColor = .clear
+        boundView.addSubview(iconReply)
+        boundView.backgroundColor = .clear
         panGesture = UIPanGestureRecognizer(target: self, action: #selector(actionDrag(_:)))
         panGesture.delegate = self
-        contentView.isUserInteractionEnabled = true
-        contentView.addGestureRecognizer(panGesture)
+        boundView.isUserInteractionEnabled = true
+        boundView.addGestureRecognizer(panGesture)
     }
     
     private func setupBodyMessageView(){
         messageBodyView.addSubview(actionBodyView)
         messageBodyView.addSubview(messageContainerView)
-        messageBodyView.addGestureRecognizer(self.longPressGestureRecognizer)
+        boundView.addGestureRecognizer(self.longPressGestureRecognizer)
+        
     }
     
     @objc func actionDrag(_ sender:UIPanGestureRecognizer) {
         let translation: CGPoint = sender.translation(in: self.superview)
-        if sender.state == UIGestureRecognizer.State.began {
-            contentView.translatesAutoresizingMaskIntoConstraints = false
-        }
         
-        let center: CGPoint = contentView.center
+        let center: CGPoint = boundView.center
         var newX: CGFloat = center.x + translation.x
-        if newX <= contentView.frame.size.width/2 {
+        if newX <= boundView.frame.size.width/2 {
             // Vượt quá breakX sẽ là action reply
             let breakX = frame.width/2 - CGFloat(60)
             newX = max(breakX, newX)
             let padding = newX - frame.width/2
             iconReply.alpha =  abs(padding) / 60
             let newY: CGFloat = center.y
-            contentView.center = CGPoint(x: newX, y: newY)
+            boundView.center = CGPoint(x: newX, y: newY)
             sender.setTranslation(CGPoint.zero, in: self.superview)
             if sender.state == UIGestureRecognizer.State.changed {
                 if shouldReply {
@@ -221,8 +235,7 @@ open class MessageContentCell: MessageCollectionViewCell, UIGestureRecognizerDel
                 shouldReply = false
                 delegate?.cellDidRequestReplyMessage(cell: self)
             }
-            contentView.center = CGPoint(x: contentView.frame.size.width/2, y: contentView.frame.size.height/2)
-            contentView.translatesAutoresizingMaskIntoConstraints = true
+            boundView.center = CGPoint(x: boundView.frame.size.width/2, y: boundView.frame.size.height/2)
             iconReply.alpha = 0
         }
     }
@@ -243,7 +256,7 @@ open class MessageContentCell: MessageCollectionViewCell, UIGestureRecognizerDel
         super.apply(layoutAttributes)
         guard let attributes = layoutAttributes as? MessagesCollectionViewLayoutAttributes else { return }
         // Call this before other laying out other subviews
-        
+        boundView.frame = contentView.bounds
         layoutMessageBodyView(with: attributes)
         layoutActionView(with: attributes)
         layoutMessageContainerView(with: attributes)
@@ -352,7 +365,7 @@ open class MessageContentCell: MessageCollectionViewCell, UIGestureRecognizerDel
     open override func gestureRecognizerShouldBegin(_ gestureRecognizer: UIGestureRecognizer) -> Bool {
         if gestureRecognizer == panGesture {
             guard !iconReply.isHidden else {return false}
-            let velocity = panGesture.velocity(in: contentView)
+            let velocity = panGesture.velocity(in: boundView)
             if velocity.x < 0 {
                 if abs(velocity.y) > abs(velocity.x) {
                     return false

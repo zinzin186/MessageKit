@@ -180,6 +180,8 @@ public protocol MKMessagesDisplayDelegate: AnyObject {
     ///   - messagesCollectionView: The `MessagesCollectionView` in which this cell will be displayed.
     func configureMediaMessageImageView(_ cell: MediaMessageCell, for message: MKMessageType, at indexPath: IndexPath, in messagesCollectionView: MessagesCollectionView)
     
+    func configureStickerImageView(_ cell: StickerMessageCell, for message: MKMessageType, at indexPath: IndexPath, in messagesCollectionView: MessagesCollectionView)
+    
     func configureActionMessageImageView(_ imageView: UIImageView, for action: MKActionType, at indexPath: IndexPath, in messagesCollectionView: MessagesCollectionView)
 
     // MARK: - Audio Message
@@ -313,8 +315,9 @@ public extension MKMessagesDisplayDelegate {
 
     // MARK: - Media Message Defaults
 
-    func configureMediaMessageImageView(_ cell: MediaMessageCell, for message: MKMessageType, at indexPath: IndexPath, in messagesCollectionView: MessagesCollectionView) {
-    }
+    func configureMediaMessageImageView(_ cell: MediaMessageCell, for message: MKMessageType, at indexPath: IndexPath, in messagesCollectionView: MessagesCollectionView) {}
+    
+    func configureStickerImageView(_ cell: StickerMessageCell, for message: MKMessageType, at indexPath: IndexPath, in messagesCollectionView: MessagesCollectionView) {}
     
     func configureActionMessageImageView(_ imageView: UIImageView, for action: MKActionType, at indexPath: IndexPath, in messagesCollectionView: MessagesCollectionView){}
 
